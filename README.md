@@ -27,3 +27,8 @@ npm run export:gh-pages
 npm run deploy
 ```
 **Note:** in order to publish to gh-pages branch, master branch must be up-to-date.
+
+## Coding Style
+
+We use ESLint with the AirBnB javascript/react Style Guide, available here:
+https://github.com/airbnb/javascript/tree/master/react
