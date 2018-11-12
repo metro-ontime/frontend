@@ -1,6 +1,6 @@
 const Index = () => (
   <div className="logo_header">
-    <img className="logo" src="static/images/logo.png"/>
+    <img className="logo" src="static/images/mot-logo.svg"/>
     <h1 className="logo_title"> LA Metro - Performance Monitor</h1>
     <style jsx>{`
       .logo_header {
@@ -14,7 +14,8 @@ const Index = () => (
       }
       .logo {
         display: inline;
-        width: 5vw;
+        width: 75px;
+        padding: 10px;
       }  
     `}</style>
   </div>

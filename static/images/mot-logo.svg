@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="607px" height="609px" viewBox="0 0 607 609" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.3 (67297) - http://www.bohemiancoding.com/sketch -->
+    <title>metro-ontime@1x</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Station" fill="#000000" cx="54" cy="324" r="54"></circle>
+        <g id="Gold-Line" transform="translate(227.500000, 151.000000) rotate(-45.000000) translate(-227.500000, -151.000000) translate(61.000000, 97.000000)" fill="#F8E71C">
+            <circle id="Oval" cx="54" cy="54" r="54"></circle>
+            <circle id="Oval" cx="279" cy="54" r="54"></circle>
+            <rect id="Rectangle" x="54" y="0" width="225" height="108"></rect>
+        </g>
+        <g id="Blue-Line" transform="translate(428.757666, 178.076425) rotate(-45.000000) translate(-428.757666, -178.076425) translate(200.257666, 124.076425)" fill="#4A90E2">
+            <circle id="Oval" cx="54" cy="54" r="54"></circle>
+            <circle id="Oval" cx="403" cy="54" r="54"></circle>
+            <rect id="Rectangle" x="54" y="-1.70530257e-13" width="349" height="108"></rect>
+        </g>
+        <g id="Purple-Line" transform="translate(407.929239, 428.586093) rotate(-45.000000) translate(-407.929239, -428.586093) translate(175.429239, 374.586093)" fill="#9013FE">
+            <circle id="Oval" cx="54" cy="54" r="54"></circle>
+            <circle id="Oval" cx="411" cy="54" r="54"></circle>
+            <rect id="Rectangle" x="54" y="-4.54747351e-13" width="357" height="108"></rect>
+        </g>
+    </g>
+</svg>
