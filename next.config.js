@@ -8,7 +8,7 @@ module.exports = {
   webpack: (config, { dev }) => {
     if (dev) {
       config.module.rules.push({
-        test: /\.js$/,
+        test: /\.jsx$/,
         exclude: /node_modules/,
         loader: 'eslint-loader',
         options: {
