@@ -7,6 +7,7 @@ const Index = () => (
     <Head>
       <title>Metro OnTime</title>
       <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
+      <meta name="viewport" content="width=device-width, initial-scale=1" />
     </Head>
     <div className="logo_header">
       <img className="logo" src="static/images/mot-logo.svg" alt="" />
