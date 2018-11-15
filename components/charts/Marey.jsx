@@ -62,6 +62,11 @@ class Marey extends Component {
       .attr('width', width + 50)
       .attr('height', height + 50);
 
+    select(node).append('defs')
+      .append('style')
+      .attr('type', 'text/css')
+      .text("@import url('https://fonts.googleapis.com/css?family=Raleway:300,700');");
+
     select(node).append('path')
       .attr('d', lineFunction(lineData))
       .attr('stroke', color)
@@ -71,11 +76,11 @@ class Marey extends Component {
 
     select(node).append('g')
       .attr('transform', `translate(50, ${height})`)
-      .style('font', '16px raleway')
+      .style('font', '14px Raleway')
       .call(xAxis);
     select(node).append('g')
       .attr('transform', 'translate(50, 0)')
-      .style('font', '16px raleway')
+      .style('font', '14px Raleway')
       .call(yAxis);
   }
 
