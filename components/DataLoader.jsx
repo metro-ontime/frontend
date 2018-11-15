@@ -23,13 +23,34 @@ class DataLoader extends Component {
     const { schedule, trips } = this.state;
     return (
       <div>
-        <Marey
-          schedule={schedule}
-          trips={trips}
-          dates={{ min: '2018-10-29 23:00:00', max: '2018-10-30 02:00:00' }}
-          size={[1200, 2000]}
-          direction="804 - Azusa / Citrus"
-        />
+        { this.state
+        && schedule
+        && trips
+        && (
+          <div>
+            <div className="date">
+              <b>Date: </b>
+              Tuesday, October 30, 2018
+              (vertical axes showing incorrect times due to timezone error)
+            </div>
+            <Marey
+              schedule={schedule}
+              trips={trips}
+              dates={{ min: '2018-10-29 23:00:00', max: '2018-10-30 02:00:00' }}
+              size={[1200, 2000]}
+              direction="804 - Azusa / Citrus"
+            />
+          </div>
+        )
+        }
+        <style jsx>
+          {`
+            .date {
+              font-weight: 200;
+              padding: 0 0 1em;
+            }
+          `}
+        </style>
       </div>
     );
   }

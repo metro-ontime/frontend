@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { select } from 'd3-selection';
 import { line, curveCatmullRom } from 'd3-shape';
+import { axisBottom, axisLeft } from 'd3-axis';
+import { timeMinute } from 'd3-time';
 import PropTypes from 'prop-types';
 
 class Marey extends Component {
@@ -11,9 +13,6 @@ class Marey extends Component {
   }
 
   componentDidMount() {
-  }
-
-  componentDidUpdate() {
     const { schedule, trips, direction } = this.props;
     schedule.forEach((element) => {
       const data = JSON.parse(element);
@@ -27,6 +26,9 @@ class Marey extends Component {
         this.createLine(data, 'steelBlue');
       }
     });
+  }
+
+  componentDidUpdate() {
   }
 
   createLine(lineData, color) {
@@ -50,15 +52,31 @@ class Marey extends Component {
       })
       .curve(curveCatmullRom.alpha(0.5));
 
+    const xAxis = axisBottom().scale(xScale);
+    xAxis.ticks(10);
+
+    const yAxis = axisLeft().scale(yScale);
+    yAxis.ticks(timeMinute.every(5));
+
     select(node)
-      .attr('width', width)
-      .attr('height', height);
+      .attr('width', width + 50)
+      .attr('height', height + 50);
 
     select(node).append('path')
       .attr('d', lineFunction(lineData))
       .attr('stroke', color)
       .attr('stroke-width', 2)
-      .attr('fill', 'none');
+      .attr('fill', 'none')
+      .attr('transform', 'translate(50, 0)');
+
+    select(node).append('g')
+      .attr('transform', `translate(50, ${height})`)
+      .style('font', '16px raleway')
+      .call(xAxis);
+    select(node).append('g')
+      .attr('transform', 'translate(50, 0)')
+      .style('font', '16px raleway')
+      .call(yAxis);
   }
 
   render() {
