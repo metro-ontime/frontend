@@ -10,8 +10,8 @@ class DataLoader extends Component {
 
   componentDidMount() {
     axios.all([
-      axios.get('static/sample_data/sample_schedule.txt'),
-      axios.get('static/sample_data/sample_trips.txt')])
+      axios.get('static/sample_data/sample_schedule.json'),
+      axios.get('static/sample_data/sample_trips.json')])
       .then(axios.spread((schedule, actual) => {
         const scheduleJSON = JSON.parse(schedule.data);
         const actualJSON = JSON.parse(actual.data);
