@@ -1,6 +1,7 @@
-import Head from 'next/head';
 import React from 'react';
+import Head from 'next/head';
 import DataLoader from '../components/DataLoader';
+import MenuBar from '../components/MenuBar';
 
 const Index = () => (
   <div>
@@ -8,44 +9,43 @@ const Index = () => (
       <title>Metro OnTime</title>
       <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <style>
+        {`
+          html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            max-width: 100%;
+            font-size: 20px;
+          }
+          body {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden;
+          }
+        `}
+      </style>
     </Head>
-    <div className="logo_header">
-      <img className="logo" src="static/images/mot-logo.svg" alt="" />
-      <h1 className="logo_title">LA Metro - Performance Monitor</h1>
-    </div>
+    <MenuBar />
     <div className="content">
-      <div>
-        <h2 className="subtitle">Logged Trains compared to the Schedule</h2>
-        <p>
-          This diagram shows 3 hours of trains running northbound
-          on the Gold line between 6am & 9am on October 30, 2018.
-          <br />
-          Light grey lines show the schedule, while blue lines are the actual
-          paths trains took during that time period,
-          <br />
-          at least according to vehicle position data logged once per minute from NextBus.
-        </p>
-        <div className="diagram">
-          <DataLoader />
-        </div>
+      <h2 className="subtitle">Logged Trains compared to the Schedule</h2>
+      <p>
+        This diagram shows 3 hours of trains running northbound
+        on the Gold line between 6am & 9am on October 30, 2018.
+        <br />
+        Light grey lines show the schedule, while blue lines are the actual
+        paths trains took during that time period,
+        <br />
+        at least according to vehicle position data logged once per minute from NextBus.
+      </p>
+      <div className="diagram">
+        <DataLoader />
       </div>
     </div>
     <style jsx>
       {`
-        .logo_header {
-          display: flex;
-          align-items: center;
-          width: 100%;
-        }
-        .logo_title {
-          display: inline;
-          font-weight: 200;
-        }
-        .logo {
-          display: inline;
-          width: 75px;
-          padding: 10px;
-        }  
         .subtitle {
           display: block;
           font-weight: 200;
@@ -54,7 +54,9 @@ const Index = () => (
           display: flex;
           flex-direction: column;
           align-items: center;
-          width: 100%;
+          max-width: 100%;
+          font-size: 0.75em;
+          padding: 10px;
         }
       `}
     </style>

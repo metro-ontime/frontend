@@ -37,7 +37,7 @@ class DataLoader extends Component {
               schedule={schedule}
               trips={trips}
               dates={{ min: '2018-10-29 23:00:00', max: '2018-10-30 02:00:00' }}
-              size={[1200, 2000]}
+              size={[300, 600]}
               direction="804 - Azusa / Citrus"
             />
           </div>
