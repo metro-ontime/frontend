@@ -8,6 +8,7 @@ const Index = () => (
     <Head>
       <title>Metro OnTime</title>
       <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
+      <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500" rel="stylesheet" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <style>
         {`
@@ -51,6 +52,7 @@ const Index = () => (
           font-weight: 200;
         }
         .content {
+          font-family: 'Raleway', sans-serif;
           display: flex;
           flex-direction: column;
           align-items: center;
