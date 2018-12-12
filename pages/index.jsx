@@ -50,6 +50,7 @@ const Index = () => (
         .subtitle {
           display: block;
           font-weight: 200;
+          font-family: 'Raleway', sans-serif;
         }
         .content {
           font-family: 'Raleway', sans-serif;

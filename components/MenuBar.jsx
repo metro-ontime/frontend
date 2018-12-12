@@ -18,6 +18,7 @@ const MenuBar = () => (
           display: inline;
           font-weight: 200;
           font-size: 1em;
+          font-family: 'Raleway', sans-serif;
         }
         .logo {
           display: inline;

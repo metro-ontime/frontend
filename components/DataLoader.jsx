@@ -16,6 +16,8 @@ class DataLoader extends Component {
         const scheduleJSON = JSON.parse(schedule.data);
         const actualJSON = JSON.parse(actual.data);
         this.setState({ schedule: scheduleJSON, trips: actualJSON });
+        const firstDate = JSON.parse(scheduleJSON[0])[0].datetime;
+        console.log(firstDate);
       }));
   }
 
@@ -32,6 +34,9 @@ class DataLoader extends Component {
               <b>Date: </b>
               Tuesday, October 30, 2018
               (vertical axes showing incorrect times due to timezone error)
+              <p>
+                { JSON.parse(schedule[0])[0].datetime }
+              </p>
             </div>
             <Marey
               schedule={schedule}
