@@ -1,5 +1,7 @@
 import React from 'react';
 import Head from 'next/head';
+import Link from 'next/link';
+import { Button } from 'reactstrap';
 import DataLoader from '../components/DataLoader';
 import MenuBar from '../components/MenuBar';
 
@@ -8,7 +10,10 @@ const Index = () => (
     <Head>
       <title>Metro OnTime</title>
       <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
-      <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500" rel="stylesheet" />
+      <link
+        href="https://fonts.googleapis.com/css?family=Raleway:300,400,400i,500"
+        rel="stylesheet"
+      />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <style>
         {`
@@ -33,13 +38,18 @@ const Index = () => (
     <div className="content">
       <h2 className="subtitle">Logged Trains compared to the Schedule</h2>
       <p>
-        This diagram shows 3 hours of trains running northbound
-        on the Gold line between 6am & 9am on October 30, 2018.
+        This diagram shows 3 hours of trains running northbound on the Gold line between 6am & 9am
+        on October 30, 2018.
         <br />
-        Light grey lines show the schedule, while blue lines are the actual
-        paths trains took during that time period,
+        Light grey lines show the schedule, while blue lines are the actual paths trains took during
+        that time period,
         <br />
         at least according to vehicle position data logged once per minute from NextBus.
+      </p>
+      <p>
+        <Link href="/train/0">
+          <Button>Go to Train Detail for Train 0</Button>
+        </Link>
       </p>
       <div className="diagram">
         <DataLoader />
