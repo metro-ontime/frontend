@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/metro-ontime/frontend#readme",
   "dependencies": {
+    "@material-ui/core": "^3.8.3",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
     "d3-array": "^2.0.2",
