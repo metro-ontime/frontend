@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { AppBar, Toolbar, Drawer, List, Typography, Divider, ListItem, ListItemText } from '@material-ui/core';
+import Layout from '../components/Layout';
+import DataLoader from '../components/DataLoader';
+import TrainDetails from '../components/TrainDetails';
 
 class Line extends Component {
   constructor(props) {
@@ -15,10 +18,11 @@ class Line extends Component {
     const { id } = this.props;
     return (
       <div>
-        <div>
+        <Layout>
           Line #
           {id}
-        </div>
+          <TrainDetails />
+        </Layout>
       </div>
     );
   }

@@ -38,10 +38,12 @@
     "d3-shape": "^1.2.2",
     "d3-time": "^1.0.10",
     "express": "^4.16.4",
+    "jss": "^9.8.7",
     "next": "^7.0.2",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
+    "react-jss": "^8.6.1",
     "react-request": "^3.1.2"
   },
   "devDependencies": {

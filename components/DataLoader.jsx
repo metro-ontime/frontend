@@ -34,15 +34,12 @@ class DataLoader extends Component {
               <b>Date: </b>
               Tuesday, October 30, 2018
               (vertical axes showing incorrect times due to timezone error)
-              <p>
-                { JSON.parse(schedule[0])[0].datetime }
-              </p>
             </div>
             <Marey
               schedule={schedule}
               trips={trips}
               dates={{ min: '2018-10-29 23:00:00', max: '2018-10-30 02:00:00' }}
-              size={[300, 600]}
+              size={[900, 1200]}
               direction="804 - Azusa / Citrus"
             />
           </div>
