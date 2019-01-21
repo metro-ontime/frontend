@@ -1,8 +1,10 @@
 import React from 'react';
 import App, { Container } from 'next/app';
+import Head from 'next/head';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 export default class MyApp extends App {
-  static async getInitialProps({ Component, router, ctx }) {
+  static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
 
     if (Component.getInitialProps) {
@@ -17,6 +19,10 @@ export default class MyApp extends App {
 
     return (
       <Container>
+        <Head>
+          <title>Metro Monitor</title>
+        </Head>
+        <CssBaseline />
         <Component {...pageProps} />
       </Container>
     );

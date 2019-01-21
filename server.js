@@ -10,9 +10,9 @@ app
   .then(() => {
     const server = express();
 
-    server.get('/train/:id', (req, res) => {
-      const actualPage = '/TrainDetails';
-      const queryParams = { id: req.params.id };
+    server.get('/line/:id', (req, res) => {
+      const actualPage = '/line';
+      const queryParams = { id: parseInt(req.params.id) };
       app.render(req, res, actualPage, queryParams);
     });
 
