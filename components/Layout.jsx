@@ -19,7 +19,8 @@ const styles = theme => ({
     width: drawerWidth
   },
   mainContent: {
-    paddingLeft: drawerWidth
+    paddingLeft: drawerWidth,
+    paddingTop: 64
   },
   appBar: {
     paddingLeft: drawerWidth,
@@ -31,9 +32,8 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   logo: {
-    display: 'inline',
     width: 45,
-    padding: 5
+    height: 45
   }
 });
 
@@ -71,10 +71,9 @@ class Layout extends Component {
     )
 
     return <div>
-      <AppBar position="static" classes={{ root: classes.appBar, colorPrimary: classes.appBarColor }}>
+      <AppBar position="fixed" classes={{ root: classes.appBar, colorPrimary: classes.appBarColor }}>
         <Toolbar>
-          <img src="/static/images/mot-logo.svg" className={ classes.logo }/>
-          <Typography variant="h5">LA Metro Performance</Typography>
+          <Typography variant="h5">{ this.props.pageTitle }</Typography>
         </Toolbar>
       </AppBar>
       <Drawer
@@ -82,7 +81,10 @@ class Layout extends Component {
         classes={{ paper: classes.drawer }}>
 				<List>
           <ListItem>
-            <ListItemText primary="Metro Monitor" />
+            <ListItemIcon>
+              <img src="/static/images/mot-logo.svg" className={ classes.logo }/>
+            </ListItemIcon>
+            <ListItemText primary="LA Metro Monitor" />
           </ListItem>
 					<ListItem button onClick={this.handleClick}>
             <DirectionsTransitIcon className={classes.icon} />

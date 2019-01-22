@@ -5,8 +5,8 @@ import Layout from '../components/Layout';
 class Index extends Component {
   render() {
     return <div>
-      <Layout>
-        <Typography variant="h3">Select your line now</Typography>
+      <Layout pageTitle="Line Selector">
+        <Typography variant="h1">Select your line now</Typography>
       </Layout>
     </div>
   }

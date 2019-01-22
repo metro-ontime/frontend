@@ -1,21 +1,14 @@
 import React from 'react';
 import DataLoader from './DataLoader';
+import { Typography } from '@material-ui/core';
 
 const TrainDetails = () => (
   <div>
-    <p>METRO LINE</p>
-    <div className="content">
-      <h2 className="subtitle">Logged Trains compared to the Schedule</h2>
-      <p>
-        This diagram shows 3 hours of trains running northbound on the Gold line
-        between 6am & 9am on October 30, 2018.
-        <br />
-        Light grey lines show the schedule, while blue lines are the actual
-        paths trains took during that time period,
-        <br />
-        at least according to vehicle position data logged once per minute from
-        NextBus.
-      </p>
+    <div>
+      <Typography variant="h4">Marey Diagrams</Typography>
+      <Typography variant="body1">
+        These diagrams show observed train positions directly compared to scheduled train positions.
+      </Typography>
     </div>
 
     <div className="diagram">

@@ -18,9 +18,7 @@ class Line extends Component {
     const { id } = this.props;
     return (
       <div>
-        <Layout>
-          Line #
-          {id}
+        <Layout pageTitle={`Line ${id}`}>
           <TrainDetails />
         </Layout>
       </div>
