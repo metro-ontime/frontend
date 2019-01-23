@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { AppBar, Toolbar, Collapse, List, ListItem, ListItemIcon, Icon, ListItemText, Typography, Drawer } from '@material-ui/core';
+import { Tabs, Tab, AppBar, Toolbar, Collapse, List, ListItem, ListItemIcon, Icon, ListItemText, Typography, Drawer } from '@material-ui/core';
 import DirectionsTransitIcon from '@material-ui/icons/DirectionsTransit';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -19,14 +19,23 @@ const styles = theme => ({
     width: drawerWidth
   },
   mainContent: {
-    paddingLeft: drawerWidth,
-    paddingTop: 64
+    paddingLeft: drawerWidth + 10,
+    paddingTop: 74,
   },
   appBar: {
     paddingLeft: drawerWidth,
+    justifyContent: 'space-between'
   },
   appBarColor: {
-    backgroundColor: theme.palette.bw.light
+    backgroundColor: theme.palette.bw.dark
+  },
+  centerVertically: {
+    margin: 'auto 0'
+  },
+  containAppBar: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   icon: {
     margin: theme.spacing.unit
@@ -48,15 +57,21 @@ const lines = [
 
 class Layout extends Component {
 	state = {
-		open: false
+    open: false,
+    selectedTab: 0
 	}
 
   handleClick = () => {
     this.setState(state => ({ open: !state.open }));
   };
 
+  handleTabChange = (event, newValue) => {
+    this.setState(state => ({ selectedTab: newValue }));
+  };
+
   render() {
     const { classes } = this.props;
+    const selectedTab = this.state.selectedTab;
 
     const links = (
       <List>
@@ -72,9 +87,13 @@ class Layout extends Component {
 
     return <div>
       <AppBar position="fixed" classes={{ root: classes.appBar, colorPrimary: classes.appBarColor }}>
-        <Toolbar>
-          <Typography variant="h5">{ this.props.pageTitle }</Typography>
-        </Toolbar>
+        <div className={ classes.containAppBar }>
+          <Typography variant="h5" classes={{ root: classes.centerVertically }} color="primary">{ this.props.pageTitle }</Typography>
+          <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="primary">
+            <Tab label="Stats" />
+            <Tab label="Diagram" />
+          </Tabs>
+        </div>
       </AppBar>
       <Drawer
         variant="permanent"
