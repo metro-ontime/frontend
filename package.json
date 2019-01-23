@@ -38,6 +38,8 @@
     "d3-shape": "^1.2.2",
     "d3-time": "^1.0.10",
     "express": "^4.16.4",
+    "highcharts": "^7.0.2",
+    "highcharts-react-official": "^2.0.0",
     "jss": "^9.8.7",
     "next": "^7.0.2",
     "papaparse": "^4.6.3",
