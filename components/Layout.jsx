@@ -31,6 +31,7 @@ const styles = theme => ({
     paddingLeft: drawerWidth + 10,
     paddingTop: 80,
     paddingRight: 15,
+    minHeight: '100%',
   },
   appBar: {
     paddingLeft: drawerWidth,
@@ -89,7 +90,7 @@ class Layout extends Component {
     );
 
     return (
-      <div>
+      <div style={{ minHeight: '100%' }}>
         <Drawer variant="permanent" classes={{ paper: classes.drawer }}>
           <List>
             <Link href="/">

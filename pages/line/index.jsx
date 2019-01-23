@@ -40,18 +40,16 @@ class Line extends Component {
     const { id } = this.props;
     const { selectedTab } = this.state;
     return (
-      <div>
-        <Layout>
-          <Nav pageTitle={`${lines[id]} Line`}>
-            <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
-              <Tab label="Diagram" />
-              <Tab label="Stats" />
-            </Tabs>
-          </Nav>
-          {selectedTab === 0 && <TrainDetails />}
-          {selectedTab === 1 && <TrainStats />}
-        </Layout>
-      </div>
+      <Layout style={{ minHeight: '100%' }}>
+        <Nav pageTitle={`${lines[id]} Line`}>
+          <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
+            <Tab label="Diagram" />
+            <Tab label="Stats" />
+          </Tabs>
+        </Nav>
+        {selectedTab === 0 && <TrainDetails />}
+        {selectedTab === 1 && <TrainStats />}
+      </Layout>
     );
   }
 }
