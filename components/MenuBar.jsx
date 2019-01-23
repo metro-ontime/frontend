@@ -12,7 +12,6 @@ const MenuBar = () => (
           display: flex;
           align-items: center;
           width: 100%;
-          background: #eeeeee;
         }
         .logo_title {
           display: inline;

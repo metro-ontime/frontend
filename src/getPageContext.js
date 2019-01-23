@@ -1,28 +1,14 @@
 import { SheetsRegistry } from 'jss';
 import { createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
-import grey from '@material-ui/core/colors/grey';
 import red from '@material-ui/core/colors/red';
 
 // A theme with custom primary and secondary color.
 // It's optional.
 const theme = createMuiTheme({
   palette: {
-    primary: {
-      light: grey[100],
-      main: grey[200],
-      dark: grey[700],
-    },
-    secondary: {
-      light: red[300],
-      main: red[500],
-      dark: red[700],
-    },
-    bw: {
-      light: grey[300],
-      main: grey[500],
-      dark: grey[700]
-    }
+    primary: blue,
+    secondary: red,
   },
   typography: {
     useNextVariants: true,
@@ -57,4 +43,3 @@ export default function getPageContext() {
 
   return pageContext;
 }
-
