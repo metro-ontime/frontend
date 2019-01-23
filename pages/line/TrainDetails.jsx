@@ -1,6 +1,6 @@
 import React from 'react';
-import DataLoader from './DataLoader';
 import { Typography } from '@material-ui/core';
+import DataLoader from './components/DataLoader';
 
 const TrainDetails = () => (
   <div>

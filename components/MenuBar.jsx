@@ -12,7 +12,6 @@ const MenuBar = () => (
           display: flex;
           align-items: center;
           width: 100%;
-          background: #eeeeee;
         }
         .logo_title {
           display: inline;
@@ -24,7 +23,7 @@ const MenuBar = () => (
           display: inline;
           width: 45px;
           padding: 10px;
-        }  
+        }
         @media (min-width: 700px) {
           .logo_title {
             font-size: 1.5em;
