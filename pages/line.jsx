@@ -5,6 +5,15 @@ import Layout from '../components/Layout';
 import DataLoader from '../components/DataLoader';
 import TrainDetails from '../components/TrainDetails';
 
+const lines = {
+  801: 'Blue',
+  802: 'Red',
+  803: 'Green',
+  804: 'Gold',
+  805: 'Purple',
+  806: 'Expo',
+};
+
 class Line extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +27,7 @@ class Line extends Component {
     const { id } = this.props;
     return (
       <div>
-        <Layout pageTitle={`Line ${id}`}>
+        <Layout pageTitle={`${lines[id]} Line`}>
           <TrainDetails />
         </Layout>
       </div>
