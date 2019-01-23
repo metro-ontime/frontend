@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import Document, { Head, Main, NextScript } from 'next/document';
 import flush from 'styled-jsx/server';
 
-
 class MyDocument extends Document {
   render() {
     const { pageContext } = this.props;
@@ -26,11 +25,7 @@ class MyDocument extends Document {
             rel="stylesheet"
             href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
           />
-          <link
-            rel="icon"
-            type="image/x-icon"
-            href="static/favicon.ico"
-          />
+          <link rel="icon" type="image/x-icon" href="static/favicon.ico" />
         </Head>
         <body>
           <Main />
@@ -41,7 +36,7 @@ class MyDocument extends Document {
   }
 }
 
-MyDocument.getInitialProps = ctx => {
+MyDocument.getInitialProps = (ctx) => {
   // Resolution order
   //
   // On the server:
@@ -66,8 +61,8 @@ MyDocument.getInitialProps = ctx => {
 
   // Render app and page and get the context of the page with collected side effects.
   let pageContext;
-  const page = ctx.renderPage(Component => {
-    const WrappedComponent = props => {
+  const page = ctx.renderPage((Component) => {
+    const WrappedComponent = (props) => {
       pageContext = props.pageContext;
       return <Component {...props} />;
     };

@@ -1,9 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { AppBar, Toolbar, Drawer, List, Typography, Divider, ListItem, ListItemText } from '@material-ui/core';
-import Layout from '../components/Layout';
-import DataLoader from '../components/DataLoader';
-import TrainDetails from '../components/TrainDetails';
+import {
+  AppBar,
+  Toolbar,
+  Drawer,
+  List,
+  Typography,
+  Divider,
+  ListItem,
+  ListItemText,
+} from '@material-ui/core';
+import Layout from '../../components/Layout';
+import DataLoader from './components/DataLoader';
+import TrainDetails from './TrainDetails';
+import Nav from './components/Nav';
 
 const lines = {
   801: 'Blue',
@@ -19,8 +29,9 @@ class Line extends Component {
     super(props);
     this.state = {};
   }
+
   static async getInitialProps({ query }) {
-    return query
+    return query;
   }
 
   render() {
@@ -28,6 +39,7 @@ class Line extends Component {
     return (
       <div>
         <Layout pageTitle={`${lines[id]} Line`}>
+          <Nav />
           <TrainDetails />
         </Layout>
       </div>
