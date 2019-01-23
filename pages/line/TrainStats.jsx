@@ -23,20 +23,25 @@ class TrainStats extends Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
-          <Grid item xs={6}>
+          <Grid item xs={12}>
             <Paper elevation={1} className={classes.paper}>
-              <Typography variant="h1" component="h3">
-                25%
-              </Typography>
-              <Typography component="p">Percentages of trains that arrive on time</Typography>
+              <Typography variant="h2">Large map with line GeoJSON embedded, stations can be clicked</Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
               <Typography variant="h1" component="h3">
-                70%
+                57%
               </Typography>
-              <Typography component="p">Customer happiness</Typography>
+              <Typography component="p">Train arrivals within 1 minute of a scheduled station stop</Typography>
+            </Paper>
+          </Grid>
+          <Grid item xs={6}>
+            <Paper elevation={1} className={classes.paper}>
+              <Typography variant="h1" component="h3">
+                14 mins
+              </Typography>
+              <Typography component="p">Average wait time between trains</Typography>
             </Paper>
           </Grid>
         </Grid>

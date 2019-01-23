@@ -32,7 +32,6 @@ class Line extends Component {
   };
 
   handleTabChange = (event, newValue) => {
-    console.log(newValue);
     this.setState(state => ({ selectedTab: newValue }));
   };
 
@@ -43,12 +42,12 @@ class Line extends Component {
       <Layout style={{ minHeight: '100%' }}>
         <Nav pageTitle={`${lines[id]} Line`}>
           <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
-            <Tab label="Diagram" />
             <Tab label="Stats" />
+            <Tab label="Diagram" />
           </Tabs>
         </Nav>
-        {selectedTab === 0 && <TrainDetails />}
-        {selectedTab === 1 && <TrainStats />}
+        {selectedTab === 0 && <TrainStats />}
+        {selectedTab === 1 && <TrainDetails />}
       </Layout>
     );
   }

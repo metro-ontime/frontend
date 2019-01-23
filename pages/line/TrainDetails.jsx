@@ -1,6 +1,7 @@
 import React from 'react';
 import { Typography } from '@material-ui/core';
 import DataLoader from './components/DataLoader';
+import Highchart from '../../components/charts/Highchart';
 
 const TrainDetails = () => (
   <div>
@@ -12,7 +13,7 @@ const TrainDetails = () => (
     </div>
 
     <div className="diagram">
-      <DataLoader />
+      <Highchart />
     </div>
 
     <style jsx>
