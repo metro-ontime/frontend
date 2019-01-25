@@ -10,6 +10,9 @@ import {
   Drawer,
 } from '@material-ui/core';
 import DirectionsTransitIcon from '@material-ui/icons/DirectionsTransit';
+import LocationCityIcon from '@material-ui/icons/LocationCity';
+import InfoIcon from '@material-ui/icons/Info';
+import PlaceIcon from '@material-ui/icons/Place';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
@@ -66,7 +69,7 @@ const lines = [
 
 class Layout extends Component {
   state = {
-    open: true,
+    open: false,
   };
 
   handleClick = () => {
@@ -105,6 +108,10 @@ class Layout extends Component {
             </Link>
             <Divider />
             {' '}
+            <ListItem button>
+              <LocationCityIcon className={classes.icon} style={{ marginLeft: 0 }} />
+              <ListItemText inset primary="Network" />
+            </ListItem>
             <ListItem button onClick={this.handleClick}>
               <DirectionsTransitIcon className={classes.icon} style={{ marginLeft: 0 }} />
               <ListItemText inset primary="Lines" />
@@ -113,6 +120,14 @@ class Layout extends Component {
             <Collapse in={this.state.open} timeout="auto" unmountOnExit>
               {links}
             </Collapse>
+            <ListItem button>
+              <PlaceIcon className={classes.icon} style={{ marginLeft: 0 }} />
+              <ListItemText inset primary="Stations" />
+            </ListItem>
+            <ListItem button>
+              <InfoIcon className={classes.icon} style={{ marginLeft: 0 }} />
+              <ListItemText inset primary="About" />
+            </ListItem>
           </List>
         </Drawer>
         <div className={classes.mainContent} style={{ ...this.props.style }}>
