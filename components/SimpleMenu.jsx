@@ -28,13 +28,13 @@ class SimpleMenu extends React.Component {
     });
 
     return (
-      <div>
+      <span>
         <Button
           aria-owns={anchorEl ? 'simple-menu' : undefined}
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          { this.props.label }{':  '}{ this.state.chosen }
+          { this.props.label }{ this.state.chosen }
         </Button>
         <Menu
           id="simple-menu"
@@ -44,7 +44,7 @@ class SimpleMenu extends React.Component {
         >
           { menuItems }
         </Menu>
-      </div>
+      </span>
     );
   }
 }

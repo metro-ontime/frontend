@@ -5,6 +5,7 @@ import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
 import Nav from './components/Nav';
+import mapboxData from './components/MapboxData';
 
 const lines = {
   801: 'Blue',
@@ -14,6 +15,7 @@ const lines = {
   805: 'Purple',
   806: 'Expo',
 };
+
 
 class Line extends Component {
   constructor(props) {
@@ -46,7 +48,7 @@ class Line extends Component {
             <Tab label="Diagram" />
           </Tabs>
         </Nav>
-        {selectedTab === 0 && <TrainStats />}
+        {selectedTab === 0 && <TrainStats mapbox={mapboxData[id]} />}
         {selectedTab === 1 && <TrainDetails />}
       </Layout>
     );

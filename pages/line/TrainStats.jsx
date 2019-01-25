@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Typography, Grid, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
+import SimpleMenu from '../../components/SimpleMenu';
 
 const styles = theme => ({
   root: {
@@ -31,7 +32,7 @@ class TrainStats extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.paper}>
-              <Map />
+              <Map data={ this.props.mapbox }/>
             </Paper>
           </Grid>
           <Grid item xs={12}>
@@ -44,7 +45,7 @@ class TrainStats extends Component {
               <Typography variant="h1" component="h3">
                 57%
               </Typography>
-              <Typography component="p">of trains arrived within 1 minute of a scheduled station stop today</Typography>
+              <Typography component="p">of trains arrived within<SimpleMenu label="" menuItems={['1 minute', '2 minutes', '3 minutes', '4 minutes', '5 minutes']} />of a scheduled station stop today</Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>

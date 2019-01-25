@@ -34,7 +34,7 @@ const TrainDetails = (props) => {
       <Grid container justify="center" alignItems="center" spacing={24}>
         <Grid item xs={12}>
           <Toolbar color="primary">
-            <SimpleMenu label="Select Direction" menuItems={['Azusa / APU', 'Atlantic']} />
+            <SimpleMenu label="Select Direction: " menuItems={['Azusa / APU', 'Atlantic']} />
           </Toolbar>
         </Grid>
         <Grid item xs={12}>

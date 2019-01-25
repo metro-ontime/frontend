@@ -2,16 +2,18 @@ import {Component} from 'react';
 import { StaticMap } from 'react-map-gl';
 
 class Map extends Component {
-
-  state = {
-    viewport: {
-      width: '100%',
-      height: '100%',
-      latitude: 34.093382,
-      longitude: -118.063454,
-      zoom: 11,
+  constructor(props) {
+    super(props)
+    this.state = {
+      viewport: {
+        width: '100%',
+        height: '100%',
+        latitude: this.props.data.latitude,
+        longitude: this.props.data.longitude,
+        zoom: this.props.data.zoom,
+      }
     }
-  };
+  }
 
   render() {
     return (
@@ -19,7 +21,7 @@ class Map extends Component {
         <StaticMap
           {...this.state.viewport}
           mapboxApiAccessToken="pk.eyJ1IjoiY3RzZXh0b24iLCJhIjoiY2pyYmZnZGZjMDZrNDN5dDhoaWwwZXE5YiJ9.gMMj34iuAtw7FucL6kEMZw"
-          mapStyle="mapbox://styles/ctsexton/cjrbfw0eh005t2ssddgy66l7d"
+          mapStyle={ this.props.data.url }
           onViewportChange={(viewport) => this.setState({viewport})}
         />
     </div>
