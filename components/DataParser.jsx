@@ -1,39 +1,44 @@
 import React, { Component } from 'react';
 import Papa from 'papaparse';
+import DataFrame from 'dataframe-js';
 import Highchart from './charts/Highchart';
+import LinearIndeterminate from './LinearIndeterminate';
 
 class DataParser extends Component {
 
   constructor(props) {
-    // Call super class
     super(props);
     this.state = { data: null };
-    // Bind this to function updateData (This eliminates the error)
     this.updateData = this.updateData.bind(this);
   }
 
-  componentWillMount() {
-
-    // Your parse code, but not seperated in a function
+  componentDidMount() {
+    // Should be run as web worker?
     var csvFilePath = "../static/sample_data/trips_latest.csv";
-    Papa.parse(csvFilePath, {
-      header: true,
-      download: true,
-      skipEmptyLines: true,
-      // Here this is also available. So we can call our custom class method
-      complete: this.updateData
+    DataFrame.fromCSV('https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/804_lametro-rail/trips_latest.csv').then(df => {
+      df = df.cast('relative_position', Number);
+      //df = df.cast('datetime_local_iso8601', Date);
+      const grouped = df.groupBy('trip_id').toCollection();
+      const trips = grouped.map((trip) => {
+        const theTrip = trip.group.toCollection().map((row) => [row.relative_position, new Date(row.datetime_local_iso8601).getTime()]);
+        return { data: theTrip }
+      });
+      this.updateData(trips);
     });
   }
 
   updateData(result) {
-    const data = result.data;
-    // Here this is available and we can call this.setState (since it's binded in the constructor)
-    this.setState({data: data}); // or shorter ES syntax: this.setState({ data });
+    const data = result;
+    this.setState({data: data});
   }
 
   render() {
-    // Your render function
-    return <Highchart data={ this.state.data } />
+    if (this.state.data) {
+      return <Highchart data={ this.state.data } />
+    } else {
+      return <LinearIndeterminate />
+    }
+    //return <LinearIndeterminate />
   }
 }
 

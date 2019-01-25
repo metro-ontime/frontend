@@ -8,39 +8,31 @@ class Highchart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      options: {
-        title: {
-          text: ''
-        },
-        series: [{ data: [1,2,3] }],
-        chart: {
-          height: "100%"
-        }
-      }
+      data: []
     }
   }
 
-  componentDidUpdate() {
-    const arr = this.props.data.map((row, index) => {
-      return { data: [index, row.relative_position] }
-    });
+  componentDidMount() {
+    this.setState({ data: this.props.data })
+  }
+
+  render() {
     const options = {
       title: {
         text: ''
       },
-      series: [arr],
+      series: this.state.data,
       chart: {
-        height: "100%"
+        height: "300%"
+      },
+      legend: {
+        enabled: false
       }
     };
-    this.setState({ options: options })
-  }
-
-  render() {
     return (
       <HighchartsReact
         highcharts={Highcharts}
-        options={this.state.options}
+        options={options}
       />
     )
   }
