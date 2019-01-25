@@ -23,10 +23,10 @@ const TrainDetails = (props) => {
     <Grid container spacing={40}>
       <Grid item xs={12}>
         <Paper elevation={1} className={ classes.paper }>
-          <Typography variant="h2">Marey Diagrams</Typography>
+          <Typography variant="h2">Trip Visualizer</Typography>
           <Divider className={ classes.root } />
           <Typography variant="body1" component="p">
-            Grey lines depict scheduled train journeys, while colored lines show the observed paths of trains over this time frame. Therefore, colored lines above grey lines depict early trains and colored lines below grey lines depict late trains.
+            Grey lines depict scheduled train journeys, while colored lines show the observed paths of trains over this time frame. Colored lines above grey lines depict early trains and colored lines below grey lines depict late trains.
           </Typography>
       </Paper>
       </Grid>
