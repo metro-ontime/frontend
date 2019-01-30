@@ -7,7 +7,7 @@ import { Typography } from '@material-ui/core';
 class SimpleMenu extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
+    this.state = {
       anchorEl: null,
       chosen: props.menuItems[0],
     };
@@ -19,6 +19,8 @@ class SimpleMenu extends React.Component {
 
   handleClose = (item) => {
     this.setState({ anchorEl: null, chosen: item });
+    const chosen = item[0] + "_" + item.slice(2, 5); // "2 minutes" --> "2_min"
+    this.props.handleMenuChange(chosen);
   };
 
   render() {

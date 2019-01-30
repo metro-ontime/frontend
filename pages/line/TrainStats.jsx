@@ -28,22 +28,31 @@ const styles = theme => ({
 class TrainStats extends Component {
   constructor(props) {
     super(props);
+    this.handleMenuChange = this.handleMenuChange.bind(this);
     this.state = {
-      summary: {}
+      chosen: '1_min',
+      summary: { '1_min': 0 },
+      total: 1
     };
   }
 
   componentDidMount() {
     axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-29.json`).then( ({ data }) => {
-      this.setState({ 
+      this.setState({
         summary: data.ontime,
         total: data.total_arrivals_analyzed
       });
+      // console.log(data);
     })
+  }
+
+  handleMenuChange(chosen) {
+    this.setState({ chosen });
   }
 
   render() {
     const { classes } = this.props;
+    const score = this.state.summary[this.state.chosen] / this.state.total * 100;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -59,10 +68,20 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
-              <Typography variant="h1" component="h3">
-                { Math.round(this.state && this.state.summary["1_min"] / this.state.total * 100) }%
-              </Typography>
-              <Typography component="p">of trains arrived within<SimpleMenu label="" menuItems={['1 minute', '2 minutes', '3 minutes', '4 minutes', '5 minutes']} />of a scheduled station stop today</Typography>
+              { score ?
+                <Typography variant="h1" component="h3">
+                  { Math.round(this.state && this.state.summary[this.state.chosen] / this.state.total * 100) }%
+                </Typography>
+                :
+                <h3><CircularIndeterminate className={classes.progress} /></h3>
+              }
+                <Typography component="p">of trains arrived within
+                  <SimpleMenu
+                    menuItems={['1 minute', '2 minutes', '3 minutes', '4 minutes', '5 minutes']}
+                    handleMenuChange = {this.handleMenuChange}
+                  />
+                  of a scheduled station stop today
+                </Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>
