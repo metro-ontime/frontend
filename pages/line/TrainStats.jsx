@@ -3,6 +3,7 @@ import { Typography, Grid, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
+import CircularIndeterminate from '../../components/CircularIndeterminate'
 import axios from 'axios';
 
 const styles = theme => ({
@@ -18,6 +19,10 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     color: theme.palette.text.secondary,
 
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,
   }
 });
 class TrainStats extends Component {
