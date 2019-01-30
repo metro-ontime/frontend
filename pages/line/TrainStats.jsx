@@ -3,6 +3,7 @@ import { Typography, Grid, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
+import axios from 'axios';
 
 const styles = theme => ({
   root: {
@@ -22,7 +23,18 @@ const styles = theme => ({
 class TrainStats extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      summary: {}
+    };
+  }
+
+  componentDidMount() {
+    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-29.json`).then( ({ data }) => {
+      this.setState({ 
+        summary: data.ontime,
+        total: data.total_arrivals_analyzed
+      });
+    })
   }
 
   render() {
@@ -43,7 +55,7 @@ class TrainStats extends Component {
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
               <Typography variant="h1" component="h3">
-                57%
+                { Math.round(this.state && this.state.summary["1_min"] / this.state.total * 100) }%
               </Typography>
               <Typography component="p">of trains arrived within<SimpleMenu label="" menuItems={['1 minute', '2 minutes', '3 minutes', '4 minutes', '5 minutes']} />of a scheduled station stop today</Typography>
             </Paper>

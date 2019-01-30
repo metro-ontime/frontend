@@ -48,7 +48,7 @@ class Line extends Component {
             <Tab label="Diagram" />
           </Tabs>
         </Nav>
-        {selectedTab === 0 && <TrainStats mapbox={mapboxData[id]} />}
+        {selectedTab === 0 && <TrainStats line={id} mapbox={mapboxData[id]} />}
         {selectedTab === 1 && <TrainDetails />}
       </Layout>
     );
