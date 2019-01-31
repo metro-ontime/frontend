@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Head from 'next/head';
 import { AppBar, Typography, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -43,6 +44,9 @@ class Layout extends Component {
     const { classes } = this.props;
     return (
       <div>
+        <Head>
+          <title>Metro Monitor | {this.props.pageTitle}</title>
+        </Head>
         {' '}
         <AppBar
           position="fixed"
