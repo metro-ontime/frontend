@@ -38,7 +38,7 @@ const TrainDetails = (props) => {
           </Toolbar>
         </Grid>
         <Grid item xs={12}>
-          <DataParser />
+          <DataParser line={ props.line }/>
         </Grid>
       </Grid>
     </Grid>

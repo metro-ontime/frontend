@@ -7,6 +7,7 @@ import CircularIndeterminate from '../../components/CircularIndeterminate'
 import axios from 'axios';
 import moment from 'moment';
 import 'moment-timezone';
+import mapboxData from './components/MapboxData';
 
 const styles = theme => ({
   root: {
@@ -95,7 +96,7 @@ class TrainStats extends Component {
         <Grid container spacing={24}>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.paper}>
-              <Map data={ this.props.mapbox }/>
+              <Map data={ mapboxData[this.props.line] }/>
             </Paper>
           </Grid>
           <Grid item xs={12}>

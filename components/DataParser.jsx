@@ -15,12 +15,11 @@ class DataParser extends Component {
   componentDidMount() {
     // Should be run as web worker?
     var csvFilePath = "../static/sample_data/trips_latest.csv";
-    DataFrame.fromCSV('https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/804_lametro-rail/trips_latest.csv').then(df => {
+    DataFrame.fromCSV(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${this.props.line}_lametro-rail/2019-01-30.csv`).then(df => {
       df = df.cast('relative_position', Number);
-      //df = df.cast('datetime_local_iso8601', Date);
       const grouped = df.groupBy('trip_id').toCollection();
       const trips = grouped.map((trip) => {
-        const theTrip = trip.group.toCollection().map((row) => [row.relative_position, new Date(row.datetime_local_iso8601).getTime()]);
+        const theTrip = trip.group.toCollection().map((row) => [row.relative_position, new Date(row.datetime).getTime()]);
         return { data: theTrip }
       });
       this.updateData(trips);
@@ -33,12 +32,15 @@ class DataParser extends Component {
   }
 
   render() {
-    if (this.state.data) {
-      return <Highchart data={ this.state.data } />
-    } else {
-      return <LinearIndeterminate />
-    }
-    //return <LinearIndeterminate />
+    return (
+      <div>
+        { this.state.data ? 
+          <Highchart data={ this.state.data } />
+          :
+          <LinearIndeterminate />
+        }
+      </div>
+    )
   }
 }
 
