@@ -9,7 +9,6 @@ class SimpleMenu extends React.Component {
     super(props);
     this.state = {
       anchorEl: null,
-      chosen: props.menuItems[0],
     };
   }
 
@@ -17,18 +16,18 @@ class SimpleMenu extends React.Component {
     this.setState({ anchorEl: event.currentTarget });
   };
 
-  handleClose = (item) => {
-    this.setState({ anchorEl: null, chosen: item });
-    const chosen = item[0] + "_" + item.slice(2, 5); // "2 minutes" --> "2_min"
-    this.props.handleMenuChange(chosen);
+  handleClose = (item, index) => {
+    this.setState({ anchorEl: null });
+    if (this.props.menuItems.includes(item)) {
+      this.props.handleMenuChange(item, index);
+    }
   };
 
   render() {
     const { anchorEl } = this.state;
-    const menuItems = this.props.menuItems.map((item) => {
-      return <MenuItem onClick={() => this.handleClose(item)} key={item}>{ item }</MenuItem>
+    const menuItems = this.props.menuItems.map((item, index) => {
+      return <MenuItem onClick={() => this.handleClose(item, index)} key={item}>{ item }</MenuItem>
     });
-
     return (
       <span>
         <Button
@@ -36,7 +35,7 @@ class SimpleMenu extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          { this.props.label }{ this.state.chosen }
+          { this.props.label }{ this.props.menuItems[this.props.selected] }
         </Button>
         <Menu
           id="simple-menu"

@@ -27,14 +27,42 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
   }
 });
+
+const arrivalWindows = [
+  {
+    menuLabel: '1 minute',
+    dataLabel: '1_min',
+  },
+  {
+    menuLabel: '2 minutes',
+    dataLabel: '2_min',
+  },
+  {
+    menuLabel: '3 minutes',
+    dataLabel: '3_min',
+  },
+  {
+    menuLabel: '4 minutes',
+    dataLabel: '4_min',
+  },
+  {
+    menuLabel: '5 minutes',
+    dataLabel: '5_min',
+  },
+]
+
 class TrainStats extends Component {
   constructor(props) {
     super(props);
     this.handleMenuChange = this.handleMenuChange.bind(this);
     this.state = {
-      chosen: '1_min',
-      summary: { '1_min': 0 },
-      total: 1
+      summary: {},
+      total: 1,
+      selectedArrivalWindow: {
+        index: 0,
+        menuLabel: arrivalWindows[0].menuLabel,
+        dataLabel: arrivalWindows[0].dataLabel,
+      }
     };
   }
 
@@ -46,17 +74,22 @@ class TrainStats extends Component {
         summary: data.ontime,
         total: data.total_arrivals_analyzed
       });
-      // console.log(data);
     })
   }
 
-  handleMenuChange(chosen) {
-    this.setState({ chosen });
+  handleMenuChange(item, index) {
+    this.setState({ 
+      selectedArrivalWindow: { 
+        index: index,
+        menuLabel: arrivalWindows[index].menuLabel,
+        dataLabel: arrivalWindows[index].dataLabel,
+      }
+    })
   }
 
   render() {
     const { classes } = this.props;
-    const score = this.state.summary[this.state.chosen] / this.state.total * 100;
+    const score = Math.round(this.state.summary[this.state.selectedArrivalWindow.dataLabel] / this.state.total * 1000) / 10;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -74,15 +107,16 @@ class TrainStats extends Component {
             <Paper elevation={1} className={classes.paper}>
               { score ?
                 <Typography variant="h1" component="h3">
-                  { Math.round(this.state && this.state.summary[this.state.chosen] / this.state.total * 100) }%
+                  { score }%
                 </Typography>
                 :
                 <h3><CircularIndeterminate className={classes.progress} /></h3>
               }
                 <Typography component="p">of trains arrived within
                   <SimpleMenu
-                    menuItems={['1 minute', '2 minutes', '3 minutes', '4 minutes', '5 minutes']}
+                    menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
                     handleMenuChange = {this.handleMenuChange}
+                    selected = {this.state.selectedArrivalWindow.index}
                   />
                   of a scheduled station stop today
                 </Typography>
