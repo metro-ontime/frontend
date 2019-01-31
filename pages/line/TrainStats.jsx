@@ -5,6 +5,8 @@ import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
 import CircularIndeterminate from '../../components/CircularIndeterminate'
 import axios from 'axios';
+import moment from 'moment';
+import 'moment-timezone';
 
 const styles = theme => ({
   root: {
@@ -37,7 +39,9 @@ class TrainStats extends Component {
   }
 
   componentDidMount() {
-    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-29.json`).then( ({ data }) => {
+    const currentDate = moment().tz('America/Los_Angeles').format("YYYY-MM-DD");
+    console.log(currentDate);
+    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-30.json`).then( ({ data }) => {
       this.setState({
         summary: data.ontime,
         total: data.total_arrivals_analyzed
@@ -90,22 +94,6 @@ class TrainStats extends Component {
                 14 mins
               </Typography>
               <Typography component="p">Average wait time between trains</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper elevation={1} className={classes.paper}>
-              <Typography variant="h1" component="h3">
-                20 secs
-              </Typography>
-              <Typography component="p">Average difference between predicted and actual arrivals</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={6}>
-            <Paper elevation={1} className={classes.paper}>
-              <Typography variant="h1" component="h3">
-                7 mins
-              </Typography>
-              <Typography component="p">Standard deviation of difference between prediction and actual arrival times.</Typography>
             </Paper>
           </Grid>
         </Grid>
