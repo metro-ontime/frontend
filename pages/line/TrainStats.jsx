@@ -5,6 +5,7 @@ import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
 import CircularIndeterminate from '../../components/CircularIndeterminate'
 import axios from 'axios';
+import Moment from 'react-moment';
 import moment from 'moment';
 import 'moment-timezone';
 import mapboxData from './components/MapboxData';
@@ -58,7 +59,9 @@ class TrainStats extends Component {
     this.handleMenuChange = this.handleMenuChange.bind(this);
     this.state = {
       summary: {},
-      total: 1,
+      total: null,
+      timestamp: '',
+      mean_time_between: null,
       selectedArrivalWindow: {
         index: 0,
         menuLabel: arrivalWindows[0].menuLabel,
@@ -70,11 +73,14 @@ class TrainStats extends Component {
   componentDidMount() {
     const currentDate = moment().tz('America/Los_Angeles').format("YYYY-MM-DD");
     console.log(currentDate);
-    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-30.json`).then( ({ data }) => {
+    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-31.json`).then( ({ data }) => {
       this.setState({
         summary: data.ontime,
-        total: data.total_arrivals_analyzed
+        total: data.total_arrivals_analyzed,
+        timestamp: data.timestamp,
+        mean_time_between: data.mean_time_between
       });
+      console.log(data);
     })
   }
 
@@ -91,6 +97,7 @@ class TrainStats extends Component {
   render() {
     const { classes } = this.props;
     const score = Math.round(this.state.summary[this.state.selectedArrivalWindow.dataLabel] / this.state.total * 1000) / 10;
+    const timestamp = this.state.timestamp;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -101,7 +108,7 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.datetime}>
-              <Typography variant="h5"><b>Latest Update:</b> 25 January 2018 at 2:30pm (PST)</Typography>
+              <Typography variant="h5"><b>Latest Update:</b> <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment></Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>
@@ -126,7 +133,7 @@ class TrainStats extends Component {
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
               <Typography variant="h1" component="h3">
-                14 mins
+                { Math.round(this.state.mean_time_between / 60 ) }
               </Typography>
               <Typography component="p">Average wait time between trains</Typography>
             </Paper>
