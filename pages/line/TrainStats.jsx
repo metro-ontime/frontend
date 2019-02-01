@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Typography, Grid, Paper } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
@@ -80,7 +80,6 @@ class TrainStats extends Component {
         timestamp: data.timestamp,
         mean_time_between: data.mean_time_between
       });
-      console.log(data);
     })
   }
 
@@ -98,6 +97,7 @@ class TrainStats extends Component {
     const { classes } = this.props;
     const score = Math.round(this.state.summary[this.state.selectedArrivalWindow.dataLabel] / this.state.total * 1000) / 10;
     const timestamp = this.state.timestamp;
+    const mean_time_between = this.state.mean_time_between;
     return (
       <div className={classes.root}>
         <Grid container spacing={24}>
@@ -108,34 +108,49 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.datetime}>
-              <Typography variant="h5"><b>Latest Update:</b> <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment></Typography>
+              <Typography variant="h5">
+                <b>Latest Update: </b> 
+                { timestamp ?
+                  <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
+                  :
+                  <span>---</span>
+                }
+              </Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
               { score ?
-                <Typography variant="h1" component="h3">
-                  { score }%
-                </Typography>
+                <Fragment>
+                  <Typography variant="h1" component="h3">
+                    { score }%
+                  </Typography>
+                  <Typography component="p">of trains arrived within
+                    <SimpleMenu
+                      menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
+                      handleMenuChange = {this.handleMenuChange}
+                      selected = {this.state.selectedArrivalWindow.index}
+                    />
+                    of a scheduled station stop today
+                  </Typography>
+                </Fragment>
                 :
                 <h3><CircularIndeterminate className={classes.progress} /></h3>
               }
-                <Typography component="p">of trains arrived within
-                  <SimpleMenu
-                    menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
-                    handleMenuChange = {this.handleMenuChange}
-                    selected = {this.state.selectedArrivalWindow.index}
-                  />
-                  of a scheduled station stop today
-                </Typography>
             </Paper>
           </Grid>
           <Grid item xs={6}>
             <Paper elevation={1} className={classes.paper}>
-              <Typography variant="h1" component="h3">
-                { Math.round(this.state.mean_time_between / 60 ) }
-              </Typography>
-              <Typography component="p">Average wait time between trains</Typography>
+              { mean_time_between ?
+                <Fragment>
+                  <Typography variant="h1" component="h3">
+                    { Math.round(this.state.mean_time_between / 60 ) }
+                  </Typography>
+                  <Typography component="p">Average wait time between trains</Typography>
+                </Fragment>
+                :
+                <h3><CircularIndeterminate className={classes.progress} /></h3>
+              }
             </Paper>
           </Grid>
         </Grid>
