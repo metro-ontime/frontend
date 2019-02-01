@@ -56,6 +56,9 @@ const styles = theme => ({
     width: 45,
     height: 45,
   },
+  logoText: {
+    fontSize: '1.5em',
+  }
 });
 
 const lines = [
@@ -102,7 +105,7 @@ class Layout extends Component {
                   <ListItemIcon>
                     <img src="/static/images/mot-logo.svg" className={classes.logo} alt="Logo" />
                   </ListItemIcon>
-                  <ListItemText primary="LA Metro Monitor" />
+                  <ListItemText primary="RailStats LA" classes={{ primary: classes.logoText }}/>
                 </ListItem>
               </a>
             </Link>
