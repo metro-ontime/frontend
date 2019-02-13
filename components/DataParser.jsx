@@ -26,6 +26,7 @@ class DataParser extends Component {
 
       const collectTrip = (trip) => {
         const theTrip = trip.group.toCollection().map((row) => [row.relative_position, new Date(row.datetime).getTime()]);
+        console.log(theTrip);
         return { data: theTrip }
       };
 
@@ -43,7 +44,7 @@ class DataParser extends Component {
     return (
       <div>
         { this.state.trips ? 
-            <Highchart data={ this.state.trips } direction={ this.props.direction }/>
+            <Highchart data={ this.state.trips[this.props.direction] }/>
           :
           <LinearIndeterminate />
         }

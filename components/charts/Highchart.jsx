@@ -7,13 +7,6 @@ import HighchartsReact from 'highcharts-react-official'
 class Highchart extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      data: [null, null]
-    }
-  }
-
-  componentDidMount() {
-    this.setState({ data: this.props.data })
   }
 
   render() {
@@ -21,7 +14,7 @@ class Highchart extends Component {
       title: {
         text: ''
       },
-      series: this.state.data[this.props.direction],
+      series: this.props.data,
       chart: {
         height: "300%"
       },
