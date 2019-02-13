@@ -8,7 +8,7 @@ class Highchart extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: [null, null]
     }
   }
 
@@ -21,7 +21,7 @@ class Highchart extends Component {
       title: {
         text: ''
       },
-      series: this.state.data,
+      series: this.state.data[this.props.direction],
       chart: {
         height: "300%"
       },

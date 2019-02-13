@@ -8,8 +8,8 @@ class DataParser extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { data: null };
-    this.updateData = this.updateData.bind(this);
+    this.state = { trips: null };
+    this.updateTrips = this.updateTrips.bind(this);
   }
 
   componentDidMount() {
@@ -17,25 +17,33 @@ class DataParser extends Component {
     var csvFilePath = "../static/sample_data/trips_latest.csv";
     DataFrame.fromCSV(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${this.props.line}_lametro-rail/2019-01-30.csv`).then(df => {
       df = df.cast('relative_position', Number);
-      const grouped = df.groupBy('trip_id').toCollection();
-      const trips = grouped.map((trip) => {
+      df = df.cast('direction_id', Number);
+      let direction0 = df.where(row => row.get('direction_id') == 0);
+      let direction1 = df.where(row => row.get('direction_id') == 1);
+
+      direction0 = direction0.groupBy('trip_id').toCollection();
+      direction1 = direction1.groupBy('trip_id').toCollection();
+
+      const collectTrip = (trip) => {
         const theTrip = trip.group.toCollection().map((row) => [row.relative_position, new Date(row.datetime).getTime()]);
         return { data: theTrip }
-      });
-      this.updateData(trips);
+      };
+
+      const trips0 = direction0.map(collectTrip);
+      const trips1 = direction1.map(collectTrip);
+      this.updateTrips(trips0, trips1);
     });
   }
 
-  updateData(result) {
-    const data = result;
-    this.setState({data: data});
+  updateTrips(trips0, trips1) {
+    this.setState({trips: [trips0, trips1]});
   }
 
   render() {
     return (
       <div>
-        { this.state.data ? 
-          <Highchart data={ this.state.data } />
+        { this.state.trips ? 
+            <Highchart data={ this.state.trips } direction={ this.props.direction }/>
           :
           <LinearIndeterminate />
         }

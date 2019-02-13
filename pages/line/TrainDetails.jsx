@@ -21,8 +21,13 @@ class TrainDetails extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      direction: '0'
-    }
+      direction: 0
+    };
+    this.handleDirectionChange = this.handleDirectionChange.bind(this);
+  }
+
+  handleDirectionChange(newDirection, index) {
+    this.setState({ direction: index });
   }
 
   render() {
@@ -42,7 +47,7 @@ class TrainDetails extends Component {
         <Grid container justify="center" alignItems="center" spacing={24}>
           <Grid item xs={12}>
             <Toolbar color="primary">
-              <SimpleMenu label="Select Direction: " menuItems={['1', '0']} />
+              <SimpleMenu label="Select Direction: " menuItems={['0', '1']} handleMenuChange={ this.handleDirectionChange } />
             </Toolbar>
           </Grid>
           <Grid item xs={12}>
