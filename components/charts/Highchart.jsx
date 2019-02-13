@@ -14,6 +14,9 @@ class Highchart extends Component {
       title: {
         text: '',
       },
+      xAxis: {
+        reversed: !!this.props.direction,
+      },
       yAxis: {
         reversed: true,
         title: {

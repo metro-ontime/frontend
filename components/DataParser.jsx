@@ -49,8 +49,8 @@ class DataParser extends Component {
       <div>
         {this.state.trips ? (
           <div>
-            {this.props.direction == 0 && <Highchart data={this.state.trips[0]} />}
-            {this.props.direction == 1 && <Highchart data={this.state.trips[1]} />}
+            {this.props.direction == 0 && <Highchart data={this.state.trips[0]} direction={ 0 }/>}
+            {this.props.direction == 1 && <Highchart data={this.state.trips[1]} direction={ 1 }/>}
           </div>
         ) : (
           <LinearIndeterminate />
