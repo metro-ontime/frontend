@@ -102,7 +102,7 @@ class Highchart extends Component {
         height: '500%',
         backgroundColor: '#f5f5f5',
         borderColor: '#999999',
-        borderWidth: 5,
+        borderWidth: 2,
         spacing: [50, 50, 50, 50]
       },
       legend: {
