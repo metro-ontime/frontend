@@ -67,6 +67,8 @@ class Highchart extends Component {
         tickPositions: tickPositions,
         opposite: true,
         tickPosition: 'inside',
+        min: 0,
+        max: 1,
         labels: {
           rotation: -90,
           style: {

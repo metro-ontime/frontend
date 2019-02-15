@@ -4,6 +4,7 @@ import Highchart from '../../components/charts/Highchart';
 import DataParser from '../../components/DataParser';
 import { withStyles } from '@material-ui/core/styles';
 import SimpleMenu from '../../components/SimpleMenu';
+import directionNames from '../../helpers/Directions.js';
 
 const styles = theme => ({
   paper: {
@@ -32,20 +33,13 @@ class TrainDetails extends Component {
 
   render() {
     const { classes } = this.props;
+    const directions = [directionNames[`${this.props.line}_0`], directionNames[`${this.props.line}_1`]];
+
     return (
       <Grid container justify="center" spacing={24}>
         <Grid item xs={12}>
-          <Paper elevation={1} className={ classes.paper }>
-            <Typography variant="h2">Trip Visualizer</Typography>
-            <Divider className={ classes.root } />
-            <Typography variant="body1" component="p">
-              Grey lines depict scheduled train journeys, while colored lines show the observed paths of trains over this time frame. Colored lines above grey lines depict early trains and colored lines below grey lines depict late trains.
-            </Typography>
-        </Paper>
-        </Grid>
-        <Grid item xs={12}>
           <Toolbar color="primary">
-            <SimpleMenu label="Select Direction: " menuItems={['0', '1']} handleMenuChange={ this.handleDirectionChange } />
+            <SimpleMenu label={`Towards: ${directions[this.state.direction]}`} menuItems={directions} handleMenuChange={ this.handleDirectionChange } />
           </Toolbar>
         </Grid>
         <Grid item xs={12}>

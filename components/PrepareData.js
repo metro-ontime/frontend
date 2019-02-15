@@ -2,6 +2,7 @@ import DataFrame from 'dataframe-js';
 import stopPositions from './StopPositions.js';
 import moment from 'moment-timezone';
 
+
 const collectObservedTrip = (trip) => {
   const theTrip = trip.group
     .toCollection()
