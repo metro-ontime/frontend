@@ -74,13 +74,16 @@ class Highchart extends Component {
           },
           formatter: function() {
             const index = this.value.toFixed(3);
-            return posToStopNames[index]
+            const name = posToStopNames[index]
+            return name.replace(' Station', '')
           }
         }
       },
       yAxis: {
         reversed: true,
         type: 'datetime',
+        min: this.props.min,
+        max: this.props.max,
         title: {
           text: 'Time',
         },

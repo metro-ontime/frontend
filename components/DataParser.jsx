@@ -7,7 +7,7 @@ import { prepareObservations, prepareSchedule } from './PrepareData';
 class DataParser extends Component {
   constructor(props) {
     super(props);
-    this.state = { trips: null, schedule: null };
+    this.state = { trips: null, schedule: null, minTime: null, maxTime: null };
     this.updateTrips = this.updateTrips.bind(this);
     this.updateSchedule = this.updateSchedule.bind(this);
   }
@@ -25,8 +25,8 @@ class DataParser extends Component {
     this.setState({ trips: [trips0, trips1] });
   }
 
-  updateSchedule(trips0, trips1) {
-    this.setState({ schedule: [trips0, trips1] });
+  updateSchedule(trips0, trips1, minTime, maxTime) {
+    this.setState({ schedule: [trips0, trips1], minTime: minTime, maxTime: maxTime });
   }
 
   render() {
@@ -34,8 +34,8 @@ class DataParser extends Component {
       <div>
         {this.state.trips && this.state.schedule ? (
           <div>
-            {this.props.direction == 0 && <Highchart observations={this.state.trips[0].concat(this.state.schedule[0])} direction={ 0 } line={ this.props.line }/>}
-            {this.props.direction == 1 && <Highchart observations={this.state.trips[1].concat(this.state.schedule[1])} direction={ 1 } line={ this.props.line }/>}
+            {this.props.direction == 0 && <Highchart observations={this.state.trips[0].concat(this.state.schedule[0])} min={this.state.minTime} max={this.state.maxTime} direction={ 0 } line={ this.props.line }/>}
+            {this.props.direction == 1 && <Highchart observations={this.state.trips[1].concat(this.state.schedule[1])} min={this.state.minTime} max={this.state.maxTime} direction={ 1 } line={ this.props.line }/>}
           </div>
         ) : (
           <LinearIndeterminate />
