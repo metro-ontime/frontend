@@ -72,7 +72,6 @@ class TrainStats extends Component {
 
   componentDidMount() {
     const currentDate = moment().tz('America/Los_Angeles').format("YYYY-MM-DD");
-    console.log(currentDate);
     axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-31.json`).then( ({ data }) => {
       this.setState({
         summary: data.ontime,

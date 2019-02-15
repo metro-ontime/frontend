@@ -33,7 +33,7 @@ class TrainDetails extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Grid container spacing={40}>
+      <Grid container justify="center" spacing={24}>
         <Grid item xs={12}>
           <Paper elevation={1} className={ classes.paper }>
             <Typography variant="h2">Trip Visualizer</Typography>
@@ -43,16 +43,13 @@ class TrainDetails extends Component {
             </Typography>
         </Paper>
         </Grid>
-
-        <Grid container justify="center" alignItems="center" spacing={24}>
-          <Grid item xs={12}>
-            <Toolbar color="primary">
-              <SimpleMenu label="Select Direction: " menuItems={['0', '1']} handleMenuChange={ this.handleDirectionChange } />
-            </Toolbar>
-          </Grid>
-          <Grid item xs={12}>
-            <DataParser line={ this.props.line } direction={ this.state.direction }/>
-          </Grid>
+        <Grid item xs={12}>
+          <Toolbar color="primary">
+            <SimpleMenu label="Select Direction: " menuItems={['0', '1']} handleMenuChange={ this.handleDirectionChange } />
+          </Toolbar>
+        </Grid>
+        <Grid item xs={12}>
+          <DataParser line={ this.props.line } direction={ this.state.direction }/>
         </Grid>
       </Grid>
     )
