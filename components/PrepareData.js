@@ -59,9 +59,11 @@ const prepareSchedule = (url, line, updateFunction) => {
         .map(row => {
           return (
             {
-              x: stops0[row.stop_id]["relative_position"],
+              // This conditional exists because of an upstream bug,
+              // sometimes stops on other lines end up in the CSV
+              x: stops0[row.stop_id] ? stops0[row.stop_id]["relative_position"] : 0,
               y: new Date(row.datetime).getTime(),
-              name: stops0[row.stop_id]["stop_name"]
+              name: stops0[row.stop_id] ? stops0[row.stop_id]["stop_name"] : "Error"
             }
           )
         });

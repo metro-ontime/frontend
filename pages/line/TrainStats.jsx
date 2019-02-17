@@ -9,6 +9,7 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import 'moment-timezone';
 import mapboxData from './components/MapboxData';
+import { getMostRecentSummary } from '../../components/DataFinder';
 
 const styles = theme => ({
   root: {
@@ -71,15 +72,14 @@ class TrainStats extends Component {
   }
 
   componentDidMount() {
-    const currentDate = moment().tz('America/Los_Angeles').format("YYYY-MM-DD");
-    axios.get(`https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/summaries/${this.props.line}_lametro-rail/2019-01-31.json`).then( ({ data }) => {
+    getMostRecentSummary(this.props.line, (data) => {
       this.setState({
         summary: data.ontime,
         total: data.total_arrivals_analyzed,
         timestamp: data.timestamp,
         mean_time_between: data.mean_time_between
       });
-    })
+    });
   }
 
   handleMenuChange(item, index) {
