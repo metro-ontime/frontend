@@ -32,6 +32,7 @@
     "aws-sdk": "^2.404.0",
     "axios": "^0.18.0",
     "babel-eslint": "^10.0.1",
+    "classnames": "^2.2.6",
     "d3-array": "^2.0.2",
     "d3-axis": "^1.0.12",
     "d3-scale": "^2.1.2",

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Head from 'next/head';
+import classNames from 'classnames';
 import {
   Collapse,
   List,
@@ -19,6 +21,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Link from 'next/link';
+import Nav from './Nav';
 
 const drawerWidth = 300;
 
@@ -30,24 +33,25 @@ const styles = theme => ({
   drawer: {
     width: drawerWidth,
   },
-  mainContent: {
-    paddingLeft: drawerWidth + 10,
+  main: {
+    paddingLeft: 10,
     paddingTop: 80,
     paddingRight: 15,
     minHeight: '100%',
   },
-  appBar: {
-    paddingLeft: drawerWidth,
-    justifyContent: 'space-between',
+  content: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: 0,
   },
-  appBarColor: {},
-  centerVertically: {
-    margin: 'auto 0',
-  },
-  containAppBar: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: drawerWidth,
   },
   icon: {
     margin: theme.spacing.unit,
@@ -72,11 +76,16 @@ const lines = [
 
 class Layout extends Component {
   state = {
-    open: false,
+    subMenuOpen: false,
+    drawerOpen: true,
   };
 
-  handleClick = () => {
-    this.setState(state => ({ open: !state.open }));
+  handleSubMenu = () => {
+    this.setState(state => ({ subMenuOpen: !state.subMenuOpen }));
+  };
+
+  handleDrawer = () => {
+    this.setState(state => ({ drawerOpen: !state.drawerOpen }));
   };
 
   render() {
@@ -97,7 +106,11 @@ class Layout extends Component {
 
     return (
       <div style={{ minHeight: '100%' }}>
-        <Drawer variant="permanent" classes={{ paper: classes.drawer }}>
+        <Head>
+          <title>Metro Monitor | {this.props.pageTitle}</title>
+        </Head>
+        {' '}
+        <Drawer variant="persistent" classes={{ paper: classes.drawer }} open={this.state.drawerOpen}>
           <List>
             <Link href="/">
               <a style={{ textDecoration: 'none' }}>
@@ -115,12 +128,12 @@ class Layout extends Component {
               <LocationCityIcon className={classes.icon} style={{ marginLeft: 0 }} />
               <ListItemText inset primary="Network" />
             </ListItem>
-            <ListItem button onClick={this.handleClick}>
+            <ListItem button onClick={this.handleSubMenu}>
               <DirectionsTransitIcon className={classes.icon} style={{ marginLeft: 0 }} />
               <ListItemText inset primary="Lines" />
-              {this.state.open ? <ExpandLess /> : <ExpandMore />}
+              {this.state.subMenuOpen ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
-            <Collapse in={this.state.open} timeout="auto" unmountOnExit>
+            <Collapse in={this.state.subMenuOpen} timeout="auto" unmountOnExit>
               {links}
             </Collapse>
             <ListItem button>
@@ -133,7 +146,10 @@ class Layout extends Component {
             </ListItem>
           </List>
         </Drawer>
-        <div className={classes.mainContent} style={{ ...this.props.style }}>
+        <Nav navClasses={classNames(classes.content, { [classes.contentShift]: this.state.drawerOpen, })} pageTitle={this.props.pageTitle} handleMenuButton={this.handleDrawer}>
+          {this.props.toolbarChildren}
+        </Nav>
+        <div className={classNames(classes.main, classes.content, { [classes.contentShift]: this.state.drawerOpen, })} style={{ ...this.props.style }}>
           {this.props.children}
         </div>
       </div>

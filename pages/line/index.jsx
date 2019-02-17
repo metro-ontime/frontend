@@ -4,7 +4,6 @@ import { Tab, Tabs } from '@material-ui/core';
 import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
-import Nav from './components/Nav';
 
 const lines = {
   801: 'Blue',
@@ -39,14 +38,15 @@ class Line extends Component {
   render() {
     const { id } = this.props;
     const { selectedTab } = this.state;
+    const toolbarChildren = (
+      <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
+        <Tab label="Stats" />
+        <Tab label="Diagram" />
+      </Tabs>
+    );
+
     return (
-      <Layout style={{ minHeight: '100%' }}>
-        <Nav pageTitle={`${lines[id]} Line`}>
-          <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
-            <Tab label="Stats" />
-            <Tab label="Diagram" />
-          </Tabs>
-        </Nav>
+      <Layout style={{ minHeight: '100%' }} pageTitle={`${lines[id]} Line`} toolbarChildren={toolbarChildren}>
         {selectedTab === 0 && <TrainStats line={id} />}
         {selectedTab === 1 && <TrainDetails line={id} />}
       </Layout>
