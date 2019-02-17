@@ -77,7 +77,7 @@ const lines = [
 class Layout extends Component {
   state = {
     subMenuOpen: false,
-    drawerOpen: true,
+    drawerOpen: false,
   };
 
   handleSubMenu = () => {
@@ -124,10 +124,12 @@ class Layout extends Component {
             </Link>
             <Divider />
             {' '}
-            <ListItem button>
-              <LocationCityIcon className={classes.icon} style={{ marginLeft: 0 }} />
-              <ListItemText inset primary="Network" />
-            </ListItem>
+            <Link href="/">
+              <ListItem button>
+                <LocationCityIcon className={classes.icon} style={{ marginLeft: 0 }} />
+                <ListItemText inset primary="Network" />
+              </ListItem>
+            </Link>
             <ListItem button onClick={this.handleSubMenu}>
               <DirectionsTransitIcon className={classes.icon} style={{ marginLeft: 0 }} />
               <ListItemText inset primary="Lines" />

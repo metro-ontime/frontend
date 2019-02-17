@@ -26,8 +26,7 @@ class Index extends Component {
     return (
       <div>
         <Layout
-          pageTitle="Line Selector"
-          style={{ paddingTop: '0', paddingLeft: '300px', height: '100vh' }}
+          pageTitle="Network Summary"
         >
           <div
             style={{
