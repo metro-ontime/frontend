@@ -10,6 +10,8 @@ import moment from 'moment';
 import 'moment-timezone';
 import mapboxData from './components/MapboxData';
 import { getMostRecentSummary } from '../../components/DataFinder';
+import withWidth from '@material-ui/core/withWidth';
+import flowRight from 'lodash/flowRight';
 
 const styles = theme => ({
   root: {
@@ -99,7 +101,7 @@ class TrainStats extends Component {
     const mean_time_between = this.state.mean_time_between;
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={24} justify="center">
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.paper}>
               <Map data={ mapboxData[this.props.line] }/>
@@ -107,7 +109,7 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.datetime}>
-              <Typography variant="h5">
+              <Typography variant="subtitle1">
                 <b>Latest Update: </b> 
                 { timestamp ?
                   <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
@@ -117,11 +119,11 @@ class TrainStats extends Component {
               </Typography>
             </Paper>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Paper elevation={1} className={classes.paper}>
               { score ?
                 <Fragment>
-                  <Typography variant="h1" component="h3">
+                  <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
                     { score }%
                   </Typography>
                   <Typography component="p">of trains arrived within
@@ -138,11 +140,11 @@ class TrainStats extends Component {
               }
             </Paper>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <Paper elevation={1} className={classes.paper}>
               { mean_time_between ?
                 <Fragment>
-                  <Typography variant="h1" component="h3">
+                  <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
                     { Math.round(this.state.mean_time_between / 60 ) }
                   </Typography>
                   <Typography component="p">Average wait time between trains</Typography>
@@ -158,4 +160,4 @@ class TrainStats extends Component {
   }
 }
 
-export default withStyles(styles)(TrainStats);
+export default flowRight([withStyles(styles), withWidth()])(TrainStats);
