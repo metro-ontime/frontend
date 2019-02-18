@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Typography, Grid, Paper } from '@material-ui/core';
+import { Typography, Grid, Paper, Tooltip } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
@@ -30,7 +30,17 @@ const styles = theme => ({
   progress: {
     margin: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-  }
+  },
+  htmlTooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'rgba(0, 0, 0, 0.87)',
+    maxWidth: 220,
+    fontSize: theme.typography.pxToRem(12),
+    border: '1px solid #dadde9',
+    '& b': {
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+  },
 });
 
 const arrivalWindows = [
@@ -63,6 +73,7 @@ class TrainStats extends Component {
     this.state = {
       summary: {},
       total: null,
+      total_scheduled: null,
       timestamp: '',
       mean_time_between: null,
       selectedArrivalWindow: {
@@ -75,9 +86,11 @@ class TrainStats extends Component {
 
   componentDidMount() {
     getMostRecentSummary(this.props.line, (data) => {
+      console.log(data);
       this.setState({
         summary: data.ontime,
         total: data.total_arrivals_analyzed,
+        total_scheduled: data.total_scheduled_arrivals,
         timestamp: data.timestamp,
         mean_time_between: data.mean_time_between
       });
@@ -109,23 +122,37 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={12}>
             <Paper elevation={1} className={classes.datetime}>
-              <Typography variant="subtitle1">
-                <b>Latest Update: </b> 
-                { timestamp ?
-                  <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
-                  :
-                  <span>---</span>
-                }
-              </Typography>
+              <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                <Fragment>
+                  <Typography color="inherit">Update Timing</Typography>
+                  Latest statistics are provided roughly every 30 minutes between 5am and 10pm PST.
+                </Fragment>
+              )}>
+                <Typography variant="subtitle1">
+                  <b>Latest Update: </b> 
+                  { timestamp ?
+                    <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
+                    :
+                    <span>---</span>
+                  }
+                </Typography>
+              </Tooltip>
             </Paper>
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper elevation={1} className={classes.paper}>
               { score ?
                 <Fragment>
-                  <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
-                    { score }%
-                  </Typography>
+                  <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                    <Fragment>
+                      <Typography color="inherit">Performance Score</Typography>
+                      This number is based on {this.state.total} train arrivals estimated so far out of {this.state.total_scheduled} scheduled for today ({ Math.round(1000 * this.state.total / this.state.total_scheduled) / 10 }%).
+                    </Fragment>
+                  )}>
+                    <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
+                      { score }%
+                    </Typography>
+                  </Tooltip>
                   <Typography component="p">observed arrivals within
                     <SimpleMenu
                       menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
@@ -144,9 +171,16 @@ class TrainStats extends Component {
             <Paper elevation={1} className={classes.paper}>
               { mean_time_between ?
                 <Fragment>
-                  <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
-                    { Math.round(this.state.mean_time_between / 60 ) }
-                  </Typography>
+                  <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                    <Fragment>
+                      <Typography color="inherit">Average Wait Time</Typography>
+                      This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+                    </Fragment>
+                  )}>
+                    <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
+                      { Math.round(this.state.mean_time_between / 60 ) }
+                    </Typography>
+                  </Tooltip>
                   <Typography component="p">minutes between trains on average</Typography>
                 </Fragment>
                 :
