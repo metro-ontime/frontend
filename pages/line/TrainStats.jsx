@@ -126,13 +126,13 @@ class TrainStats extends Component {
                   <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
                     { score }%
                   </Typography>
-                  <Typography component="p">of trains arrived within
+                  <Typography component="p">observed arrivals within
                     <SimpleMenu
                       menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
                       handleMenuChange = {this.handleMenuChange}
                       selected = {this.state.selectedArrivalWindow.index}
                     />
-                    of a scheduled station stop today
+                    of a scheduled stop
                   </Typography>
                 </Fragment>
                 :
@@ -147,7 +147,7 @@ class TrainStats extends Component {
                   <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
                     { Math.round(this.state.mean_time_between / 60 ) }
                   </Typography>
-                  <Typography component="p">Average wait time between trains</Typography>
+                  <Typography component="p">minutes between trains on average</Typography>
                 </Fragment>
                 :
                 <h3><CircularIndeterminate className={classes.progress} /></h3>
