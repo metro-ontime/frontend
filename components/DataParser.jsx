@@ -3,7 +3,7 @@ import Papa from 'papaparse';
 import Highchart from './charts/Highchart';
 import LinearIndeterminate from './LinearIndeterminate';
 import { prepareObservations, prepareSchedule } from './PrepareData';
-import { getMostRecentSchedulePath, getMostRecentVehiclesPath } from './DataFinder';
+import { whenListAllObjects, whenGotS3Object } from './DataFinder';
 
 class DataParser extends Component {
   constructor(props) {
@@ -14,14 +14,16 @@ class DataParser extends Component {
   }
 
   componentDidMount() {
-    // Should be run as web worker?
-    getMostRecentVehiclesPath(this.props.line, path => {
-      const fullPath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${path}`;
-      prepareObservations(fullPath, this.updateTrips);
+    const vehicleListParams = {Bucket: 'h4la-metro-performance', Prefix: `data/vehicle_tracking/processed/${this.props.line}_lametro-rail`};
+    whenListAllObjects(vehicleListParams).then(objects => {
+      const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${objects[objects.length - 1]}`;
+      prepareObservations(vehiclePath, this.updateTrips);
     });
-    getMostRecentSchedulePath(this.props.line, path => {
-      const fullPath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${path}`;
-      prepareSchedule(fullPath, this.props.line, this.updateSchedule);
+
+    const scheduleListParams = {Bucket: 'h4la-metro-performance', Prefix: `data/schedule/${this.props.line}_lametro-rail`};
+    whenListAllObjects(scheduleListParams).then(objects => {
+      const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${objects[objects.length - 1]}`;
+      prepareSchedule(schedulePath, this.props.line, this.updateSchedule);
     });
   }
 

@@ -9,7 +9,6 @@ import Moment from 'react-moment';
 import moment from 'moment';
 import 'moment-timezone';
 import mapboxData from './components/MapboxData';
-import { getMostRecentSummary } from '../../components/DataFinder';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
 
@@ -71,30 +70,12 @@ class TrainStats extends Component {
     super(props);
     this.handleMenuChange = this.handleMenuChange.bind(this);
     this.state = {
-      summary: {},
-      total: null,
-      total_scheduled: null,
-      timestamp: '',
-      mean_time_between: null,
       selectedArrivalWindow: {
         index: 0,
         menuLabel: arrivalWindows[0].menuLabel,
         dataLabel: arrivalWindows[0].dataLabel,
       }
     };
-  }
-
-  componentDidMount() {
-    getMostRecentSummary(this.props.line, (data) => {
-      console.log(data);
-      this.setState({
-        summary: data.ontime,
-        total: data.total_arrivals_analyzed,
-        total_scheduled: data.total_scheduled_arrivals,
-        timestamp: data.timestamp,
-        mean_time_between: data.mean_time_between
-      });
-    });
   }
 
   handleMenuChange(item, index) {
@@ -109,9 +90,8 @@ class TrainStats extends Component {
 
   render() {
     const { classes } = this.props;
-    const score = Math.round(this.state.summary[this.state.selectedArrivalWindow.dataLabel] / this.state.total * 1000) / 10;
-    const timestamp = this.state.timestamp;
-    const mean_time_between = this.state.mean_time_between;
+    const data = this.props.data;
+    const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
     return (
       <div className={classes.root}>
         <Grid container spacing={24} justify="center">
@@ -130,8 +110,8 @@ class TrainStats extends Component {
               )}>
                 <Typography variant="subtitle1">
                   <b>Latest Update: </b> 
-                  { timestamp ?
-                    <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
+                  { data.timestamp ?
+                    <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ data.timestamp }</Moment>
                     :
                     <span>---</span>
                   }
@@ -146,7 +126,7 @@ class TrainStats extends Component {
                   <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
                     <Fragment>
                       <Typography color="inherit">Performance Score</Typography>
-                      This number is based on {this.state.total} train arrivals estimated so far out of {this.state.total_scheduled} scheduled for today ({ Math.round(1000 * this.state.total / this.state.total_scheduled) / 10 }%).
+                      This number is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%).
                     </Fragment>
                   )}>
                     <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
@@ -169,7 +149,7 @@ class TrainStats extends Component {
           </Grid>
           <Grid item xs={12} md={6}>
             <Paper elevation={1} className={classes.paper}>
-              { mean_time_between ?
+              { data.mean_time_between ?
                 <Fragment>
                   <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
                     <Fragment>
@@ -178,7 +158,7 @@ class TrainStats extends Component {
                     </Fragment>
                   )}>
                     <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
-                      { Math.round(this.state.mean_time_between / 60 ) }
+                      { Math.round(data.mean_time_between / 60 ) }
                     </Typography>
                   </Tooltip>
                   <Typography component="p">minutes between trains on average</Typography>

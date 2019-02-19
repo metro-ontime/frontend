@@ -5,7 +5,10 @@ import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
 import { linesById } from '../../helpers/LineInfo.js';
+import { whenGotS3Object, whenListAllObjects } from '../../components/DataFinder.js';
 
+import S3 from 'aws-sdk/clients/s3';
+const s3 = new S3();
 
 class Line extends Component {
   constructor(props) {
@@ -15,8 +18,13 @@ class Line extends Component {
     };
   }
 
-  static async getInitialProps({ query }) {
-    return query;
+  static async getInitialProps({ query, res }) {
+    const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries/${query.id}_lametro-rail`};
+    const objects = await whenListAllObjects(listParams);
+    const mostRecent = objects[objects.length - 1];
+    const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
+    const data = await whenGotS3Object(objectParams);
+    return { query, data };
   }
 
   handleClick = () => {
@@ -28,7 +36,8 @@ class Line extends Component {
   };
 
   render() {
-    const { id } = this.props;
+    const { id } = this.props.query;
+    const { data } = this.props;
     const { selectedTab } = this.state;
     const toolbarChildren = (
       <Hidden smDown>
@@ -60,7 +69,7 @@ class Line extends Component {
 
     return (
       <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarTitle={toolbarTitle} toolbarChildren={toolbarChildren}>
-        {selectedTab === 0 && <TrainStats line={id} />}
+        {selectedTab === 0 && <TrainStats line={id} data={data}/>}
         {selectedTab === 1 && <TrainDetails line={id} />}
       </Layout>
     );
