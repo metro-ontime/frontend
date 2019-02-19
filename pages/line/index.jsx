@@ -4,15 +4,7 @@ import { Tab, Tabs } from '@material-ui/core';
 import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
-
-const lines = {
-  801: 'Blue',
-  802: 'Red',
-  803: 'Green',
-  804: 'Gold',
-  805: 'Purple',
-  806: 'Expo',
-};
+import { linesById } from '../../helpers/LineInfo.js';
 
 
 class Line extends Component {
@@ -44,9 +36,27 @@ class Line extends Component {
         <Tab label="Diagram" />
       </Tabs>
     );
+    const pageTitle = (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div
+          style={{
+            backgroundColor: linesById[id].color,
+            width: '30px',
+            padding: 0,
+            height: '30px',
+            margin: 0,
+            marginRight: 15,
+            borderRadius: '30px',
+            border: '3px solid white',
+            float: 'left',
+          }}
+        />
+        { linesById[id].name } Line
+      </div>
+    );
 
     return (
-      <Layout style={{ minHeight: '100%' }} pageTitle={`${lines[id]} Line`} toolbarChildren={toolbarChildren}>
+      <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarChildren={toolbarChildren}>
         {selectedTab === 0 && <TrainStats line={id} />}
         {selectedTab === 1 && <TrainDetails line={id} />}
       </Layout>

@@ -1,14 +1,20 @@
 import React, { Component } from 'react';
-import { Typography, Grid, Paper } from '@material-ui/core';
+import { Typography, Grid, Paper, Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Layout from '../components/Layout';
+import { lines } from '../helpers/LineInfo.js';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing.unit * 1.5,
+  button: {
+    margin: theme.spacing.unit,
+  },
+  buttonWrapper: {
+    padding: 0,
+    width: 200,
+    background: 'transparent',
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
@@ -23,78 +29,44 @@ class Index extends Component {
   render() {
     const { classes } = this.props;
     const position = [34.0407, -118.2468];
+    const lineButton = (line) => (
+      <Button href={`/line/${line.id}`} variant="outlined" className={classes.button}>
+        <div className={classes.buttonWrapper} style={{ position: 'relative' }}>
+          <div
+            style={{
+              backgroundColor: line.color,
+              width: '25px',
+              padding: 0,
+              height: '25px',
+              margin: 0,
+              borderRadius: '25px',
+              float: 'left',
+            }}
+          />
+          <div>
+            <Typography component="h4">{line.name} Line</Typography>
+          </div>
+        </div>
+      </Button>
+    )
+    const lineButtons = () => {
+      return lines.map((line) => {
+        return (
+          <Grid item xs={12} key={line.name}>
+            { lineButton(line) }
+          </Grid>
+        )
+      })
+    };
+
     return (
       <div>
         <Layout
           pageTitle="Network Summary"
         >
-          <div
-            style={{
-              padding: '6em',
-              paddingBottom: '10em',
-              paddingTop: '16em',
-              height: '400px',
-              backgroundImage:
-                'url('
-                + 'https://images.unsplash.com/photo-1477936821694-ec4233a9a1a0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2820&q=80'
-                + ')',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-            }}
-          >
-            <Typography variant="h5" style={{ color: '#fff' }}>
-              We had a question
-            </Typography>
-            <Typography
-              variant="h2"
-              style={{ fontWeight: 'bold', marginTop: '0.25em', color: '#fff' }}
-              color="white"
-            >
-              How predictable is the LA Metro?
-            </Typography>
-          </div>
-          <div style={{ padding: '6em', paddingTop: '4em', marginTop: '0em' }}>
-            <Typography variant="h5" style={{ marginTop: '0.25em', color: '#303030' }}>
-              Find out by clicking a line below
-            </Typography>
+          <div style={{ maxWidth: '800px'}}>
             <Grid container spacing={24} style={{ marginTop: '2em' }}>
-              <Grid item xs={3}>
-                <Paper elevation={1} className={classes.paper} style={{ position: 'relative' }}>
-                  <div
-                    style={{
-                      backgroundColor: 'red',
-                      width: '25px',
-                      padding: 0,
-                      height: '25px',
-                      margin: 0,
-                      borderRadius: '25px',
-                      float: 'left',
-                    }}
-                  />
-                  <div>
-                    <Typography component="h5">Red Line</Typography>
-                  </div>
-                </Paper>
-              </Grid>
-              <Grid item xs={3}>
-                <Paper elevation={1} className={classes.paper} style={{ position: 'relative' }}>
-                  <div
-                    style={{
-                      backgroundColor: 'blue',
-                      width: '25px',
-                      padding: 0,
-                      height: '25px',
-                      margin: 0,
-                      borderRadius: '25px',
-                      float: 'left',
-                    }}
-                  />
-                  <div>
-                    <Typography component="h5">Blue Line</Typography>
-                  </div>
-                </Paper>
-              </Grid>
+              { lineButtons() }
             </Grid>
           </div>
         </Layout>

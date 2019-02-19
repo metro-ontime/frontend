@@ -8,6 +8,7 @@ import {
   ListItemIcon,
   Divider,
   ListItemText,
+  ListItemAvatar,
   Typography,
   Drawer,
 } from '@material-ui/core';
@@ -22,6 +23,7 @@ import { withStyles } from '@material-ui/core/styles';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Link from 'next/link';
 import Nav from './Nav';
+import { lines } from '../helpers/LineInfo.js';
 
 const drawerWidth = 300;
 
@@ -65,15 +67,6 @@ const styles = theme => ({
   }
 });
 
-const lines = [
-  { name: 'Blue', id: 801 },
-  { name: 'Red', id: 802 },
-  { name: 'Green', id: 803 },
-  { name: 'Gold', id: 804 },
-  { name: 'Purple', id: 805 },
-  { name: 'Expo', id: 806 },
-];
-
 class Layout extends Component {
   state = {
     subMenuOpen: false,
@@ -97,6 +90,19 @@ class Layout extends Component {
         {lines.map(line => (
           <Link href={`/line/${line.id}`} key={line.id.toString()}>
             <ListItem button>
+              <ListItemAvatar>
+                <div
+                  style={{
+                    backgroundColor: line.color,
+                    width: '25px',
+                    padding: 0,
+                    height: '25px',
+                    margin: 0,
+                    borderRadius: '25px',
+                    float: 'left',
+                  }}
+                />
+              </ListItemAvatar>
               <ListItemText primary={`${line.name}`} />
             </ListItem>
           </Link>
