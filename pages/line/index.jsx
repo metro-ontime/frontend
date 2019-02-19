@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Tab, Tabs } from '@material-ui/core';
+import { Hidden, Tab, Tabs } from '@material-ui/core';
 import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
@@ -31,10 +31,12 @@ class Line extends Component {
     const { id } = this.props;
     const { selectedTab } = this.state;
     const toolbarChildren = (
-      <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
-        <Tab label="Summary" />
-        <Tab label="Diagram" />
-      </Tabs>
+      <Hidden smDown>
+        <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
+          <Tab label="Summary" />
+          <Tab label="Diagram" />
+        </Tabs>
+      </Hidden>
     );
     const pageTitle = `${ linesById[id].name } Line`;
     const toolbarTitle = (

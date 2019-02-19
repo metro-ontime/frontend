@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { AppBar, Typography, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+import flowRight from 'lodash/flowRight';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import classNames from 'classnames';
@@ -31,7 +33,7 @@ const styles = theme => ({
   }
 });
 
-class Layout extends Component {
+class Nav extends Component {
   render() {
     const { classes } = this.props;
     return (
@@ -49,7 +51,7 @@ class Layout extends Component {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h5" color="inherit">
+            <Typography variant={ this.props.width === 'xs' ? 'body1' : 'h5' } color="inherit">
               {this.props.pageTitle}
             </Typography>
           </div>
@@ -60,4 +62,4 @@ class Layout extends Component {
   }
 }
 
-export default withStyles(styles)(Layout);
+export default flowRight([withStyles(styles), withWidth()])(Nav);

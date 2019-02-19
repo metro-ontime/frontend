@@ -39,7 +39,7 @@ class Index extends Component {
         toolbarTitle="Network Summary"
       >
         <Grid container justify="center">
-          <Grid item container justify="center" spacing={24} xs={6}>
+          <Grid item container justify="center" spacing={24} xs={12} md={6}>
             <Grid item xs={12}>
               <Card>
                 <CardHeader title="RailStats LA" />

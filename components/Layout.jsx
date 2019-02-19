@@ -20,6 +20,8 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+import flowRight from 'lodash/flowRight';
 import SvgIcon from '@material-ui/core/SvgIcon';
 import Link from 'next/link';
 import Nav from './Nav';
@@ -163,4 +165,4 @@ class Layout extends Component {
   }
 }
 
-export default withStyles(styles)(Layout);
+export default flowRight([withStyles(styles), withWidth()])(Layout);
