@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Head from 'next/head';
 import classNames from 'classnames';
 import {
@@ -113,7 +113,7 @@ class Layout extends Component {
     return (
       <div style={{ minHeight: '100%' }}>
         <Head>
-          <title>Metro Monitor | {this.props.pageTitle}</title>
+          <title>RailStats LA | {this.props.pageTitle}</title>
         </Head>
         {' '}
         <Drawer variant="persistent" classes={{ paper: classes.drawer }} open={this.state.drawerOpen}>
@@ -122,7 +122,7 @@ class Layout extends Component {
               <a style={{ textDecoration: 'none' }}>
                 <ListItem style={{ padding: '5px 16px' }}>
                   <ListItemIcon>
-                    <img src="/static/images/mot-logo.svg" className={classes.logo} alt="Logo" />
+                    <img src="/static/images/network-color.svg" className={classes.logo} alt="Logo" />
                   </ListItemIcon>
                   <ListItemText primary="RailStats LA" classes={{ primary: classes.logoText }}/>
                 </ListItem>
@@ -144,17 +144,15 @@ class Layout extends Component {
             <Collapse in={this.state.subMenuOpen} timeout="auto" unmountOnExit>
               {links}
             </Collapse>
-            <ListItem button>
-              <PlaceIcon className={classes.icon} style={{ marginLeft: 0 }} />
-              <ListItemText inset primary="Stations" />
-            </ListItem>
-            <ListItem button>
-              <InfoIcon className={classes.icon} style={{ marginLeft: 0 }} />
-              <ListItemText inset primary="About" />
-            </ListItem>
+            <Link href="/about">
+              <ListItem button>
+                <InfoIcon className={classes.icon} style={{ marginLeft: 0 }} />
+                <ListItemText inset primary="About" />
+              </ListItem>
+            </Link>
           </List>
         </Drawer>
-        <Nav navClasses={classNames(classes.content, { [classes.contentShift]: this.state.drawerOpen, })} pageTitle={this.props.pageTitle} handleMenuButton={this.handleDrawer}>
+        <Nav navClasses={classNames(classes.content, { [classes.contentShift]: this.state.drawerOpen, })} pageTitle={this.props.toolbarTitle} handleMenuButton={this.handleDrawer}>
           {this.props.toolbarChildren}
         </Nav>
         <div className={classNames(classes.main, classes.content, { [classes.contentShift]: this.state.drawerOpen, })} style={{ ...this.props.style }}>

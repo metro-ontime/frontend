@@ -32,31 +32,32 @@ class Line extends Component {
     const { selectedTab } = this.state;
     const toolbarChildren = (
       <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
-        <Tab label="Stats" />
+        <Tab label="Summary" />
         <Tab label="Diagram" />
       </Tabs>
     );
-    const pageTitle = (
+    const pageTitle = `${ linesById[id].name } Line`;
+    const toolbarTitle = (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        Metro { linesById[id].name } Line
         <div
           style={{
             backgroundColor: linesById[id].color,
             width: '30px',
             padding: 0,
             height: '30px',
-            margin: 0,
+            marginLeft: 15,
             marginRight: 15,
             borderRadius: '30px',
             border: '3px solid white',
             float: 'left',
           }}
         />
-        { linesById[id].name } Line
       </div>
     );
 
     return (
-      <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarChildren={toolbarChildren}>
+      <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarTitle={toolbarTitle} toolbarChildren={toolbarChildren}>
         {selectedTab === 0 && <TrainStats line={id} />}
         {selectedTab === 1 && <TrainDetails line={id} />}
       </Layout>
