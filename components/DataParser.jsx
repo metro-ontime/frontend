@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Papa from 'papaparse';
 import Highchart from './charts/Highchart';
 import LinearIndeterminate from './LinearIndeterminate';
 import { prepareObservations, prepareSchedule } from './PrepareData';

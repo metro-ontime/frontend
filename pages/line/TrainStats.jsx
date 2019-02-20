@@ -4,7 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
 import CircularIndeterminate from '../../components/CircularIndeterminate'
-import axios from 'axios';
 import Moment from 'react-moment';
 import moment from 'moment';
 import 'moment-timezone';
