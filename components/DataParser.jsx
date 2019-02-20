@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Highchart from './charts/Highchart';
 import LinearIndeterminate from './LinearIndeterminate';
-import { prepareObservations, prepareSchedule } from './PrepareData';
-import { whenListAllObjects, whenGotS3Object } from './DataFinder';
+import { prepareObservations, prepareSchedule } from '../helpers/PrepareData';
+import { whenListAllObjects, whenGotS3Object } from '../helpers/DataFinder';
 
 class DataParser extends Component {
   constructor(props) {

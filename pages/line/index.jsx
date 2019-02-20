@@ -5,7 +5,7 @@ import Layout from '../../components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
 import { linesById } from '../../helpers/LineInfo.js';
-import { whenGotS3Object, whenListAllObjects } from '../../components/DataFinder.js';
+import { whenGotS3Object, whenListAllObjects } from '../../helpers/DataFinder.js';
 
 import S3 from 'aws-sdk/clients/s3';
 const s3 = new S3();

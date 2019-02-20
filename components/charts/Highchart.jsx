@@ -3,8 +3,8 @@ import { render } from 'react-dom';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import moment from 'moment-timezone';
-import stopPositions from '../StopPositions.js';
-import positionStops from '../PositionStops.js';
+import stopPositions from '../../helpers/StopPositions.js';
+import positionStops from '../../helpers/PositionStops.js';
 
 class Highchart extends Component {
   constructor(props) {
