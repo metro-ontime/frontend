@@ -71,7 +71,7 @@ class Line extends Component {
     return (
       <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarTitle={toolbarTitle} toolbarChildren={toolbarChildren}>
         {selectedTab === 0 && <TrainStats line={id} data={data}/>}
-        {selectedTab === 1 && <TrainDetails line={id} />}
+        {selectedTab === 1 && <TrainDetails line={id} date={data["date"]} />}
       </Layout>
     );
   }

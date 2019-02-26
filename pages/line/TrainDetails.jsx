@@ -43,7 +43,7 @@ class TrainDetails extends Component {
           </Toolbar>
         </Grid>
         <Grid item xs={12}>
-          <DataParser line={ this.props.line } direction={ this.state.direction }/>
+          <DataParser line={ this.props.line } direction={ this.state.direction } date={this.props.date}/>
         </Grid>
       </Grid>
     )

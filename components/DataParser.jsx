@@ -13,17 +13,12 @@ class DataParser extends Component {
   }
 
   componentDidMount() {
-    const vehicleListParams = {Bucket: 'h4la-metro-performance', Prefix: `data/vehicle_tracking/processed/${this.props.line}_lametro-rail`};
-    whenListAllObjects(vehicleListParams).then(objects => {
-      const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${objects[objects.length - 1]}`;
-      prepareObservations(vehiclePath, this.updateTrips);
-    });
+    const line = this.props.line;
+    const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${line}_lametro-rail/${this.props.date}.csv`;
+    prepareObservations(vehiclePath, this.updateTrips);
 
-    const scheduleListParams = {Bucket: 'h4la-metro-performance', Prefix: `data/schedule/${this.props.line}_lametro-rail`};
-    whenListAllObjects(scheduleListParams).then(objects => {
-      const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/${objects[objects.length - 1]}`;
-      prepareSchedule(schedulePath, this.props.line, this.updateSchedule);
-    });
+    const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/schedule/${line}_lametro-rail/${this.props.date}.csv`;
+    prepareSchedule(schedulePath, this.props.line, this.updateSchedule);
   }
 
   updateTrips(trips0, trips1) {
