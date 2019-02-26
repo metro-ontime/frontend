@@ -10,15 +10,26 @@ class DataParser extends Component {
     this.state = { trips: null, schedule: null, minTime: null, maxTime: null };
     this.updateTrips = this.updateTrips.bind(this);
     this.updateSchedule = this.updateSchedule.bind(this);
+    this.fetchData = this.fetchData.bind(this);
+  }
+
+  fetchData(line, date) {
+    const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${line}_lametro-rail/${date}.csv`;
+    prepareObservations(vehiclePath, this.updateTrips);
+
+    const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/schedule/${line}_lametro-rail/${date}.csv`;
+    prepareSchedule(schedulePath, line, this.updateSchedule);
   }
 
   componentDidMount() {
-    const line = this.props.line;
-    const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${line}_lametro-rail/${this.props.date}.csv`;
-    prepareObservations(vehiclePath, this.updateTrips);
+    this.fetchData(this.props.line, this.props.date)
+  }
 
-    const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/schedule/${line}_lametro-rail/${this.props.date}.csv`;
-    prepareSchedule(schedulePath, this.props.line, this.updateSchedule);
+  componentDidUpdate(prevProps) {
+    if (this.props.date !== prevProps.date) {
+      this.setState({ trips: null, schedule: null, minTime: null, maxTime: null });
+      this.fetchData(this.props.line, this.props.date);
+    }
   }
 
   updateTrips(trips0, trips1) {
