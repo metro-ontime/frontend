@@ -19,11 +19,12 @@ class Line extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries/${query.id}_lametro-rail`};
+    const listParams = {Bucket: 'h4la-metro-performance', Prefix: 'data/summaries'};
     const objects = await whenListAllObjects(listParams);
     const mostRecent = objects[objects.length - 1];
     const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
-    const data = await whenGotS3Object(objectParams);
+    const allData = await whenGotS3Object(objectParams);
+    const data = allData[`${query.id}_lametro-rail`];
     return { query, data };
   }
 

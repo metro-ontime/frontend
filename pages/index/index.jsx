@@ -76,34 +76,31 @@ class Index extends Component {
     // This number crunching should all occur in the backend python scripts.
     // Ideally our summary JSON file should just be one doc,
     // containing all data prepared already.
-    let lineObjects = lines.map(line => {
-      const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries/${line.id}_lametro-rail`};
-      return whenListAllObjects(listParams);
-    });
-    lineObjects = await Promise.all(lineObjects);
 
-    let mostRecents = lineObjects.map(objects => {
-      return objects[objects.length - 1]
-    });
-    mostRecents = await Promise.all(mostRecents);
+    const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries`};
+    const lineObjects = await whenListAllObjects(listParams);
+    let mostRecent = lineObjects[lineObjects.length - 1]
 
-    let dataObjects = mostRecents.map(mostRecent => {
-      const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
-      return whenGotS3Object(objectParams)
-    });
+    const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
+    const data = await whenGotS3Object(objectParams);
 
-    dataObjects = await Promise.all(dataObjects);
+    const dataObjects = Object.keys(data).map((key) => {
+      return data[key]
+    });
     const windows = Array.from({length: 5}, (k, n) => n + 1);
+
     let totalsOntime = windows.map(windowSize => {
       const totalOntimeForWindow = dataObjects.reduce((acc, currentValue) => {
         return currentValue["ontime"][`${windowSize}_min`] + acc
       }, dataObjects[0]["ontime"][`${windowSize}_min`]);
       return { window: windowSize, n: totalOntimeForWindow }
     });
+
     totalsOntime = totalsOntime.reduce((map, obj) => {
       map[`${obj.window}_min`] = obj.n;
       return map
     }, {});
+
     const totalArrivals = dataObjects.reduce((acc, currentValue) => {
       return currentValue["total_arrivals_analyzed"] + acc
     }, dataObjects[0]["total_arrivals_analyzed"]);
