@@ -40,6 +40,7 @@
     "moment-timezone": "^0.5.23",
     "next": "^7.0.2",
     "next-redux-wrapper": "^3.0.0-alpha.1",
+    "nodemon": "^1.18.10",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
