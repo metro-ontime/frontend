@@ -150,12 +150,12 @@ class TrainStats extends Component {
                               return item.menuLabel
                             })} handleMenuChange={this.handleMenuChange} selected={this.state.selectedArrivalWindow.index}/>
                           of a scheduled stop
-                          <Tooltip classes={{
-                              tooltip: classes.htmlTooltip
-                            }} title={(<Fragment>
-                              <Typography color="inherit">Average Wait Time</Typography>
-                              This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
-                            </Fragment>)}>
+                          <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                        <Fragment>
+                          <Typography color="inherit">Performance Score</Typography>
+                          This number is based on the {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%).
+                        </Fragment>
+)}>
                             <IconButton aria-label="Delete">
                               <InfoIcon/>
                             </IconButton>
@@ -172,14 +172,24 @@ class TrainStats extends Component {
                 {
                   data.mean_time_between
                     ? <Fragment>
-                      
+
                           <Typography variant={this.props.width === 'xs'
                               ? 'h3'
                               : 'h1'} component="p">
                             {Math.round(data.mean_time_between / 60)}
+
                           </Typography>
 
-                        <Typography component="p">minutes between trains on average</Typography>
+                        <Typography component="p">minutes between trains on average<Tooltip classes={{
+                            tooltip: classes.htmlTooltip
+                          }} title={(<Fragment>
+                            <Typography color="inherit">Average Wait Time</Typography>
+                            This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+                          </Fragment>)}>
+                          <IconButton aria-label="Delete">
+                            <InfoIcon/>
+                          </IconButton>
+                        </Tooltip></Typography>
                       </Fragment>
                     : <h3><CircularIndeterminate className={classes.progress}/></h3>
                 }
