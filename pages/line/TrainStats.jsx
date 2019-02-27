@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Typography, Grid, Paper, Tooltip } from '@material-ui/core';
+import { Typography, Grid, Paper, Tooltip, Card, CardMedia } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Map from './components/Map';
 import SimpleMenu from '../../components/SimpleMenu';
@@ -10,6 +10,7 @@ import 'moment-timezone';
 import mapboxData from './components/MapboxData';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
+import OnTimePie from '../../components/charts/OnTimePie';
 
 const styles = theme => ({
   root: {
@@ -19,6 +20,15 @@ const styles = theme => ({
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+  },
+  paperAlignLeft: {
+    padding: theme.spacing.unit * 2,
+    textAlign: 'left',
+    color: theme.palette.text.secondary,
+  },
+  logo: {
+    padding: '0!important',
+    margin: '0!important'
   },
   datetime: {
     padding: theme.spacing.unit * 2,
@@ -93,21 +103,16 @@ class TrainStats extends Component {
     const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
     return (
       <div className={classes.root}>
-        <Grid container spacing={24} justify="center">
-          <Grid item xs={12}>
-            <Paper elevation={1} className={classes.paper}>
-              <Map data={ mapboxData[this.props.line] }/>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper elevation={1} className={classes.datetime}>
+        <Paper elevation={0} className={ classes.paperAlignLeft }>
+          <Grid container spacing={24} justify="space-around">
+            <Grid item xs={8} md={12}>
               <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
                 <Fragment>
                   <Typography color="inherit">Update Timing</Typography>
                   Latest statistics are provided roughly every 30 minutes between 5am and 10pm PST.
                 </Fragment>
               )}>
-                <Typography variant="subtitle1">
+                <Typography variant="body2">
                   <b>Latest Update: </b> 
                   { data.timestamp ?
                     <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ data.timestamp }</Moment>
@@ -116,58 +121,70 @@ class TrainStats extends Component {
                   }
                 </Typography>
               </Tooltip>
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper elevation={1} className={classes.paper}>
-              { score ?
-                <Fragment>
-                  <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+            </Grid>
+            <Grid container item xs={12} sm={8} md={6}>
+              <Grid container item justify="center" xs={12}>
+                <Grid item xs={12} md={4}>
+                  <OnTimePie bins={ data.ontime } total={ data.total_arrivals_analyzed } />
+                </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper elevation={0} className={classes.paper}>
+                  { score ?
                     <Fragment>
-                      <Typography color="inherit">Performance Score</Typography>
-                      This number is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%).
+                      <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                        <Fragment>
+                          <Typography color="inherit">Performance Score</Typography>
+                          This number is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%).
+                        </Fragment>
+                      )}>
+                        <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
+                          { score }%
+                        </Typography>
+                      </Tooltip>
+                      <Typography component="p">observed arrivals within
+                        <SimpleMenu
+                          menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
+                          handleMenuChange = {this.handleMenuChange}
+                          selected = {this.state.selectedArrivalWindow.index}
+                        />
+                        of a scheduled stop
+                      </Typography>
                     </Fragment>
-                  )}>
-                    <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
-                      { score }%
-                    </Typography>
-                  </Tooltip>
-                  <Typography component="p">observed arrivals within
-                    <SimpleMenu
-                      menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
-                      handleMenuChange = {this.handleMenuChange}
-                      selected = {this.state.selectedArrivalWindow.index}
-                    />
-                    of a scheduled stop
-                  </Typography>
-                </Fragment>
-                :
-                <h3><CircularIndeterminate className={classes.progress} /></h3>
-              }
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <Paper elevation={1} className={classes.paper}>
-              { data.mean_time_between ?
-                <Fragment>
-                  <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                    :
+                    <h3><CircularIndeterminate className={classes.progress} /></h3>
+                  }
+                </Paper>
+              </Grid>
+              <Grid item xs={12}>
+                <Paper elevation={0} className={classes.paper}>
+                  { data.mean_time_between ?
                     <Fragment>
-                      <Typography color="inherit">Average Wait Time</Typography>
-                      This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+                      <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
+                        <Fragment>
+                          <Typography color="inherit">Average Wait Time</Typography>
+                          This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+                        </Fragment>
+                      )}>
+                        <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
+                          { Math.round(data.mean_time_between / 60 ) }
+                        </Typography>
+                      </Tooltip>
+                      <Typography component="p">minutes between trains on average</Typography>
                     </Fragment>
-                  )}>
-                    <Typography variant={ this.props.width === 'xs' ? 'h3' : 'h1' } component="p">
-                      { Math.round(data.mean_time_between / 60 ) }
-                    </Typography>
-                  </Tooltip>
-                  <Typography component="p">minutes between trains on average</Typography>
-                </Fragment>
-                :
-                <h3><CircularIndeterminate className={classes.progress} /></h3>
-              }
-            </Paper>
+                    :
+                    <h3><CircularIndeterminate className={classes.progress} /></h3>
+                  }
+                </Paper>
+              </Grid>
+            </Grid>
+            <Grid item xs={4} md={4} lg={3} className={ classes.logo }>
+              <Card elevation={0} className={ classes.logo }>
+                <CardMedia component="img" className={classes.cardImage} src={`/static/images/logo_${this.props.line}.svg`} />
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>
+        </Paper>
       </div>
     );
   }

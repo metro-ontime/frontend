@@ -163,7 +163,7 @@ class Index extends Component {
                     </CardContent>
                   </Grid>
                   <Grid item xs={12} md={6}>
-                    <CardMedia component="img" className={classes.cardImage} src="/static/images/network-color.svg" />
+                    <CardMedia component="img" className={classes.cardImage} src="/static/images/logo_network.svg" />
                   </Grid>
                 </Grid>
               </Card>
