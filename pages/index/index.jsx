@@ -62,14 +62,25 @@ class Index extends Component {
       return currentValue["total_arrivals_analyzed"] + acc
     }, dataObjects[0]["total_arrivals_analyzed"]);
 
+    const totalScheduled = dataObjects.reduce((acc, currentValue) => {
+      return currentValue["total_scheduled_arrivals"] + acc
+    }, dataObjects[0]["total_scheduled_arrivals"]);
+
     const sumMeanTimeBetween = dataObjects.reduce((acc, currentValue) => {
-      return acc + currentValue["mean_time_between"]
+      return currentValue["mean_time_between"] + acc
     }, dataObjects[0]["mean_time_between"]);
     const overallMeanTimeBetween = sumMeanTimeBetween / dataObjects.length;
 
     const timestamp = dataObjects[0]["timestamp"];
 
-    return { query, totalsOntime, totalArrivals, timestamp, overallMeanTimeBetween };
+    const overallData = {
+      ontime: totalsOntime,
+      total_arrivals_analyzed: totalArrivals,
+      total_scheduled_arrivals: totalScheduled,
+      mean_time_between: overallMeanTimeBetween
+    };
+
+    return { query, overallData, timestamp };
   }
 
   selectTimeWindow = (value) => {
@@ -77,13 +88,7 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, totalsOntime, totalArrivals, timestamp, overallMeanTimeBetween } = this.props;
-    const data = {
-      ontime: totalsOntime,
-      total_arrivals_analyzed: totalArrivals,
-      total_scheduled_arrivals: 0,
-      mean_time_between: overallMeanTimeBetween
-    };
+    const { classes, overallData, timestamp } = this.props;
     return (
       <Layout
         pageTitle="Network Summary"
@@ -97,10 +102,10 @@ class Index extends Component {
           </Grid>
           <Grid container="container" item="item" xs={12} md={7} justify="space-between" alignItems="center">
             <Grid item="item" xs={12} md={6}>
-              <ScoreCard data={ data } width={ this.props.width } />
+              <ScoreCard data={ overallData } width={ this.props.width } />
             </Grid>
             <Grid item="item" xs={12} md={5}>
-              <SimpleScoreCard width={this.props.width} data={ data }/>
+              <SimpleScoreCard width={this.props.width} data={ overallData }/>
             </Grid>
           </Grid>
           <Grid item xs={12} md={7}>
