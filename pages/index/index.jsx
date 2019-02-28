@@ -10,14 +10,18 @@ import { Typography,
   Tooltip
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+import flowRight from 'lodash/flowRight';
 import Moment from 'react-moment';
 import moment from 'moment';
 import 'moment-timezone';
 import Layout from '~/components/Layout';
-import LineSelector from './components/LineSelector';
+import LineSelector from '~/components/LineSelector';
 import SimpleMenu from '~/components/SimpleMenu';
 import { lines } from '~/helpers/LineInfo';
 import { whenListAllObjects, whenGotS3Object } from '~/helpers/DataFinder';
+import LogoAndTitle from '~/components/LogoAndTitle';
+import ScoreCard from '~/components/ScoreCard';
 
 const styles = theme => ({
   cardImage: {
@@ -25,51 +29,7 @@ const styles = theme => ({
   }
 });
 
-const arrivalWindows = [
-  {
-    menuLabel: '1 minute',
-    dataLabel: '1_min',
-  },
-  {
-    menuLabel: '2 minutes',
-    dataLabel: '2_min',
-  },
-  {
-    menuLabel: '3 minutes',
-    dataLabel: '3_min',
-  },
-  {
-    menuLabel: '4 minutes',
-    dataLabel: '4_min',
-  },
-  {
-    menuLabel: '5 minutes',
-    dataLabel: '5_min',
-  },
-]
-
 class Index extends Component {
-  constructor(props) {
-    super(props);
-    this.handleMenuChange = this.handleMenuChange.bind(this);
-    this.state = {
-      selectedArrivalWindow: {
-        index: 0,
-        menuLabel: arrivalWindows[0].menuLabel,
-        dataLabel: arrivalWindows[0].dataLabel,
-      }
-    };
-  }
-
-  handleMenuChange(item, index) {
-    this.setState({ 
-      selectedArrivalWindow: { 
-        index: index,
-        menuLabel: arrivalWindows[index].menuLabel,
-        dataLabel: arrivalWindows[index].dataLabel,
-      }
-    })
-  }
 
 
   static async getInitialProps({ query, res }) {
@@ -116,61 +76,29 @@ class Index extends Component {
 
   render() {
     const { classes, totalsOntime, totalArrivals, timestamp } = this.props;
-    const score = Math.round(totalsOntime[this.state.selectedArrivalWindow.dataLabel] / totalArrivals * 1000) / 10;
+    const data = {
+      ontime: totalsOntime,
+      total_arrivals_analyzed: totalArrivals,
+      total_scheduled_arrivals: 0
+    };
     return (
       <Layout
         pageTitle="Network Summary"
         toolbarTitle="Network Summary"
       >
-        <Grid container justify="center">
-          <Grid item container justify="center" spacing={24} xs={12} md={6}>
-            <Grid item xs={12}>
-              <Card>
-                <CardHeader title="RailStats LA" />
-                <CardContent>
-                  We track LA Metro trains and assess network performance.
-                  <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
-                    <Fragment>
-                      <Typography color="inherit">Update Timing</Typography>
-                      Latest statistics are provided roughly every 30 minutes between 5am and 10pm PST.
-                    </Fragment>
-                  )}>
-                    <Typography variant="subtitle1">
-                      <b>Latest Update: </b> 
-                      <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{ timestamp }</Moment>
-                    </Typography>
-                  </Tooltip>
-                </CardContent>
-              </Card>
+        <Grid container="container" spacing={24} justify="space-around">
+          <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
+            <Grid item="item" xs={12} md={8}>
+              <LogoAndTitle altText="How reliable is the LA Metro Network today?" timestamp={ timestamp } altImg="/static/images/logo_network.svg"/>
             </Grid>
-            <Grid item xs={12}>
-              <Card>
-                <Grid container spacing={0} justify="space-between">
-                  <Grid item xs={12} md={4}>
-                    <CardContent>
-                      <Typography variant="h1">
-                        { score }%
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        Trains running within
-                        <SimpleMenu
-                          menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
-                          handleMenuChange = {this.handleMenuChange}
-                          selected = {this.state.selectedArrivalWindow.index}
-                        />
-                        of schedule across the network today.
-                      </Typography>
-                    </CardContent>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <CardMedia component="img" className={classes.cardImage} src="/static/images/logo_network.svg" />
-                  </Grid>
-                </Grid>
-              </Card>
+          </Grid>
+          <Grid container="container" item="item" xs={12} justify="space-around" alignItems="center">
+            <Grid item="item" xs={12} md={4}>
+              <ScoreCard data={ data } width={ this.props.width } />
             </Grid>
-            <Grid item xs={12}>
-              <LineSelector />
-            </Grid>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <LineSelector />
           </Grid>
         </Grid>
       </Layout>
@@ -178,4 +106,4 @@ class Index extends Component {
   }
 }
 
-export default withStyles(styles)(Index);
+export default flowRight([withStyles(styles), withWidth()])(Index);

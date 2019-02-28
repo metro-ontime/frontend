@@ -6,9 +6,9 @@ import {withStyles} from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
 import LogoAndTitle from '~/components/LogoAndTitle';
-import InfoBox from '~/components/InfoBox';
 import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
+import LineSelector from '~/components/LineSelector';
 
 const styles = theme => ({
 });
@@ -19,19 +19,21 @@ const TrainStats = (props) => {
   return (
     <Fragment>
       <Grid container="container" spacing={24} justify="space-around">
-        <Grid item="item" xs={4} md={4} lg={6}>
-          <LogoAndTitle line={props.line} />
+        <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
+          <Grid item="item" xs={12} md={8}>
+            <LogoAndTitle line={props.line} timestamp={ data.timestamp }/>
+          </Grid>
         </Grid>
-        <Grid item="item" xs={8} md={12}>
-          <InfoBox timestamp={ data.timestamp } />
-        </Grid>
-        <Grid container="container" item="item" xs={12} sm={8} md={6}>
-          <Grid item="item" xs={12}>
+        <Grid container="container" item="item" xs={12} md={7} justify="space-between" alignItems="center">
+          <Grid item="item" xs={12} md={6}>
             <ScoreCard data={ data } width={ props.width } />
           </Grid>
-          <Grid item="item" xs={12}>
+          <Grid item="item" xs={12} md={5}>
             <SimpleScoreCard width={props.width} data={ data }/>
           </Grid>
+        </Grid>
+        <Grid item xs={12} md={7}>
+          <LineSelector />
         </Grid>
       </Grid>
     </Fragment>

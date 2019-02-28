@@ -11,6 +11,7 @@ import OnTimePie from '~/components/charts/OnTimePie';
 import SimpleMenu from '~/components/SimpleMenu';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
+import Dropdown from '~/components/Dropdown';
 
 
 const styles = theme => ({
@@ -18,6 +19,25 @@ const styles = theme => ({
     margin: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2
   },
+  card: {
+    position: 'relative',
+    padding: 20
+  },
+  iconPosition: {
+    position: 'absolute',
+    top: 0,
+    right: 0
+  },
+  score: {
+    marginLeft: 0
+  },
+  description: {
+    textAlign: 'center',
+    marginTop: '1em'
+  },
+  spacer: {
+    margin: '2em 0'
+  }
 });
 
 const arrivalWindows = [
@@ -67,42 +87,39 @@ class ScoreCard extends Component {
     const data = this.props.data;
     const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
     return (
-      <Card elevation={1}>
-        <Grid container="container" item="item" justify="center" xs={12}>
+      <Card elevation={1} className={ classes.card }>
+        <div className={ classes.iconPosition }>
+          <TooltipCustom title={(
+            <Fragment>
+              <Typography color="inherit">Performance Score</Typography>
+              This figure is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
+            </Fragment>
+          )}/>
+        </div>
+        <Grid container="container" item="item" justify="center" alignItems="center" xs={12}>
           <Grid item="item" xs={12} md={4}>
             <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
           </Grid>
+          <Grid item="item" xs={12} md={4}>
+            <Typography variant={this.props.width === 'xs'
+                ? 'h3'
+                : 'h2'} component="p" className={ classes.score }>
+              {score}%
+            </Typography>
+          </Grid>
         </Grid>
-        <Grid item="item" xs={12}>
-            {
-              score
-                ? <Fragment>
-
-                    <Typography variant={this.props.width === 'xs'
-                        ? 'h3'
-                        : 'h1'} component="p">
-                      {score}%
-                    </Typography>
-                    <Typography component="p">observed arrivals within
-                      <SimpleMenu menuItems={arrivalWindows.map((item) => {
-                          return item.menuLabel
-                        })} handleMenuChange={this.handleMenuChange} selected={this.state.selectedArrivalWindow.index}/>
-                      of a scheduled stop
-                      <Tooltip classes={{ tooltip: classes.htmlTooltip }} title={(
-                    <Fragment>
-                      <Typography color="inherit">Performance Score</Typography>
-                      This number is based on the {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%).
-                    </Fragment>
-  )}>
-                        <IconButton aria-label="Delete">
-                          <InfoIcon/>
-                        </IconButton>
-                      </Tooltip>
-                    </Typography>
-
-                  </Fragment>
-                : <h3><CircularIndeterminate className={classes.progress}/></h3>
-            }
+        <Grid container item="item" xs={12} md={12} justify="center">
+          <Grid item xs={12}>
+            <Typography component="p" className={ classes.description }>Trains running within { this.state.selectedArrivalWindow.menuLabel } of schedule.
+            </Typography>
+          </Grid>
+          <Grid item xs={8} md={6} className={ classes.spacer }>
+            <Dropdown
+              menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
+              handleMenuChange = {this.handleMenuChange}
+              selected = {this.state.selectedArrivalWindow.index}
+            />
+          </Grid>
         </Grid>
       </Card>
     )

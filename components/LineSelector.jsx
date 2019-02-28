@@ -7,7 +7,7 @@ import {
   Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { lines } from '../../../helpers/LineInfo.js';
+import { lines } from '~/helpers/LineInfo.js';
 
 const styles = theme => ({
   button: {
@@ -20,6 +20,9 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
   },
+  title: {
+    fontWeight: 200
+  }
 });
 
 
@@ -62,8 +65,10 @@ class LineSelector extends Component {
       )});
       return (
         <Card>
-          <CardHeader title="Select a line:" />
           <CardContent>
+            <Typography variant="subheading" className={classes.title}>
+              Select below to filter by line:
+            </Typography>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>
               { allLines }
             </div>
