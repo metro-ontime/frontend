@@ -66,7 +66,7 @@ class LineSelector extends Component {
       return (
         <Card>
           <CardContent>
-            <Typography variant="subheading" className={classes.title}>
+            <Typography variant="body2" className={classes.title}>
               Select below to filter by line:
             </Typography>
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap' }}>

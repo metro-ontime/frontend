@@ -39,7 +39,6 @@ class OnTimePie extends Component {
     });
     separated[">5_mins"] = Math.round((this.props.total - bins[4]["value"]) / this.props.total * 1000) / 10;
     const observations = Object.keys(separated).map((key, index) => {
-      console.log(separated[key]);
       return {
         name: labelMap[key],
         y: separated[key],

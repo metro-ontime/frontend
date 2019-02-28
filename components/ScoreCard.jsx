@@ -29,7 +29,7 @@ const styles = theme => ({
     right: 0
   },
   score: {
-    marginLeft: 0
+    textAlign: 'center'
   },
   description: {
     textAlign: 'center',
@@ -37,6 +37,9 @@ const styles = theme => ({
   },
   spacer: {
     margin: '2em 0'
+  },
+  maxWidth300: {
+    maxWidth: 300
   }
 });
 
@@ -96,11 +99,11 @@ class ScoreCard extends Component {
             </Fragment>
           )}/>
         </div>
-        <Grid container="container" item="item" justify="center" alignItems="center" xs={12}>
-          <Grid item="item" xs={12} md={4}>
+        <Grid container item justify="center" alignItems="center" xs={12}>
+          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
           </Grid>
-          <Grid item="item" xs={12} md={4}>
+          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <Typography variant={this.props.width === 'xs'
                 ? 'h3'
                 : 'h2'} component="p" className={ classes.score }>
@@ -108,12 +111,12 @@ class ScoreCard extends Component {
             </Typography>
           </Grid>
         </Grid>
-        <Grid container item="item" xs={12} md={12} justify="center">
+        <Grid container item xs={12} md={12} justify="center">
           <Grid item xs={12}>
             <Typography component="p" className={ classes.description }>Trains running within { this.state.selectedArrivalWindow.menuLabel } of schedule.
             </Typography>
           </Grid>
-          <Grid item xs={8} md={6} className={ classes.spacer }>
+          <Grid item xs={10} sm={8} md={6} className={ classes.spacer }>
             <Dropdown
               menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
               handleMenuChange = {this.handleMenuChange}

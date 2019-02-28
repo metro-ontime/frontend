@@ -18,22 +18,22 @@ const TrainStats = (props) => {
   const data = props.data;
   return (
     <Fragment>
-      <Grid container="container" spacing={24} justify="space-around">
-        <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
-          <Grid item="item" xs={12} md={10}>
+      <Grid container spacing={24} justify="space-around">
+        <Grid container item xs={12} md={8} justify="center" alignItems="center">
+          <Grid item xs={12} md={10}>
             <LogoAndTitle line={props.line} timestamp={ data.timestamp }/>
           </Grid>
         </Grid>
-        <Grid container="container" item="item" xs={12} md={7} justify="space-between" alignItems="center">
-          <Grid item="item" xs={12} md={6}>
+        <Grid container item spacing={16} xs={12} lg={8} justify="space-between" alignItems="center">
+          <Grid item xs={12} md={6}>
             <ScoreCard data={ data } width={ props.width } />
           </Grid>
-          <Grid item="item" xs={12} md={5}>
+          <Grid item xs={12} md={5}>
             <SimpleScoreCard width={props.width} data={ data }/>
           </Grid>
-        </Grid>
-        <Grid item xs={12} md={7}>
-          <LineSelector />
+          <Grid item xs={12}>
+            <LineSelector />
+          </Grid>
         </Grid>
       </Grid>
     </Fragment>

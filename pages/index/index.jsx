@@ -27,6 +27,10 @@ import SimpleScoreCard from '~/components/SimpleScoreCard';
 const styles = theme => ({
   cardImage: {
     width: '100%',
+  },
+  container: {
+    [theme.breakpoints.down('xs')]: {
+    }
   }
 });
 
@@ -34,7 +38,7 @@ class Index extends Component {
 
 
   static async getInitialProps({ query, res }) {
-    const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries`};
+    const listParams = {Bucket: 'h4la-metro-performance', Prefix: 'data/summaries'};
     const lineObjects = await whenListAllObjects(listParams);
     let mostRecent = lineObjects[lineObjects.length - 1]
 
@@ -94,22 +98,22 @@ class Index extends Component {
         pageTitle="Network Summary"
         toolbarTitle="Network Summary"
       >
-        <Grid container="container" spacing={24} justify="space-around">
-          <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
-            <Grid item="item" xs={12} md={10}>
+        <Grid container spacing={24} justify="space-around" className={ classes.container }>
+          <Grid container item xs={12} md={8} justify="center" alignItems="center" className={ classes.container }>
+            <Grid item xs={12} md={10} className={ classes.container }>
               <LogoAndTitle altText="How reliable is the LA Metro Network today?" timestamp={ timestamp } altImg="/static/images/logo_network.svg"/>
             </Grid>
           </Grid>
-          <Grid container="container" item="item" xs={12} md={7} justify="space-between" alignItems="center">
-            <Grid item="item" xs={12} md={6}>
+          <Grid container spacing={16} item xs={12} lg={8} justify="space-between" alignItems="center">
+            <Grid item xs={12} md={6}>
               <ScoreCard data={ overallData } width={ this.props.width } />
             </Grid>
-            <Grid item="item" xs={12} md={5}>
+            <Grid item xs={12} md={5}>
               <SimpleScoreCard width={this.props.width} data={ overallData }/>
             </Grid>
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <LineSelector />
+            <Grid item xs={12} md={12}>
+              <LineSelector />
+            </Grid>
           </Grid>
         </Grid>
       </Layout>

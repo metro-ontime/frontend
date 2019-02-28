@@ -6,6 +6,8 @@ import {
   Typography
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
+import withWidth from '@material-ui/core/withWidth';
+import flowRight from 'lodash/flowRight';
 import Moment from 'react-moment';
 import { linesById } from '~/helpers/LineInfo.js';
 import TooltipCustom from '~/components/TooltipCustom';
@@ -16,15 +18,31 @@ const styles = theme => ({
     position: 'relative',
     backgroundColor: 'transparent',
     justifyContent: 'center',
-    alignItems: 'center',
-    margin: 20,
-    padding: 20
+    alignItems: 'flex-start',
+    margin: 0,
+    padding: 0,
+    paddingTop: 50,
+    [theme.breakpoints.up('sm')]: {
+      alignItems: 'center',
+      margin: 20,
+      padding: 20
+    }
+  },
+  cardContent: {
+    [theme.breakpoints.down('xs')]: {
+      padding: 0,
+      margin: 0
+    }
   },
   logo: {
     padding: '0!important',
     margin: '0!important',
-    width: 150,
-    height: 150,
+    width: 75,
+    height: 75,
+    [theme.breakpoints.up('sm')]: {
+      width: 150,
+      height: 150,
+    },
     marginRight: 25
   },
   title: {
@@ -56,8 +74,8 @@ const LogoAndTitle = (props) => {
         </TooltipCustom>
       </div>
       <CardMedia component="img" className={classes.logo} src={ props.altImg ? props.altImg : `/static/images/logo_${props.line}.svg`}/>
-      <CardContent>
-        <Typography variant="h5" className={ classes.title }>
+      <CardContent className={ classes.cardContent }>
+        <Typography variant={ props.width == 'xs' ? 'body1' : 'h5' } className={ classes.title }>
           { props.altText ? props.altText : defaultText }
         </Typography>
         <Typography component="p" variant="body2" className={ classes.updateTime }>
@@ -73,4 +91,4 @@ const LogoAndTitle = (props) => {
   )
 }
 
-export default withStyles(styles)(LogoAndTitle);
+export default flowRight([withStyles(styles), withWidth()])(LogoAndTitle);
