@@ -20,7 +20,7 @@ const TrainStats = (props) => {
     <Fragment>
       <Grid container="container" spacing={24} justify="space-around">
         <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
-          <Grid item="item" xs={12} md={8}>
+          <Grid item="item" xs={12} md={10}>
             <LogoAndTitle line={props.line} timestamp={ data.timestamp }/>
           </Grid>
         </Grid>

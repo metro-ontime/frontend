@@ -22,6 +22,7 @@ import { lines } from '~/helpers/LineInfo';
 import { whenListAllObjects, whenGotS3Object } from '~/helpers/DataFinder';
 import LogoAndTitle from '~/components/LogoAndTitle';
 import ScoreCard from '~/components/ScoreCard';
+import SimpleScoreCard from '~/components/SimpleScoreCard';
 
 const styles = theme => ({
   cardImage: {
@@ -33,10 +34,6 @@ class Index extends Component {
 
 
   static async getInitialProps({ query, res }) {
-    // This number crunching should all occur in the backend python scripts.
-    // Ideally our summary JSON file should just be one doc,
-    // containing all data prepared already.
-
     const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/summaries`};
     const lineObjects = await whenListAllObjects(listParams);
     let mostRecent = lineObjects[lineObjects.length - 1]
@@ -65,9 +62,14 @@ class Index extends Component {
       return currentValue["total_arrivals_analyzed"] + acc
     }, dataObjects[0]["total_arrivals_analyzed"]);
 
+    const sumMeanTimeBetween = dataObjects.reduce((acc, currentValue) => {
+      return acc + currentValue["mean_time_between"]
+    }, dataObjects[0]["mean_time_between"]);
+    const overallMeanTimeBetween = sumMeanTimeBetween / dataObjects.length;
+
     const timestamp = dataObjects[0]["timestamp"];
 
-    return { query, totalsOntime, totalArrivals, timestamp };
+    return { query, totalsOntime, totalArrivals, timestamp, overallMeanTimeBetween };
   }
 
   selectTimeWindow = (value) => {
@@ -75,11 +77,12 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, totalsOntime, totalArrivals, timestamp } = this.props;
+    const { classes, totalsOntime, totalArrivals, timestamp, overallMeanTimeBetween } = this.props;
     const data = {
       ontime: totalsOntime,
       total_arrivals_analyzed: totalArrivals,
-      total_scheduled_arrivals: 0
+      total_scheduled_arrivals: 0,
+      mean_time_between: overallMeanTimeBetween
     };
     return (
       <Layout
@@ -88,16 +91,19 @@ class Index extends Component {
       >
         <Grid container="container" spacing={24} justify="space-around">
           <Grid container="container" item="item" xs={12} md={8} justify="center" alignItems="center">
-            <Grid item="item" xs={12} md={8}>
+            <Grid item="item" xs={12} md={10}>
               <LogoAndTitle altText="How reliable is the LA Metro Network today?" timestamp={ timestamp } altImg="/static/images/logo_network.svg"/>
             </Grid>
           </Grid>
-          <Grid container="container" item="item" xs={12} justify="space-around" alignItems="center">
-            <Grid item="item" xs={12} md={4}>
+          <Grid container="container" item="item" xs={12} md={7} justify="space-between" alignItems="center">
+            <Grid item="item" xs={12} md={6}>
               <ScoreCard data={ data } width={ this.props.width } />
             </Grid>
+            <Grid item="item" xs={12} md={5}>
+              <SimpleScoreCard width={this.props.width} data={ data }/>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={7}>
             <LineSelector />
           </Grid>
         </Grid>
