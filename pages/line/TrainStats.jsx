@@ -131,7 +131,7 @@ class TrainStats extends Component {
           <Grid container="container" item="item" xs={12} sm={8} md={6}>
             <Grid container="container" item="item" justify="center" xs={12}>
               <Grid item="item" xs={12} md={4}>
-                <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed}/>
+                <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
               </Grid>
             </Grid>
             <Grid item="item" xs={12}>
