@@ -124,7 +124,7 @@ class Layout extends Component {
               <a style={{ textDecoration: 'none' }}>
                 <ListItem style={{ padding: '5px 16px' }}>
                   <ListItemIcon>
-                    <img src="/static/images/network-color.svg" className={classes.logo} alt="Logo" />
+                    <img src="/static/images/logo_network.svg" className={classes.logo} alt="Logo" />
                   </ListItemIcon>
                   <ListItemText primary="RailStats LA" classes={{ primary: classes.logoText }}/>
                 </ListItem>
