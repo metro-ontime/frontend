@@ -1,5 +1,17 @@
 {
-  "presets": ["next/babel"],
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "targets": {
+            "browsers": "defaults"
+          },
+          "useBuiltIns": "usage"
+        }
+      }
+      ]
+    ],
   "plugins": [
     ["babel-plugin-root-import"]
   ]
