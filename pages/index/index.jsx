@@ -12,9 +12,6 @@ import { Typography,
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
-import Moment from 'react-moment';
-import moment from 'moment';
-import 'moment-timezone';
 import Layout from '~/components/Layout';
 import LineSelector from '~/components/LineSelector';
 import SimpleMenu from '~/components/SimpleMenu';

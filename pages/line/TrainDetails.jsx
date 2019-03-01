@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Typography, Grid, Toolbar, Paper, Divider } from '@material-ui/core';
-import Highchart from '../../components/charts/Highchart';
-import DataParser from '../../components/DataParser';
+import Highchart from '~/components/charts/Highchart';
+import DataParser from '~/components/DataParser';
 import { withStyles } from '@material-ui/core/styles';
-import SimpleMenu from '../../components/SimpleMenu';
-import directionNames from '../../helpers/Directions.js';
-import { whenGotS3Object, whenListAllObjects } from '../../helpers/DataFinder.js';
+import SimpleMenu from '~/components/SimpleMenu';
+import directionNames from '~/helpers/Directions.js';
+import { whenGotS3Object, whenListAllObjects } from '~/helpers/DataFinder.js';
 
 const styles = theme => ({
   paper: {

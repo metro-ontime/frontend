@@ -9,6 +9,8 @@ import {withStyles} from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
 import Moment from 'react-moment';
+import moment from 'moment';
+import 'moment-timezone';
 import { linesById } from '~/helpers/LineInfo.js';
 import TooltipCustom from '~/components/TooltipCustom';
 

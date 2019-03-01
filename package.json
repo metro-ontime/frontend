@@ -47,7 +47,6 @@
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "react-jss": "^8.6.1",
-    "react-map-gl": "^4.0.9",
     "react-moment": "^0.8.4",
     "react-redux": "^6.0.0",
     "react-request": "^3.1.2",
