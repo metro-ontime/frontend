@@ -26,7 +26,7 @@ const TrainStats = (props) => {
     <Fragment>
       <Grid container spacing={24} justify="space-around">
         <Grid container item xs={12} md={8} justify="center" alignItems="center">
-          <Grid item xs={12} md={10}>
+          <Grid item xs={12}>
             <LogoAndTitle line={props.line} timestamp={ data.timestamp }/>
           </Grid>
         </Grid>

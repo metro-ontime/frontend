@@ -39,8 +39,8 @@ const styles = theme => ({
   logo: {
     padding: '0!important',
     margin: '0!important',
-    width: 75,
-    height: 75,
+    width: 85,
+    height: 85,
     [theme.breakpoints.up('sm')]: {
       width: 150,
       height: 150,
@@ -77,7 +77,7 @@ const LogoAndTitle = (props) => {
       </div>
       <CardMedia component="img" className={classes.logo} src={ props.altImg ? props.altImg : `/static/images/logo_${props.line}.svg`}/>
       <CardContent className={ classes.cardContent }>
-        <Typography variant={ props.width == 'xs' ? 'body1' : 'h5' } className={ classes.title }>
+        <Typography variant={ props.width == 'xs' ? 'h6' : 'h4' } className={ classes.title }>
           { props.altText ? props.altText : defaultText }
         </Typography>
         <Typography component="p" variant="body2" className={ classes.updateTime }>
