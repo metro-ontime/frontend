@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import {
   Grid,
+  Hidden
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
@@ -9,13 +10,18 @@ import LogoAndTitle from '~/components/LogoAndTitle';
 import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
 import LineSelector from '~/components/LineSelector';
+import DiagramLink from '~/components/DiagramLink';
 
 const styles = theme => ({
+  spaceTop: {
+    marginTop: '1em'
+  }
 });
 
 const TrainStats = (props) => {
   const {classes} = props;
   const data = props.data;
+  const switchTab = props.switchTab;
   return (
     <Fragment>
       <Grid container spacing={24} justify="space-around">
@@ -28,8 +34,15 @@ const TrainStats = (props) => {
           <Grid item xs={12} md={6}>
             <ScoreCard data={ data } width={ props.width } />
           </Grid>
-          <Grid item xs={12} md={5}>
-            <SimpleScoreCard width={props.width} data={ data }/>
+          <Grid container item xs={12} md={5}>
+            <Grid item xs={12}>
+              <SimpleScoreCard width={props.width} data={ data }/>
+            </Grid>
+            <Hidden smDown>
+              <Grid item xs={12} className={ classes.spaceTop }>
+                <DiagramLink action={ switchTab } line={ props.line }/>
+              </Grid>
+            </Hidden>
           </Grid>
           <Grid item xs={12}>
             <LineSelector />

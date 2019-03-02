@@ -40,6 +40,7 @@ class Line extends Component {
     const { id } = this.props.query;
     const { data } = this.props;
     const { selectedTab } = this.state;
+    const switchTab = this.handleTabChange;
     const toolbarChildren = (
       <Hidden smDown>
         <Tabs value={selectedTab} onChange={this.handleTabChange} textColor="inherit">
@@ -70,7 +71,7 @@ class Line extends Component {
 
     return (
       <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarTitle={toolbarTitle} toolbarChildren={toolbarChildren}>
-        {selectedTab === 0 && <TrainStats line={id} data={data}/>}
+        {selectedTab === 0 && <TrainStats line={id} data={data} switchTab={ switchTab }/>}
         {selectedTab === 1 && <TrainDetails line={id} date={data["date"]} />}
       </Layout>
     );
