@@ -29,7 +29,7 @@ const TooltipCustom = (props) => {
   return (
     <Tooltip classes={{
         tooltip: classes.htmlTooltip
-      }} title={ props.title }>
+      }} title={ props.title } enterTouchDelay={0} leaveTouchDelay={2000}>
       { props.children ? props.children : defaultIcon }
     </Tooltip>
   )
