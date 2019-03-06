@@ -8,6 +8,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { lines } from '~/helpers/LineInfo.js';
+import Link from 'next/link';
 
 const styles = theme => ({
   button: {
@@ -35,24 +36,26 @@ class LineSelector extends Component {
     const { classes } = this.props;
     const lineButton = (line) => {
       return (
-        <Button href={`/line/${line.id}`} variant="outlined" className={classes.button}>
-          <div className={classes.buttonWrapper} style={{ position: 'relative' }}>
-            <div
-              style={{
-                backgroundColor: line.color,
-                width: '25px',
-                padding: 0,
-                height: '25px',
-                margin: 0,
-                borderRadius: '25px',
-                float: 'left',
-              }}
-            />
-            <div>
-              <Typography component="h4">{line.name} Line</Typography>
+        <Link prefetch href={{ pathname: `/line`, query: {id: line.id} }} as={`/line/${line.id}`}>
+          <Button variant="outlined" className={classes.button}>
+            <div className={classes.buttonWrapper} style={{ position: 'relative' }}>
+              <div
+                style={{
+                  backgroundColor: line.color,
+                  width: '25px',
+                  padding: 0,
+                  height: '25px',
+                  margin: 0,
+                  borderRadius: '25px',
+                  float: 'left',
+                }}
+              />
+              <div>
+                <Typography component="h4">{line.name} Line</Typography>
+              </div>
             </div>
-          </div>
-        </Button>
+          </Button>
+        </Link>
       )
     };
 

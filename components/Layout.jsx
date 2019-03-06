@@ -90,7 +90,7 @@ class Layout extends Component {
     const links = (
       <List>
         {lines.map(line => (
-          <Link href={`/line/${line.id}`} key={line.id.toString()}>
+          <Link prefetch href={{ pathname: `/line`, query: {id: line.id} }} as={`/line/${line.id}`} key={line.id.toString()}>
             <ListItem button>
               <ListItemAvatar>
                 <div
