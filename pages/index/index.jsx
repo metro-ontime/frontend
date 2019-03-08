@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import axios from 'axios';
 import { Typography,
   Grid, 
   Paper,
@@ -35,53 +36,9 @@ class Index extends Component {
 
 
   static async getInitialProps({ query, res }) {
-    const listParams = {Bucket: 'h4la-metro-performance', Prefix: 'data/summaries'};
-    const lineObjects = await whenListAllObjects(listParams);
-    let mostRecent = lineObjects[lineObjects.length - 1]
-
-    const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
-    const data = await whenGotS3Object(objectParams);
-
-    const dataObjects = Object.keys(data).map((key) => {
-      return data[key]
-    });
-    const windows = Array.from({length: 5}, (k, n) => n + 1);
-
-    let totalsOntime = windows.map(windowSize => {
-      const totalOntimeForWindow = dataObjects.reduce((acc, currentValue) => {
-        return currentValue["ontime"][`${windowSize}_min`] + acc
-      }, dataObjects[0]["ontime"][`${windowSize}_min`]);
-      return { window: windowSize, n: totalOntimeForWindow }
-    });
-
-    totalsOntime = totalsOntime.reduce((map, obj) => {
-      map[`${obj.window}_min`] = obj.n;
-      return map
-    }, {});
-
-    const totalArrivals = dataObjects.reduce((acc, currentValue) => {
-      return currentValue["total_arrivals_analyzed"] + acc
-    }, dataObjects[0]["total_arrivals_analyzed"]);
-
-    const totalScheduled = dataObjects.reduce((acc, currentValue) => {
-      return currentValue["total_scheduled_arrivals"] + acc
-    }, dataObjects[0]["total_scheduled_arrivals"]);
-
-    const sumMeanTimeBetween = dataObjects.reduce((acc, currentValue) => {
-      return currentValue["mean_time_between"] + acc
-    }, dataObjects[0]["mean_time_between"]);
-    const overallMeanTimeBetween = sumMeanTimeBetween / dataObjects.length;
-
-    const timestamp = dataObjects[0]["timestamp"];
-
-    const overallData = {
-      ontime: totalsOntime,
-      total_arrivals_analyzed: totalArrivals,
-      total_scheduled_arrivals: totalScheduled,
-      mean_time_between: overallMeanTimeBetween
-    };
-
-    return { query, overallData, timestamp };
+    const { data } = await axios.get('https://api.railstats.org/network');
+    const timestamp = data.timestamp;
+    return { query, data, timestamp };
   }
 
   selectTimeWindow = (value) => {
@@ -89,7 +46,7 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, overallData, timestamp } = this.props;
+    const { classes, data, timestamp } = this.props;
     return (
       <Layout
         pageTitle="Network Summary"
@@ -103,10 +60,10 @@ class Index extends Component {
           </Grid>
           <Grid container spacing={16} item xs={12} lg={8} justify="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
-              <ScoreCard data={ overallData } width={ this.props.width } />
+              <ScoreCard data={ data } width={ this.props.width } />
             </Grid>
             <Grid item xs={12} md={5}>
-              <SimpleScoreCard width={this.props.width} data={ overallData }/>
+              <SimpleScoreCard width={this.props.width} data={ data }/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineSelector />
