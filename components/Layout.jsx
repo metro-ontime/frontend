@@ -9,6 +9,7 @@ import {
   Divider,
   ListItemText,
   ListItemAvatar,
+  Avatar,
   Typography,
   Drawer,
 } from '@material-ui/core';
@@ -66,6 +67,10 @@ const styles = theme => ({
   },
   logoText: {
     fontSize: '1.5em',
+  },
+  avatar: {
+    width: 25,
+    height: 25
   }
 });
 
@@ -90,20 +95,22 @@ class Layout extends Component {
     const links = (
       <List>
         {lines.map(line => (
-          <Link prefetch href={{ pathname: `/line`, query: {id: line.id} }} as={`/line/${line.id}`} key={line.id.toString()}>
-            <ListItem button>
+          <Link prefetch href={{ pathname: '/line', query: {id: line.id} }} as={`/line/${line.id}`} key={line.id.toString()}>
+            <ListItem button onClick={ this.handleDrawer }>
               <ListItemAvatar>
-                <div
-                  style={{
-                    backgroundColor: line.color,
-                    width: '25px',
-                    padding: 0,
-                    height: '25px',
-                    margin: 0,
-                    borderRadius: '25px',
-                    float: 'left',
-                  }}
-                />
+                <Avatar className={ classes.avatar }>
+                  <div
+                    style={{
+                      backgroundColor: line.color,
+                      width: '100%',
+                      padding: 0,
+                      height: '100%',
+                      margin: 0,
+                      borderRadius: '50%',
+                      float: 'left',
+                    }}
+                  />
+                </Avatar>
               </ListItemAvatar>
               <ListItemText primary={`${line.name}`} />
             </ListItem>
@@ -120,20 +127,18 @@ class Layout extends Component {
         {' '}
         <Drawer variant="persistent" classes={{ paper: classes.drawer }} open={this.state.drawerOpen}>
           <List>
-            <Link href="/">
-              <a style={{ textDecoration: 'none' }}>
-                <ListItem style={{ padding: '5px 16px' }}>
-                  <ListItemIcon>
-                    <img src="/static/images/logo_network.svg" className={classes.logo} alt="Logo" />
-                  </ListItemIcon>
-                  <ListItemText primary="RailStats LA" classes={{ primary: classes.logoText }}/>
-                </ListItem>
-              </a>
+            <Link href='/'>
+              <ListItem onClick={ this.handleDrawer } style={{ padding: '5px 8px 5px 16px', cursor: 'pointer' }}>
+                <ListItemIcon>
+                  <img src="/static/images/logo_network.svg" className={classes.logo} alt="Logo" />
+                </ListItemIcon>
+                <ListItemText primary="RailStats LA" classes={{ primary: classes.logoText }}/>
+              </ListItem>
             </Link>
             <Divider />
             {' '}
-            <Link href="/">
-              <ListItem button>
+            <Link prefetch href='/'>
+              <ListItem button onClick={ this.handleDrawer }>
                 <LocationCityIcon className={classes.icon} style={{ marginLeft: 0 }} />
                 <ListItemText inset primary="Network" />
               </ListItem>
@@ -146,8 +151,8 @@ class Layout extends Component {
             <Collapse in={this.state.subMenuOpen} timeout="auto" unmountOnExit>
               {links}
             </Collapse>
-            <Link href="/about">
-              <ListItem button>
+            <Link prefetch href='/about'>
+              <ListItem button onClick={ this.handleDrawer }>
                 <InfoIcon className={classes.icon} style={{ marginLeft: 0 }} />
                 <ListItemText inset primary="About" />
               </ListItem>
