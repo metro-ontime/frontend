@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import Layout from '~/components/Layout';
@@ -20,7 +19,12 @@ class Line extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get(`https://api.railstats.org/line/${query.id}`);
+    const listParams = {Bucket: 'h4la-metro-performance', Prefix: 'data/summaries'};
+    const objects = await whenListAllObjects(listParams);
+    const mostRecent = objects[objects.length - 1];
+    const objectParams = {Bucket: 'h4la-metro-performance', Key: mostRecent};
+    const allData = await whenGotS3Object(objectParams);
+    const data = allData[`${query.id}_lametro-rail`];
     return { query, data };
   }
 
