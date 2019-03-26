@@ -18,6 +18,7 @@ import LocationCityIcon from '@material-ui/icons/LocationCity';
 import InfoIcon from '@material-ui/icons/Info';
 import PlaceIcon from '@material-ui/icons/Place';
 import MenuIcon from '@material-ui/icons/Menu';
+import HistoryIcon from '@material-ui/icons/History';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import { withStyles } from '@material-ui/core/styles';
@@ -155,6 +156,12 @@ class Layout extends Component {
               <ListItem button onClick={ this.handleDrawer }>
                 <InfoIcon className={classes.icon} style={{ marginLeft: 0 }} />
                 <ListItemText inset primary="About" />
+              </ListItem>
+            </Link>
+            <Link prefetch href='/history'>
+              <ListItem button onClick={ this.handleDrawer }>
+                <HistoryIcon className={classes.icon} style={{ marginLeft: 0 }} />
+                <ListItemText inset primary="History" />
               </ListItem>
             </Link>
           </List>
