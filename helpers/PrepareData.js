@@ -95,4 +95,8 @@ const prepareSchedule = (url, line, updateFunction) => {
   });
 };
 
-export { prepareObservations, prepareSchedule };
+const prepareHistoryData = (data) => {
+    return Object.values(data).slice(0,Object.values(data).length).reverse().map((item,i) => Object.assign(item,{ id: i }))
+}
+
+export { prepareObservations, prepareSchedule, prepareHistoryData };

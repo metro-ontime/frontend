@@ -17,165 +17,8 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { lines } from '../helpers/LineInfo.js';
-
-const sampleDataSet = [{
-  mean_time_between: 1012.4553324721667,
-  ontime: {
-    "1_min": 2000,
-    '2_min': 3000,
-    '3_min': 4000,
-    '4_min': 5000,
-    '5_min': 6000,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 7000,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1200.5553324721667,
-  ontime: {
-    "1_min": 2139,
-    '2_min': 3478,
-    '3_min': 4085,
-    '4_min': 4384,
-    '5_min': 4511,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4758,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 5000,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1012.4553324721667,
-  ontime: {
-    "1_min": 2000,
-    '2_min': 3000,
-    '3_min': 4000,
-    '4_min': 5000,
-    '5_min': 6000,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 7000,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1200.5553324721667,
-  ontime: {
-    "1_min": 2139,
-    '2_min': 3478,
-    '3_min': 4085,
-    '4_min': 4384,
-    '5_min': 4511,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4758,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 4500,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  },
-  {
-  mean_time_between: 1112.4553324721667,
-  ontime: {
-    "1_min": 2100,
-    '2_min': 3400,
-    '3_min': 4000,
-    '4_min': 4300,
-    '5_min': 5000,
-  },
-  timestamp: "2019-03-23T11:00:41.896707-07:00",
-  total_arrivals_analyzed: 4800,
-  total_scheduled_arrivals: 18679,
-  }
-]
+import { lines, linesByName } from '../helpers/LineInfo.js';
+import { prepareHistoryData } from "../helpers/PrepareData"
 
 const styles = theme => ({
   root: {
@@ -211,20 +54,19 @@ const styles = theme => ({
 
 class History extends React.Component {
   state = {
-    rows: sampleDataSet.slice(0,sampleDataSet.length).reverse().map((item,i) => Object.assign(item,{ id: i })),
+    rows: this.props.formattedData,
     page: 0,
     rowsPerPage: 5,
     line: "All Lines"
   };
 
-  /* for getting actual data
+  // for getting actual data
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('http://localhost:8080/network');
+    const { data } = await axios.get('http://localhost:8080/history');
     const timestamp = data.timestamp;
-    console.log(data);
-    return { query, data, timestamp };
+    const formattedData = prepareHistoryData(data);
+    return { query, formattedData, timestamp };
   }
-  */
 
   handleChangePage = (event, page) => {
     this.setState({ page });
@@ -236,10 +78,24 @@ class History extends React.Component {
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
+    this.setLineData(event.target.value)
+        .then(data => this.setState({ rows: data }));
   };
+
+  async setLineData (lineId) {
+    if (lineId === "All Lines") {
+      const { data } = await axios.get('http://localhost:8080/history');
+      return prepareHistoryData(data);
+    } else {
+      const lineNum = linesByName[lineId].id;
+      const { data } = await axios.get(`http://localhost:8080/linehistory/${lineNum}`);
+      return prepareHistoryData(data);
+    }
+  }
+
   render() {
-    const { classes } = this.props;
-    const { rows, rowsPerPage, page } = this.state;
+    const { classes, formattedData } = this.props;
+    const { rowsPerPage, rows, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
     const dateToString = (diff) => {
         let d = new Date();
