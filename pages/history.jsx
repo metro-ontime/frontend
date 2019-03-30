@@ -18,7 +18,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { lines, linesByName } from '../helpers/LineInfo.js';
-import { prepareHistoryData } from "../helpers/PrepareData"
+import { prepareHistoryData, prepareNetworkData } from "../helpers/PrepareData"
 
 const styles = theme => ({
   root: {
@@ -54,18 +54,16 @@ const styles = theme => ({
 
 class History extends React.Component {
   state = {
-    rows: this.props.formattedData,
+    rows: prepareHistoryData(this.props.formattedData.map(datum => prepareNetworkData(datum))),
     page: 0,
     rowsPerPage: 5,
     line: "All Lines"
   };
 
-  // for getting actual data
   static async getInitialProps({ query, res }) {
     const { data } = await axios.get('http://localhost:8080/history');
-    const timestamp = data.timestamp;
-    const formattedData = prepareHistoryData(data);
-    return { query, formattedData, timestamp };
+    const formattedData = Object.values(data);
+    return { query, formattedData };
   }
 
   handleChangePage = (event, page) => {
@@ -78,23 +76,22 @@ class History extends React.Component {
 
   handleChange = event => {
     this.setState({ [event.target.name]: event.target.value });
-    this.setLineData(event.target.value)
-        .then(data => this.setState({ rows: data }));
+    this.setState({ rows: this.setTableLineData(event.target.value) });
   };
 
-  async setLineData (lineId) {
+  setTableLineData = (lineId) => {
+    const { formattedData } = this.props;    
+    console.log(formattedData);
     if (lineId === "All Lines") {
-      const { data } = await axios.get('http://localhost:8080/history');
-      return prepareHistoryData(data);
+      return prepareHistoryData(formattedData.map(datum => prepareNetworkData(datum)));
     } else {
       const lineNum = linesByName[lineId].id;
-      const { data } = await axios.get(`http://localhost:8080/linehistory/${lineNum}`);
-      return prepareHistoryData(data);
+      return prepareHistoryData(formattedData.map(datum => datum[`${lineNum}_lametro-rail`]));
     }
   }
 
   render() {
-    const { classes, formattedData } = this.props;
+    const { classes } = this.props;
     const { rowsPerPage, rows, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
     const dateToString = (diff) => {

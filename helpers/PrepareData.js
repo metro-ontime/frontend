@@ -96,7 +96,50 @@ const prepareSchedule = (url, line, updateFunction) => {
 };
 
 const prepareHistoryData = (data) => {
-    return Object.values(data).slice(0,Object.values(data).length).reverse().map((item,i) => Object.assign(item,{ id: i }))
+    return data.slice(0,data.length).reverse().map((item,i) => Object.assign(item,{ id: i }))
 }
 
-export { prepareObservations, prepareSchedule, prepareHistoryData };
+const prepareNetworkData = data => {
+  const dataObjects = Object.keys(data).map((key) => {
+    return data[key]
+  });
+  const windows = Array.from({length: 5}, (k, n) => n + 1);
+
+  let totalsOntime = windows.map(windowSize => {
+    const totalOntimeForWindow = dataObjects.reduce((acc, currentValue) => {
+      return currentValue["ontime"][`${windowSize}_min`] + acc
+    }, dataObjects[0]["ontime"][`${windowSize}_min`]);
+    return { window: windowSize, n: totalOntimeForWindow }
+  });
+
+  totalsOntime = totalsOntime.reduce((map, obj) => {
+    map[`${obj.window}_min`] = obj.n;
+    return map
+  }, {});
+
+  const totalArrivals = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["total_arrivals_analyzed"] + acc
+  }, dataObjects[0]["total_arrivals_analyzed"]);
+
+  const totalScheduled = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["total_scheduled_arrivals"] + acc
+  }, dataObjects[0]["total_scheduled_arrivals"]);
+
+  const sumMeanTimeBetween = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["mean_time_between"] + acc
+  }, dataObjects[0]["mean_time_between"]);
+  const overallMeanTimeBetween = sumMeanTimeBetween / dataObjects.length;
+
+  const timestamp = dataObjects[0]["timestamp"];
+
+  const overallData = {
+    ontime: totalsOntime,
+    total_arrivals_analyzed: totalArrivals,
+    total_scheduled_arrivals: totalScheduled,
+    mean_time_between: overallMeanTimeBetween,
+    timestamp: timestamp
+  };
+  return overallData;
+};
+
+export { prepareObservations, prepareSchedule, prepareHistoryData, prepareNetworkData };
