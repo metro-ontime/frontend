@@ -95,10 +95,6 @@ const prepareSchedule = (url, line, updateFunction) => {
   });
 };
 
-const prepareHistoryData = (data) => {
-    return data.slice(0,data.length).reverse().map((item,i) => Object.assign(item,{ id: i }))
-}
-
 const prepareNetworkData = data => {
   const dataObjects = Object.keys(data).map((key) => {
     return data[key]
@@ -132,12 +128,15 @@ const prepareNetworkData = data => {
 
   const timestamp = dataObjects[0]["timestamp"];
 
+  const date = dataObjects[0]["date"];
+
   const overallData = {
     ontime: totalsOntime,
     total_arrivals_analyzed: totalArrivals,
     total_scheduled_arrivals: totalScheduled,
     mean_time_between: overallMeanTimeBetween,
-    timestamp: timestamp
+    timestamp: timestamp,
+    date: date
   };
   return overallData;
 };

@@ -37,7 +37,8 @@
     "express": "^4.16.4",
     "file-system": "^2.2.2",
     "fs": "0.0.1-security",
-    "highcharts": "^7.0.2",
+    "highcharts": "^7.0.3",
+    "highcharts-react": "0.0.3",
     "highcharts-react-official": "^2.0.0",
     "jss": "^9.8.7",
     "lodash": "^4.17.11",
@@ -52,7 +53,8 @@
     "react-moment": "^0.8.4",
     "react-redux": "^6.0.0",
     "react-request": "^3.1.2",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "victory": "^32.1.0"
   },
   "devDependencies": {
     "babel-plugin-root-import": "^6.1.0",

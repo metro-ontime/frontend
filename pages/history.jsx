@@ -1,29 +1,19 @@
 import React from 'react';
 import Layout from '~/components/Layout';
-import { Grid, Typography, Card, Select, MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
+import HistoryTable from "~/components/HistoryTable";
+import HistoryChart from "~/components/charts/HistoryChart";
+import { AppBar, Button, Tab, Tabs, Grid, Typography, Card, Select, MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
 import axios from 'axios';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableFooter from '@material-ui/core/TableFooter';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import { lines, linesByName } from '../helpers/LineInfo.js';
-import { prepareHistoryData, prepareNetworkData } from "../helpers/PrepareData"
+import { prepareNetworkData } from "../helpers/PrepareData"
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
   root: {
     width: '100%',
     marginTop: theme.spacing.unit * 3,
+    flexGrow: 1,
   },
   table: {
     minWidth: 500,
@@ -50,14 +40,95 @@ const styles = theme => ({
     height: 16,
     marginRight: ".5em"
   },
+  headerContainer: {
+    paddingBottom: "1em",
+    display: "flex",
+    alignItems: "flex-end",
+    flexWrap: "wrap"
+  },
+  chartContainer: {
+    margin: "auto",
+    width: "90%",
+    paddingTop:"3em",
+    paddingBottom:"3em"
+  }
 });
+
+const deriveLine = (data, line) => {
+    if (line === "All Lines") {
+      return data.map(datum => prepareNetworkData(datum))
+    } else {
+      const lineNum = linesByName[line].id;
+      return data.map(datum => datum[`${lineNum}_lametro-rail`]);
+    }
+}
+
+const deriveXAxis = (data, axisLabel) => {
+  let weekDayArr = [[],[],[],[],[],[],[]]
+  switch(axisLabel) {
+    case "Weekday Average":
+      
+      for (let item of data) {
+        weekDayArr[new Date(item.date).getDay()].push(item);
+      }
+      return weekDayArr;
+    case "Weekly Average":
+      for (let item of data) {
+        weekDayArr[new Date(item.date).getDay()].push(item);
+      }
+      return weekDayArr;
+    default:
+       return data;
+  }
+}
+
+const getAverageStats = (arr) => {
+  const avgWait = arr.reduce((acc, currItem) => acc + currItem.mean_time_between, 0) / arr.length / 60;
+  const avgOneMin = arr.reduce((acc, currItem) => acc + currItem.ontime["1_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
+  const avgFiveMin = arr.reduce((acc, currItem) => acc + currItem.ontime["5_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
+  return {
+    avgWait,
+    avgOneMin,
+    avgFiveMin
+  }
+}
+
+const deriveYAxis = (data, axisLabel) => {
+  const formattedData = data.map(item => getAverageStats(item));
+  switch(axisLabel) {
+    case "Average Wait Time":
+      return formattedData.map((item, i) => {
+        return item.avgWait;
+      });
+    case "% Within 1 Minute":
+      return formattedData.map((item, i) => {
+        return item.avgOneMin;        
+      });
+    case "% Within 5 Minutes":
+    return formattedData.map((item, i) => {
+        return item.avgFiveMin;
+      });
+    default:
+       return data;
+  }
+}
+
+const prepareHistoryData = (data) => {
+    return data.slice(0,data.length).reverse().map((item,i) => Object.assign(item,{ id: i }))
+}
 
 class History extends React.Component {
   state = {
-    rows: prepareHistoryData(this.props.formattedData.map(datum => prepareNetworkData(datum))),
-    page: 0,
-    rowsPerPage: 5,
-    line: "All Lines"
+    rows: [],
+    graphData: [],
+    line: "All Lines",
+    xAxis: "Weekday Average",
+    xTickFormat: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    yAxis: "Average Wait Time",
+    yTickFormat: { formatter: function() { return `${this.value} min`; } },
+    dataFormat: "chart",
+    value: 0,
+    color: "#dddddd"
   };
 
   static async getInitialProps({ query, res }) {
@@ -66,44 +137,56 @@ class History extends React.Component {
     return { query, formattedData };
   }
 
-  handleChangePage = (event, page) => {
-    this.setState({ page });
-  };
-
-  handleChangeRowsPerPage = event => {
-    this.setState({ page: 0, rowsPerPage: Number(event.target.value) });
-  };
-
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-    this.setState({ rows: this.setTableLineData(event.target.value) });
-  };
-
-  setTableLineData = (lineId) => {
-    const { formattedData } = this.props;    
-    console.log(formattedData);
-    if (lineId === "All Lines") {
-      return prepareHistoryData(formattedData.map(datum => prepareNetworkData(datum)));
-    } else {
-      const lineNum = linesByName[lineId].id;
-      return prepareHistoryData(formattedData.map(datum => datum[`${lineNum}_lametro-rail`]));
+  static getDerivedStateFromProps (props, state) {
+    if (!state.rows[0] && !state.graphData[0]) {
+      return {
+        rows: prepareHistoryData(props.formattedData.map(datum => prepareNetworkData(datum))),
+        graphData: deriveYAxis(deriveXAxis(deriveLine(props.formattedData, state.line), state.xAxis), state.yAxis)
+      }
     }
+    return null;
   }
+
+
+  handleLineChange = event => {
+    this.setState({ line: event.target.value,
+                    color: linesByName[event.target.value]["color"],
+                    rows: prepareHistoryData(deriveLine(this.props.formattedData, event.target.value)),
+                    graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, event.target.value), this.state.xAxis), this.state.yAxis)
+                 });
+  };
+
+  handleXAxisChange = event => {
+    this.setState({ xAxis: event.target.value,
+                    graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line), event.target.value), this.state.yAxis),
+                 });
+  };
+
+  handleYAxisChange = event => {
+    this.setState({ yAxis: event.target.value,
+                    graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line), this.state.xAxis), event.target.value),
+                    
+                 });
+    if (event.target.value === "Average Wait Time") {
+      this.setState({ yTickFormat: { formatter: function() { 
+                        return `${this.value} min`;
+                      } 
+                    } });
+    } else {
+      this.setState({ yTickFormat: { formatter: function() { 
+                        return `${this.value}%`;
+                      } 
+                    } });
+    }
+  };
+
+  handleTabChange = (event, value) => {
+    this.setState({ dataFormat: value });
+  };
 
   render() {
     const { classes } = this.props;
-    const { rowsPerPage, rows, page } = this.state;
-    const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-    const dateToString = (diff) => {
-        let d = new Date();
-        d.setDate(d.getDate() - diff);
-        
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-
-        return [month,day].join('/');
-      }
-
+    const { rows, dataFormat, xTickFormat, yTickFormat, color, graphData } = this.state;
     const links = lines.map((line,i) => (
             <MenuItem value={`${line.name}`} key={i}>
               <div style={{display: "flex", alignItems: "center"}}>
@@ -124,69 +207,116 @@ class History extends React.Component {
               {line.name}
               </div>
             </MenuItem>
-        )
-    );
+    ));
+
     return (
       <Layout
         pageTitle="History"
         toolbarTitle="History"
-      > <Card className={classes.card}>
-        <div className={classes.tableWrapper}>
-          <div style={{display: "flex", alignItems: "flex-end"}}>
-            <Typography className={classes.header} inline={true}>View Data for
-            </Typography>
-            <Select
-              value={this.state.line}
-              onChange={this.handleChange}
-              name="line"
-              className={classes.selectEmpty}
-            >
-              <MenuItem value={"All Lines"}>All Lines
-              </MenuItem>
-              {links}
-            </Select>
+      > 
+        <Card className={classes.card}>
+          <div className={classes.headerContainer}>
+          <div>
+          <Typography className={classes.header} inline={true}>View Data for
+          </Typography>
+          <Select
+            value={this.state.line}
+            onChange={this.handleLineChange}
+            name="line"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value={"All Lines"}>
+              <div style={{display: "flex", alignItems: "center"}}>
+              <ListItemAvatar>
+                <Avatar className={ classes.avatar }>
+                  <div
+                    style={{
+                      backgroundColor: '#dddddd',
+                      width: '100%',
+                      padding: 0,
+                      height: '100%',
+                      margin: 0,
+                      borderRadius: '50%',
+                    }}
+                  />
+                </Avatar>
+              </ListItemAvatar>
+              All Lines
+              </div>
+            </MenuItem>
+            {links}
+          </Select>
           </div>
-          <Table className={classes.table}>
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell align="right">Within 1 min.</TableCell>
-                <TableCell align="right">Within 5 min.</TableCell>
-                <TableCell align="right">Avg. wait time</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                   .map((row,i) => (
-                      <TableRow key={row.id}>
-                        <TableCell component="th" scope="row">
-                          {dateToString(row.id)}
-                        </TableCell>
-                        <TableCell align="right">{Math.round(1000 * row.ontime["1_min"] / row.total_arrivals_analyzed) / 10 + "%"}</TableCell>
-                        <TableCell align="right">{Math.round(1000 * row.ontime["5_min"] / row.total_arrivals_analyzed) / 10 + "%"}</TableCell>
-                        <TableCell align="right">{Math.round(row.mean_time_between/60) + " min."}</TableCell>
-                      </TableRow>
-              ))}
-            </TableBody>           
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25]}
-                  colSpan={3}
-                  count={rows.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  SelectProps={{
-                    native: true,
-                  }}
-                  onChangePage={this.handleChangePage}
-                  onChangeRowsPerPage={this.handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActionsWrapped}
-                />
-              </TableRow>
-            </TableFooter>
-          </Table>
+          { dataFormat === "chart" ?
+          <React.Fragment>
+          <div>
+          <Typography className={classes.header} inline={true}>X-Axis:
+          </Typography>
+          <Select
+            value={this.state.xAxis}
+            onChange={this.handleXAxisChange}
+            name="xAxis"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value={"Weekday Average"}>Weekday Average
+            </MenuItem>
+            <MenuItem value={"Weekly Average"}>Weekly Average
+            </MenuItem>
+          </Select>
+          </div>
+          <div>
+          <Typography className={classes.header} inline={true}>Y-Axis:
+          </Typography>
+          <Select
+            value={this.state.yAxis}
+            onChange={this.handleYAxisChange}
+            name="yAxis"
+            className={classes.selectEmpty}
+          >
+            <MenuItem value={"Average Wait Time"}>Average Wait Time
+            </MenuItem>
+            <MenuItem value={"% Within 1 Minute"}>% Within 1 Minute
+            </MenuItem>
+            <MenuItem value={"% Within 5 Minutes"}>% Within 5 Minutes
+            </MenuItem>
+          </Select>
+          </div>
+          </React.Fragment>
+          : ""
+          }
         </div>
+        </Card>
+        <Card className={classes.card}>
+          <Grid container justify="center" alignItems="center">
+            <Grid item xs={8}>
+            </Grid>
+            <Grid item xs={4}>
+              <AppBar position="static" color="default">
+              <Tabs
+                value={this.state.dataFormat}
+                onChange={this.handleTabChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+              >
+                <Tab label="Chart" value="chart" />
+                <Tab label="Table" value="table" />
+              </Tabs>
+            </AppBar> 
+            </Grid>
+          </Grid>
+          { dataFormat === "chart" ? 
+          <div className={classes.chartContainer}>
+          <HistoryChart
+            graphData={graphData}
+            color={color}
+            xTickFormat={xTickFormat}
+            yTickFormat={yTickFormat}
+            />
+          </div>
+          :
+          <HistoryTable rows={rows} />
+          } 
         </Card>
       </Layout>
     );
@@ -196,91 +326,6 @@ class History extends React.Component {
 History.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
-
-const actionsStyles = theme => ({
-  root: {
-    flexShrink: 0,
-    color: theme.palette.text.secondary,
-    marginLeft: theme.spacing.unit * 2.5,
-  },
-});
-
-class TablePaginationActions extends React.Component {
-  handleFirstPageButtonClick = event => {
-    this.props.onChangePage(event, 0);
-  };
-
-  handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
-  };
-
-  handleNextButtonClick = event => {
-    this.props.onChangePage(event, this.props.page + 1);
-  };
-
-  handleLastPageButtonClick = event => {
-    this.props.onChangePage(
-      event,
-      Math.max(0, Math.ceil(this.props.count / this.props.rowsPerPage) - 1),
-    );
-  };
-
-  render() {
-    const { classes, count, page, rowsPerPage, theme } = this.props;
-
-    return (
-      <div className={classes.root}>
-        <IconButton
-          onClick={this.handleFirstPageButtonClick}
-          disabled={page === 0}
-          aria-label="First Page"
-        >
-          {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleBackButtonClick}
-          disabled={page === 0}
-          aria-label="Previous Page"
-        >
-          {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Next Page"
-        >
-          {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-        </IconButton>
-        <IconButton
-          onClick={this.handleLastPageButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-          aria-label="Last Page"
-        >
-          {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-        </IconButton>
-      </div>
-    );
-  }
-}
-
-TablePaginationActions.propTypes = {
-  classes: PropTypes.object.isRequired,
-  count: PropTypes.number.isRequired,
-  onChangePage: PropTypes.func.isRequired,
-  page: PropTypes.number.isRequired,
-  theme: PropTypes.object.isRequired,
-};
-
-const TablePaginationActionsWrapped = withStyles(actionsStyles, { withTheme: true })(
-  TablePaginationActions,
-);
-
-let counter = 0;
-function createData(name, calories, fat) {
-  counter += 1;
-  return { id: counter, name, calories, fat };
-}
 
 
 export default withStyles(styles)(History);

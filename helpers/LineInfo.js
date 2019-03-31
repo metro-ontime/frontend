@@ -23,6 +23,7 @@ const linesByName = {
   Gold: { id: 804, color: '#ffb200'},
   Purple: { id: 805, color: '#9561a8'},
   Expo: { id: 806, color: '#51c8e8'},
+  "All Lines": { color: '#dddddd'}
 };
 
 export { lines, linesById, linesByName };
