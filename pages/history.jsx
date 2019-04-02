@@ -194,7 +194,7 @@ class History extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { rows, dataFormat, xTickFormat, yTickFormat, color, graphData } = this.state;
+    const { rows, dataFormat, xTickFormat, yTickFormat, color, graphData, yAxis } = this.state;
     const links = lines.map((line,i) => (
             <MenuItem value={`${line.name}`} key={i}>
               <div style={{display: "flex", alignItems: "center"}}>
@@ -320,6 +320,7 @@ class History extends React.Component {
             color={color}
             xTickFormat={xTickFormat}
             yTickFormat={yTickFormat}
+            yAxis={yAxis}
             />
           </div>
           :

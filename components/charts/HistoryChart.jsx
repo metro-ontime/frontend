@@ -14,7 +14,7 @@ const styles = theme => ({
 
 class HistoryChart extends React.Component {
   render() {
-    const { classes, xTickFormat, yTickFormat, graphData, color } = this.props;
+    const { classes, xTickFormat, yTickFormat, graphData, color, yAxis } = this.props;
     const options = {
         chart: {
             type: 'column'
@@ -33,7 +33,9 @@ class HistoryChart extends React.Component {
         },
         yAxis: {
           title: '',
-          labels: yTickFormat
+          labels: yTickFormat,
+          min: 0,
+          max: yAxis === "Average Wait Time" ? 30 : 100
         },
         series: [{
           name: '',
