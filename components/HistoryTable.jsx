@@ -16,6 +16,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
+import { dateToString } from "../helpers/PrepareData"
 
 
 const styles = theme => ({
@@ -58,17 +59,6 @@ class HistoryTable extends React.Component {
     const { classes, rows } = this.props;
     const { rowsPerPage, page, dataFormat } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
-
-    const dateToString = (diff) => {
-        let d = new Date();
-        d.setDate(d.getDate() - diff);
-        
-        let month = '' + (d.getMonth() + 1);
-        let day = '' + d.getDate();
-
-        return [month,day].join('/');
-    }
-
     return (
           <div className={classes.tableWrapper}>
             <Table className={classes.table}>

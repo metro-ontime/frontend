@@ -6,7 +6,7 @@ import { AppBar, Button, Tab, Tabs, Grid, Typography, Card, Select, MenuItem, Li
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
 import { lines, linesByName } from '../helpers/LineInfo.js';
-import { prepareNetworkData } from "../helpers/PrepareData"
+import { prepareNetworkData, dateToString } from "../helpers/PrepareData"
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
@@ -64,49 +64,51 @@ const deriveLine = (data, line) => {
 }
 
 const deriveXAxis = (data, axisLabel) => {
-  let weekDayArr = [[],[],[],[],[],[],[]]
   switch(axisLabel) {
     case "Weekday Average":
-      
+      let weekDayArr = [[],[],[],[],[],[],[]]
       for (let item of data) {
         weekDayArr[new Date(item.date).getDay()].push(item);
       }
-      return weekDayArr;
-    case "Weekly Average":
-      for (let item of data) {
-        weekDayArr[new Date(item.date).getDay()].push(item);
-      }
-      return weekDayArr;
+      const formattedWeekDayArr = weekDayArr.map(item => getAverageStats(item));
+      return formattedWeekDayArr;
+    case "Last 30 Days":
+      const lastThirtyArr = data.slice(data.length-30, data.length);
+      const formattedLastThirtyArr = lastThirtyArr.map(currItem => ({
+        wait: currItem.mean_time_between / 60,
+        oneMin: currItem.ontime["1_min"] / currItem.total_arrivals_analyzed * 100,
+        fiveMin: currItem.ontime["5_min"] / currItem.total_arrivals_analyzed * 100,
+      }))
+      return formattedLastThirtyArr;
     default:
        return data;
   }
 }
 
 const getAverageStats = (arr) => {
-  const avgWait = arr.reduce((acc, currItem) => acc + currItem.mean_time_between, 0) / arr.length / 60;
-  const avgOneMin = arr.reduce((acc, currItem) => acc + currItem.ontime["1_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
-  const avgFiveMin = arr.reduce((acc, currItem) => acc + currItem.ontime["5_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
+  const wait = arr.reduce((acc, currItem) => acc + currItem.mean_time_between, 0) / arr.length / 60;
+  const oneMin = arr.reduce((acc, currItem) => acc + currItem.ontime["1_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
+  const fiveMin = arr.reduce((acc, currItem) => acc + currItem.ontime["5_min"] / currItem.total_arrivals_analyzed, 0) / arr.length * 100;
   return {
-    avgWait,
-    avgOneMin,
-    avgFiveMin
+    wait,
+    oneMin,
+    fiveMin
   }
 }
 
 const deriveYAxis = (data, axisLabel) => {
-  const formattedData = data.map(item => getAverageStats(item));
   switch(axisLabel) {
     case "Average Wait Time":
-      return formattedData.map((item, i) => {
-        return item.avgWait;
+      return data.map((item, i) => {
+        return item.wait;
       });
     case "% Within 1 Minute":
-      return formattedData.map((item, i) => {
-        return item.avgOneMin;        
+      return data.map((item, i) => {
+        return item.oneMin;        
       });
     case "% Within 5 Minutes":
-    return formattedData.map((item, i) => {
-        return item.avgFiveMin;
+    return data.map((item, i) => {
+        return item.fiveMin;
       });
     default:
        return data;
@@ -160,6 +162,12 @@ class History extends React.Component {
     this.setState({ xAxis: event.target.value,
                     graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line), event.target.value), this.state.yAxis),
                  });
+    if (event.target.value === "Weekday Average") {
+      this.setState({ xTickFormat: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"] });
+    } else {
+      this.setState({ xTickFormat: new Array(30).fill("").map((item, i) => dateToString(30-i)) });
+    }
+    console.log(this.state.xTickFormat);
   };
 
   handleYAxisChange = event => {
@@ -260,7 +268,7 @@ class History extends React.Component {
           >
             <MenuItem value={"Weekday Average"}>Weekday Average
             </MenuItem>
-            <MenuItem value={"Weekly Average"}>Weekly Average
+            <MenuItem value={"Last 30 Days"}>Last 30 Days
             </MenuItem>
           </Select>
           </div>

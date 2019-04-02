@@ -141,4 +141,14 @@ const prepareNetworkData = data => {
   return overallData;
 };
 
-export { prepareObservations, prepareSchedule, prepareHistoryData, prepareNetworkData };
+const dateToString = (diff) => {
+  let d = new Date();
+  d.setDate(d.getDate() - diff);
+  
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+
+  return [month,day].join('/');
+}
+
+export { prepareObservations, prepareSchedule, prepareNetworkData, dateToString };

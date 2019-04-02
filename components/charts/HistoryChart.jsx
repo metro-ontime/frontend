@@ -43,7 +43,8 @@ class HistoryChart extends React.Component {
     }
     return <HighchartsReact 
                  highcharts={Highcharts} 
-                 options={options} />
+                 options={options}
+                 key={Math.random()} />
   }
 }
 
