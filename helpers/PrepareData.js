@@ -95,4 +95,60 @@ const prepareSchedule = (url, line, updateFunction) => {
   });
 };
 
-export { prepareObservations, prepareSchedule };
+const prepareNetworkData = data => {
+  const dataObjects = Object.keys(data).map((key) => {
+    return data[key]
+  });
+  const windows = Array.from({length: 5}, (k, n) => n + 1);
+
+  let totalsOntime = windows.map(windowSize => {
+    const totalOntimeForWindow = dataObjects.reduce((acc, currentValue) => {
+      return currentValue["ontime"][`${windowSize}_min`] + acc
+    }, dataObjects[0]["ontime"][`${windowSize}_min`]);
+    return { window: windowSize, n: totalOntimeForWindow }
+  });
+
+  totalsOntime = totalsOntime.reduce((map, obj) => {
+    map[`${obj.window}_min`] = obj.n;
+    return map
+  }, {});
+
+  const totalArrivals = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["total_arrivals_analyzed"] + acc
+  }, dataObjects[0]["total_arrivals_analyzed"]);
+
+  const totalScheduled = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["total_scheduled_arrivals"] + acc
+  }, dataObjects[0]["total_scheduled_arrivals"]);
+
+  const sumMeanTimeBetween = dataObjects.reduce((acc, currentValue) => {
+    return currentValue["mean_time_between"] + acc
+  }, dataObjects[0]["mean_time_between"]);
+  const overallMeanTimeBetween = sumMeanTimeBetween / dataObjects.length;
+
+  const timestamp = dataObjects[0]["timestamp"];
+
+  const date = dataObjects[0]["date"];
+
+  const overallData = {
+    ontime: totalsOntime,
+    total_arrivals_analyzed: totalArrivals,
+    total_scheduled_arrivals: totalScheduled,
+    mean_time_between: overallMeanTimeBetween,
+    timestamp: timestamp,
+    date: date
+  };
+  return overallData;
+};
+
+const dateToString = (diff) => {
+  let d = new Date();
+  d.setDate(d.getDate() - diff);
+  
+  let month = '' + (d.getMonth() + 1);
+  let day = '' + d.getDate();
+
+  return [month,day].join('/');
+}
+
+export { prepareObservations, prepareSchedule, prepareNetworkData, dateToString };

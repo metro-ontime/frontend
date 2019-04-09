@@ -16,4 +16,14 @@ const linesById = {
   806: { name: 'Expo', color: '#51c8e8'},
 };
 
-export { lines, linesById };
+const linesByName = {
+  Blue: { id: 801, color: '#2461aa'},
+  Red: { id: 802, color: '#fc1920'},
+  Green: { id: 803, color: '#6bbc46'},
+  Gold: { id: 804, color: '#ffb200'},
+  Purple: { id: 805, color: '#9561a8'},
+  Expo: { id: 806, color: '#51c8e8'},
+  "All Lines": { color: '#dddddd'}
+};
+
+export { lines, linesById, linesByName };
