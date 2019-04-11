@@ -1,11 +1,12 @@
 import React from 'react';
 import Layout from '~/components/Layout';
+import HistoryMenu from "~/components/HistoryMenu";
 import HistoryTable from "~/components/HistoryTable";
 import HistoryChart from "~/components/charts/HistoryChart";
 import { AppBar, Button, Tab, Tabs, Grid, Typography, Card, Select, MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { lines, linesByName } from '../helpers/LineInfo.js';
+import { linesByName } from '../helpers/LineInfo.js';
 import { dateToString, deriveLine, deriveXAxis, deriveYAxis, prepareTableData } from "../helpers/formatHistory"
 import PropTypes from 'prop-types';
 
@@ -15,36 +16,10 @@ const styles = theme => ({
     marginTop: theme.spacing.unit * 3,
     flexGrow: 1,
   },
-  table: {
-    minWidth: 500,
-  },
-  tableWrapper: {
-    overflowX: 'auto',
-  },
   card: {
     maxWidth: 1200,
     margin: 'auto',
     marginTop: 20,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
-    marginLeft: ".5em",
-    marginBottom: '-.25em',
-  },
-  header: {
-    marginLeft: "1.6em",
-    fontSize: 16,
-  },
-  avatar: {
-    width: 16,
-    height: 16,
-    marginRight: ".5em"
-  },
-  headerContainer: {
-    paddingBottom: "1em",
-    display: "flex",
-    alignItems: "flex-end",
-    flexWrap: "wrap"
   },
   chartContainer: {
     margin: "auto",
@@ -128,106 +103,21 @@ class History extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { rows, dataFormat, xTickFormat, yTickFormat, color, graphData, yAxis } = this.state;
-    const links = lines.map((line,i) => (
-            <MenuItem value={`${line.name}`} key={i}>
-              <div style={{display: "flex", alignItems: "center"}}>
-              <ListItemAvatar>
-                <Avatar className={ classes.avatar }>
-                  <div
-                    style={{
-                      backgroundColor: line.color,
-                      width: '100%',
-                      padding: 0,
-                      height: '100%',
-                      margin: 0,
-                      borderRadius: '50%',
-                    }}
-                  />
-                </Avatar>
-              </ListItemAvatar>
-              {line.name}
-              </div>
-            </MenuItem>
-    ));
-
+    const { line, rows, dataFormat, xTickFormat, yTickFormat, color, graphData, xAxis, yAxis } = this.state;
     return (
       <Layout
         pageTitle="History"
         toolbarTitle="History"
-      > 
-        <Card className={classes.card}>
-          <div className={classes.headerContainer}>
-          <div>
-          <Typography className={classes.header} inline={true}>View Data for
-          </Typography>
-          <Select
-            value={this.state.line}
-            onChange={this.handleLineChange}
-            name="line"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value={"All Lines"}>
-              <div style={{display: "flex", alignItems: "center"}}>
-              <ListItemAvatar>
-                <Avatar className={ classes.avatar }>
-                  <div
-                    style={{
-                      backgroundColor: '#dddddd',
-                      width: '100%',
-                      padding: 0,
-                      height: '100%',
-                      margin: 0,
-                      borderRadius: '50%',
-                    }}
-                  />
-                </Avatar>
-              </ListItemAvatar>
-              All Lines
-              </div>
-            </MenuItem>
-            {links}
-          </Select>
-          </div>
-          { dataFormat === "chart" ?
-          <React.Fragment>
-          <div>
-          <Typography className={classes.header} inline={true}>X-Axis:
-          </Typography>
-          <Select
-            value={this.state.xAxis}
-            onChange={this.handleXAxisChange}
-            name="xAxis"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value={"Last 30 Days"}>Last 30 Days
-            </MenuItem>
-            <MenuItem value={"Weekday Average"}>Weekday Average
-            </MenuItem>
-          </Select>
-          </div>
-          <div>
-          <Typography className={classes.header} inline={true}>Y-Axis:
-          </Typography>
-          <Select
-            value={this.state.yAxis}
-            onChange={this.handleYAxisChange}
-            name="yAxis"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value={"Average Wait Time"}>Average Wait Time
-            </MenuItem>
-            <MenuItem value={"% Within 1 Minute"}>% Within 1 Minute
-            </MenuItem>
-            <MenuItem value={"% Within 5 Minutes"}>% Within 5 Minutes
-            </MenuItem>
-          </Select>
-          </div>
-          </React.Fragment>
-          : ""
-          }
-        </div>
-        </Card>
+      >
+        <HistoryMenu
+          line={line}
+          handleLineChange={this.handleLineChange}
+          dataFormat={dataFormat}
+          xAxis={xAxis}
+          handleXAxisChange={this.handleXAxisChange}
+          yAxis={yAxis}
+          handleYAxisChange={this.handleYAxisChange}
+        />
         <Card className={classes.card}>
           <Grid container justify="center" alignItems="center">
             <Grid item xs={8}>
@@ -235,7 +125,7 @@ class History extends React.Component {
             <Grid item xs={4}>
               <AppBar position="static" color="default">
               <Tabs
-                value={this.state.dataFormat}
+                value={dataFormat}
                 onChange={this.handleTabChange}
                 indicatorColor="primary"
                 textColor="primary"

@@ -42,8 +42,7 @@ class HistoryTable extends React.Component {
     super(props);
     this.state = {
       page: 0,
-      rowsPerPage: 10,
-      dataFormat: "chart"
+      rowsPerPage: 10
     };
   }
 
@@ -57,7 +56,7 @@ class HistoryTable extends React.Component {
 
   render() {
     const { classes, rows } = this.props;
-    const { rowsPerPage, page, dataFormat } = this.state;
+    const { rowsPerPage, page } = this.state;
     const emptyRows = rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
     return (
           <div className={classes.tableWrapper}>
