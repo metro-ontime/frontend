@@ -16,7 +16,7 @@ import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import { dateToString } from "../helpers/PrepareData"
+import { dateToString } from "../helpers/formatHistory"
 
 
 const styles = theme => ({
