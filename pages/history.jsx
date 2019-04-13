@@ -44,7 +44,7 @@ class History extends React.Component {
   };
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('http://localhost:8080/history');
+    const { data } = await axios.get('https://api.railstats.org/history');
     const formattedData = Object.values(data[0]);
     const allLineData = data[1];
     return { query, allLineData, formattedData };
