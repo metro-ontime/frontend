@@ -21,6 +21,7 @@ import { whenListAllObjects, whenGotS3Object } from '~/helpers/DataFinder';
 import LogoAndTitle from '~/components/LogoAndTitle';
 import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
+import LineComparison from '~/components/LineComparison';
 
 const styles = theme => ({
   cardImage: {
@@ -33,12 +34,13 @@ const styles = theme => ({
 });
 
 class Index extends Component {
-
-
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('https://api.railstats.org/network');
+    const { data } = await axios.get('https://api.railstats.org/history');
+    const formattedLineData = Object.values(data[0]);
+    const allLineData = data[1];
+    const latestData = allLineData[allLineData.length-1]
     const timestamp = data.timestamp;
-    return { query, data, timestamp };
+    return { query, latestData, timestamp, formattedLineData, allLineData };
   }
 
   selectTimeWindow = (value) => {
@@ -46,7 +48,7 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, data, timestamp } = this.props;
+    const { classes, latestData, timestamp, formattedLineData, allLineData } = this.props;
     return (
       <Layout
         pageTitle="Network Summary"
@@ -60,13 +62,16 @@ class Index extends Component {
           </Grid>
           <Grid container spacing={16} item xs={12} lg={8} justify="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
-              <ScoreCard data={ data } width={ this.props.width } />
+              <ScoreCard data={ latestData } width={ this.props.width } />
             </Grid>
             <Grid item xs={12} md={5}>
-              <SimpleScoreCard width={this.props.width} data={ data }/>
+              <SimpleScoreCard width={this.props.width} data={ latestData }/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineSelector />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>
             </Grid>
           </Grid>
         </Grid>

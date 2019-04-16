@@ -1,7 +1,7 @@
 import React from 'react';
 import { AppBar, Button, Tab, Tabs, Grid, Typography, Card, Select, MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { lines, linesByName } from '../helpers/LineInfo.js';
+import { lineLinks, linesByName } from '../helpers/LineInfo.js';
 
 const styles = theme => ({
   card: {
@@ -37,27 +37,6 @@ class HistoryMenu extends React.Component {
 	}
 	render() {
 		const { classes, line, handleLineChange, dataFormat, xAxis, handleXAxisChange, yAxis, handleYAxisChange  } = this.props;
-		const links = lines.map((metLine,i) => (
-	            <MenuItem value={`${metLine.name}`} key={i}>
-	              <div style={{display: "flex", alignItems: "center"}}>
-	              <ListItemAvatar>
-	                <Avatar className={ classes.avatar }>
-	                  <div
-	                    style={{
-	                      backgroundColor: metLine.color,
-	                      width: '100%',
-	                      padding: 0,
-	                      height: '100%',
-	                      margin: 0,
-	                      borderRadius: '50%',
-	                    }}
-	                  />
-	                </Avatar>
-	              </ListItemAvatar>
-	              {metLine.name}
-	              </div>
-	            </MenuItem>
-	    ));
 		return (
 			<Card className={classes.card}>
 	          <div className={classes.headerContainer}>
@@ -89,7 +68,7 @@ class HistoryMenu extends React.Component {
 	              All Lines
 	              </div>
 	            </MenuItem>
-	            {links}
+	            {lineLinks(classes)}
 	          </Select>
 	          </div>
 	          { dataFormat === "chart" ?

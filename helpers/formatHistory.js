@@ -37,6 +37,25 @@ const deriveXAxis = (data, axisLabel) => {
         fiveMin: currItem.ontime["5_min"] / currItem.total_arrivals_analyzed * 100,
       }))
       return formattedLastThirtyArr;
+    case "Weekly Average":
+      const weeklyArr = [];
+      let d = new Date(data[0].date);
+      d.setDate(d.getDate() + 1);
+      let firstNum = d.getDay();
+      let firstArrLength = 7 - firstNum;
+      weeklyArr.push(data.slice(0, firstArrLength));
+      for (let i = firstArrLength; i < data.length; i+=7) {
+        weeklyArr.push(data.slice(i, i+7));
+      }
+      const formattedWeeklyArr = weeklyArr.map(item => getAverageStats(item))
+      return formattedWeeklyArr;
+    case "All Daily Data":
+      const dailyArr = data.map(currItem => ({
+        wait: currItem.mean_time_between / 60,
+        oneMin: currItem.ontime["1_min"] / currItem.total_arrivals_analyzed * 100,
+        fiveMin: currItem.ontime["5_min"] / currItem.total_arrivals_analyzed * 100,
+      }))
+      return dailyArr;
     default:
        return data;
   }

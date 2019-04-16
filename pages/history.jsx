@@ -140,6 +140,7 @@ class History extends React.Component {
           { dataFormat === "chart" ? 
           <div className={classes.chartContainer}>
           <HistoryChart
+            chartFormat={'column'}
             graphData={graphData}
             color={color}
             xTickFormat={xTickFormat}
