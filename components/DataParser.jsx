@@ -26,7 +26,7 @@ class DataParser extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.date !== prevProps.date) {
+    if (this.props.date !== prevProps.date || this.props.line !== prevProps.line) {
       this.setState({ trips: null, schedule: null, minTime: null, maxTime: null });
       this.fetchData(this.props.line, this.props.date);
     }
