@@ -54,26 +54,40 @@ const SimpleScoreCard = (props) => {
       <Typography component="p">
         minutes between trains on average
       </Typography>
-      <div className={classes.performWrapper}>
-        <Typography color="textPrimary" gutterBottom>
-          Top Performer
-        </Typography>
-        <div className={classes.performer}>
-          <Circle color={linesById[data.best_line.name]['color']}/>
-          <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">{linesById[data.best_line.name]['name']} Line every {Math.round(data.best_line.mean_time_between / 60)} minutes</Typography>
+      {data.best_line && (
+        <div className={classes.performWrapper}>
+          <Typography color="textPrimary" gutterBottom>
+            Top Performer
+          </Typography>
+          <div className={classes.performer}>
+            <Circle color={linesById[data.best_line.name].color} />
+            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+              {linesById[data.best_line.name].name}
+              {' Line every '}
+              {Math.round(data.best_line.mean_time_between / 60)}
+              { 'minutes'}
+            </Typography>
+          </div>
         </div>
-      </div>
-      <div className={classes.performWrapper}>
-        <Typography color="textPrimary" gutterBottom>
-          Worst Performer
-        </Typography>
-        <div className={classes.performer}>
-          <Circle color={linesById[data.worst_line.name]['color']}/>
-          <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">{linesById[data.worst_line.name]['name']} Line every {Math.round(data.worst_line.mean_time_between / 60)} minutes</Typography>
+      )}
+      {data.worst_line && (
+        <div className={classes.performWrapper}>
+          <Typography color="textPrimary" gutterBottom>
+            Worst Performer
+          </Typography>
+          <div className={classes.performer}>
+            <Circle color={linesById[data.worst_line.name].color} />
+            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+              {linesById[data.worst_line.name].name}
+              {' Line every '}
+              {Math.round(data.worst_line.mean_time_between / 60)}
+              {' minutes'}
+            </Typography>
+          </div>
         </div>
-      </div>
+      )}
     </Card>
-  )
-}
+  );
+};
 
 export default withStyles(styles)(SimpleScoreCard);
