@@ -26,8 +26,8 @@ const styles = theme => ({
     paddingTop: 50,
     [theme.breakpoints.up('sm')]: {
       alignItems: 'center',
-      margin: 20,
-      padding: 20
+      margin: 10,
+      padding: 10
     }
   },
   cardContent: {

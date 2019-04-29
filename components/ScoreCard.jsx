@@ -12,6 +12,7 @@ import SimpleMenu from '~/components/SimpleMenu';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import Dropdown from '~/components/Dropdown';
+import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
 
 
 const styles = theme => ({
@@ -21,7 +22,8 @@ const styles = theme => ({
   },
   card: {
     position: 'relative',
-    padding: 20
+    padding: 0,
+    height: '100%'
   },
   iconPosition: {
     position: 'absolute',
@@ -40,6 +42,9 @@ const styles = theme => ({
   },
   maxWidth300: {
     maxWidth: 300
+  },
+  cardContainer: {
+    height: 'calc(100% - 3em)'
   }
 });
 
@@ -89,28 +94,7 @@ class ScoreCard extends Component {
     const { classes } = this.props;
     const data = this.props.data;
     const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
-    return (
-      <Card elevation={1} className={ classes.card }>
-        <div className={ classes.iconPosition }>
-          <TooltipCustom title={(
-            <Fragment>
-              <Typography color="inherit">Performance Score</Typography>
-              This figure is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
-            </Fragment>
-          )}/>
-        </div>
-        <Grid container item justify="center" alignItems="center" xs={12}>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
-          </Grid>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <Typography variant={this.props.width === 'xs'
-                ? 'h3'
-                : 'h2'} component="p" className={ classes.score }>
-              {score}%
-            </Typography>
-          </Grid>
-        </Grid>
+    const selector = (
         <Grid container item xs={12} md={12} justify="center">
           <Grid item xs={12}>
             <Typography component="p" className={ classes.description }>Trains running within { this.state.selectedArrivalWindow.menuLabel } of schedule.
@@ -122,6 +106,30 @@ class ScoreCard extends Component {
               handleMenuChange = {this.handleMenuChange}
               selected = {this.state.selectedArrivalWindow.index}
             />
+          </Grid>
+        </Grid>
+    )
+    return (
+      <Card elevation={1} className={ classes.card }>
+        <div className={ classes.iconPosition }>
+          <TooltipCustom title={(
+            <Fragment>
+              <Typography color="inherit">Performance Score</Typography>
+              This figure is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
+            </Fragment>
+          )}/>
+        </div>
+        <SimpleScoreCardHeader title="On-Time Performance" />
+        <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
+          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
+            <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
+          </Grid>
+          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
+            <Typography variant={this.props.width === 'xs'
+                ? 'h3'
+                : 'h2'} component="p" className={ classes.score }>
+              {score}%
+            </Typography>
           </Grid>
         </Grid>
       </Card>
