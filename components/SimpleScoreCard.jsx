@@ -65,7 +65,7 @@ const SimpleScoreCard = (props) => {
               {linesById[data.best_line.name].name}
               {' Line every '}
               {Math.round(data.best_line.mean_time_between / 60)}
-              { 'minutes'}
+              {' minutes'}
             </Typography>
           </div>
         </div>
