@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
 import { Typography,
-  Grid, 
+  Grid,
   Paper,
   Button,
   Card,
@@ -36,7 +36,7 @@ class Index extends Component {
 
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('https://api.railstats.org/network');
+    const { data } = await axios.get('http://localhost:8080/network');
     const timestamp = data.timestamp;
     return { query, data, timestamp };
   }
