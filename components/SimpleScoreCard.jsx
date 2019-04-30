@@ -1,43 +1,46 @@
 import React, { Fragment} from 'react';
 import {
   Typography,
-  Card
+  Card,
+  CardMedia,
+  Grid
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { linesById } from '~/helpers/LineInfo.js';
 import Circle from '~/components/Circle';
 import TooltipCustom from '~/components/TooltipCustom';
+import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
 
 const styles = theme => ({
-  paper: {
-    padding: theme.spacing.unit * 2,
+  root: {
+    //padding: theme.spacing.unit * 2,
+    padding: 0,
     textAlign: 'center',
     color: theme.palette.text.secondary,
     position: 'relative',
-  },
-  progress: {
-    margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2
+    height: '100%'
   },
   iconPosition: {
     position: 'absolute',
     top: 0,
     right: 0
   },
-  performWrapper: {
-    marginTop: 10
-  },
   performer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  container: {
+    height: 'calc(100% - 3em)'
   }
 });
 
 const SimpleScoreCard = (props) => {
   const { data, classes } = props;
   return (
-    <Card elevation={1} className={classes.paper}>
+    <Card elevation={1} classes={classes}>
       <div className={ classes.iconPosition }>
         <TooltipCustom title={(<Fragment>
             <Typography color="inherit">Average Wait Time</Typography>
@@ -45,47 +48,56 @@ const SimpleScoreCard = (props) => {
           </Fragment>
         )}/>
       </div>
-      <Typography variant={props.width === 'xs'
-          ? 'h3'
-          : 'h1'} component="p">
-        {Math.round(data.mean_time_between / 60)}
-
-      </Typography>
-      <Typography component="p">
-        minutes between trains on average
-      </Typography>
-      {data.best_line && (
-        <div className={classes.performWrapper}>
-          <Typography color="textPrimary" gutterBottom>
-            Top Performer
+      <SimpleScoreCardHeader title="Average Wait Time" />
+      <Grid container justifyContent="center" alignItems="center" classes={classes}>
+        <Grid item xs={6}>
+          <img
+            src="/static/images/waiting.svg"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <Typography variant={props.width === 'xs'
+            ? 'h3'
+            : 'h1'} component="p" align="center">
+          {Math.round(data.mean_time_between / 60)}
           </Typography>
-          <div className={classes.performer}>
-            <Circle color={linesById[data.best_line.name].color} />
-            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-              {linesById[data.best_line.name].name}
-              {' Line every '}
-              {Math.round(data.best_line.mean_time_between / 60)}
-              {' minutes'}
-            </Typography>
-          </div>
-        </div>
-      )}
-      {data.worst_line && (
-        <div className={classes.performWrapper}>
-          <Typography color="textPrimary" gutterBottom>
-            Worst Performer
+          <Typography variant="h5" align="center">
+            minutes
           </Typography>
-          <div className={classes.performer}>
-            <Circle color={linesById[data.worst_line.name].color} />
-            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-              {linesById[data.worst_line.name].name}
-              {' Line every '}
-              {Math.round(data.worst_line.mean_time_between / 60)}
-              {' minutes'}
+        </Grid>
+        {data.most_frequent && (
+          <Grid item xs={12}>
+            <Typography color="textPrimary" gutterBottom>
+              Most Frequent
             </Typography>
-          </div>
-        </div>
-      )}
+            <div className={classes.performer}>
+              <Circle color={linesById[data.most_frequent.name].color} />
+              <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                {linesById[data.most_frequent.name].name}
+                {' Line every '}
+                {Math.round(data.most_frequent.mean_time_between / 60)}
+                {' minutes'}
+              </Typography>
+            </div>
+          </Grid>
+        )}
+        {data.least_frequent && (
+          <Grid item xs={12}>
+            <Typography color="textPrimary" gutterBottom>
+              Least Frequent
+            </Typography>
+            <div className={classes.performer}>
+              <Circle color={linesById[data.least_frequent.name].color} />
+              <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                {linesById[data.least_frequent.name].name}
+                {' Line every '}
+                {Math.round(data.least_frequent.mean_time_between / 60)}
+                {' minutes'}
+              </Typography>
+            </div>
+          </Grid>
+        )}
+      </Grid>
     </Card>
   );
 };
