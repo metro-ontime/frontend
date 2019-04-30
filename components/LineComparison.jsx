@@ -66,11 +66,12 @@ const styles = theme => ({
     padding: "22px 0px"
   },
   sliderContainer: {
-    width: "50%",
+    width: "30%",
     marginLeft: "auto",
     marginRight: "auto",
     paddingBottom: "1em",
-    paddingTop: "1em"
+    paddingTop: "1em",
+    textAlign: "center"
   },
   trackBefore: {
     opacity: ".2"
