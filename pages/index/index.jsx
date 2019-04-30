@@ -22,6 +22,7 @@ import LogoAndTitle from '~/components/LogoAndTitle';
 import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
 import FilterPanel from '~/components/FilterPanel';
+import CONFIG from '~/config'
 
 const styles = theme => ({
   cardImage: {
@@ -48,7 +49,7 @@ class Index extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('https://api.railstats.org/network');
+    const { data } = await axios.get(CONFIG.RAILSTATS_API);
     const timestamp = data.timestamp;
     return { query, data, timestamp };
   }

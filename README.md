@@ -1,6 +1,6 @@
 # Metro Performance Monitor Website
 
-This is the front end React App for our performance monitor tool. 
+This is the front end React App for our performance monitor tool.
 
 
 ## Getting Started
@@ -11,8 +11,8 @@ git clone https://github.com/metro-ontime/frontend.git
 cd frontend
 npm i
 ```
-2. To run live development server: `npm run dev`
-3. To build and export static web app to 'out' directory:
+2. To run live development server: Run the railstats api https://github.com/metro-ontime/railstats_api and then `npm run dev`
+3. To build and export static web app to 'out' directory without a local API:
 ```
 npm run build
 npm run export
