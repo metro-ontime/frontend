@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { linesByName } from '../helpers/LineInfo.js';
 import { dateToString, deriveLine, deriveXAxis, deriveYAxis, prepareTableData } from "../helpers/formatHistory"
 import PropTypes from 'prop-types';
+import CONFIG from '~/config';
 
 const styles = theme => ({
   root: {
@@ -44,7 +45,7 @@ class History extends React.Component {
   };
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get('https://api.railstats.org/history');
+    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedData = Object.values(data[0]);
     const allLineData = data[1];
     return { query, allLineData, formattedData };
@@ -82,17 +83,17 @@ class History extends React.Component {
   handleYAxisChange = event => {
     this.setState({ yAxis: event.target.value,
                     graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line, this.props.allLineData), this.state.xAxis), event.target.value),
-                    
+
                  });
     if (event.target.value === "Average Wait Time") {
-      this.setState({ yTickFormat: { formatter: function() { 
+      this.setState({ yTickFormat: { formatter: function() {
                         return `${this.value} min`;
-                      } 
+                      }
                     } });
     } else {
-      this.setState({ yTickFormat: { formatter: function() { 
+      this.setState({ yTickFormat: { formatter: function() {
                         return `${this.value}%`;
-                      } 
+                      }
                     } });
     }
   };
@@ -134,10 +135,10 @@ class History extends React.Component {
                 <Tab label="Chart" value="chart" />
                 <Tab label="Table" value="table" />
               </Tabs>
-            </AppBar> 
+            </AppBar>
             </Grid>
           </Grid>
-          { dataFormat === "chart" ? 
+          { dataFormat === "chart" ?
           <div className={classes.chartContainer}>
           <HistoryChart
             graphData={graphData}
@@ -149,7 +150,7 @@ class History extends React.Component {
           </div>
           :
           <HistoryTable rows={rows} />
-          } 
+          }
         </Card>
       </Layout>
     );

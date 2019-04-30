@@ -7,6 +7,7 @@ import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
 import { linesById } from '~/helpers/LineInfo.js';
 import { whenGotS3Object, whenListAllObjects } from '~/helpers/DataFinder.js';
+import CONFIG from '~/config';
 
 import S3 from 'aws-sdk/clients/s3';
 const s3 = new S3();
@@ -20,7 +21,7 @@ class Line extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get(`https://api.railstats.org/line/${query.id}`);
+    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/line/${query.id}`);
     return { query, data };
   }
 

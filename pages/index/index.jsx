@@ -22,7 +22,7 @@ import LogoAndTitle from '~/components/LogoAndTitle';
 import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
 import FilterPanel from '~/components/FilterPanel';
-import CONFIG from '~/config'
+import CONFIG from '~/config';
 
 const styles = theme => ({
   cardImage: {
@@ -49,7 +49,7 @@ class Index extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get(CONFIG.RAILSTATS_API);
+    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
     const timestamp = data.timestamp;
     return { query, data, timestamp };
   }
