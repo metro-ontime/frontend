@@ -14,10 +14,28 @@ const styles = theme => ({
 
 class HistoryChart extends React.Component {
   render() {
-    const { classes, xTickFormat, yTickFormat, graphData, color, yAxis } = this.props;
+    const { bgColor, 
+            chartFormat, 
+            classes, 
+            xTickFormat, 
+            yTickFormat, 
+            graphData, 
+            color, 
+            yAxis, 
+            secondSeries } = this.props;
+    
+    const series = [{
+          name: '',
+          color: color,
+          data: graphData
+        }]
+    if (secondSeries) series.push(secondSeries);
+
     const options = {
         chart: {
-            type: 'column'
+            type: chartFormat,
+            backgroundColor: bgColor,
+            plotBackgroundColor: bgColor
         },
         title: {
           text: '',
@@ -37,11 +55,7 @@ class HistoryChart extends React.Component {
           min: 0,
           max: yAxis === "Average Wait Time" ? 30 : 100
         },
-        series: [{
-          name: '',
-          color: color,
-          data: graphData
-        }]
+        series: series
     }
     return <HighchartsReact 
                  highcharts={Highcharts} 

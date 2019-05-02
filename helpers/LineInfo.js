@@ -1,3 +1,5 @@
+import { MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
+
 const lines = [
   { name: 'Blue', color: '#2461aa', id: 801 },
   { name: 'Red', color: '#fc1920', id: 802 },
@@ -26,4 +28,28 @@ const linesByName = {
   "All Lines": { color: '#dddddd'}
 };
 
-export { lines, linesById, linesByName };
+const lineLinks = (classes) => ( 
+  lines.map((metLine,i) => (
+      <MenuItem value={`${metLine.name}`} key={i}>
+        <div style={{display: "flex", alignItems: "center"}}>
+        <ListItemAvatar>
+          <Avatar className={ classes.avatar }>
+            <div
+              style={{
+                backgroundColor: metLine.color,
+                width: '100%',
+                padding: 0,
+                height: '100%',
+                margin: 0,
+                borderRadius: '50%',
+              }}
+            />
+          </Avatar>
+        </ListItemAvatar>
+        {metLine.name}
+        </div>
+      </MenuItem>
+  ))
+ )
+
+export { lines, linesById, linesByName, lineLinks };

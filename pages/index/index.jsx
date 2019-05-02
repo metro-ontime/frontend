@@ -23,6 +23,7 @@ import ScoreCard from '~/components/ScoreCard';
 import SimpleScoreCard from '~/components/SimpleScoreCard';
 import FilterPanel from '~/components/FilterPanel';
 import CONFIG from '~/config';
+import LineComparison from '~/components/LineComparison';
 
 const styles = theme => ({
   cardImage: {
@@ -31,7 +32,7 @@ const styles = theme => ({
   container: {
   },
   item: {
-    height: '100%'
+    height: 400
   }
 });
 
@@ -49,9 +50,12 @@ class Index extends Component {
   }
 
   static async getInitialProps({ query, res }) {
-    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
-    const timestamp = data.timestamp;
-    return { query, data, timestamp };
+    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
+    const formattedLineData = Object.values(data[0]);
+    const allLineData = data[1];
+    const latestData = allLineData[allLineData.length-1]
+    const timestamp = latestData.timestamp;
+    return { query, latestData, timestamp, formattedLineData, allLineData };
   }
 
   handleLineChange(e) {
@@ -71,7 +75,7 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, data, timestamp } = this.props;
+    const { classes, latestData, timestamp, formattedLineData, allLineData } = this.props;
     const state = this.state;
     return (
       <Layout
@@ -80,9 +84,21 @@ class Index extends Component {
       >
         <Grid container spacing={24} justify="space-around" className={ classes.container }>
           <Grid container item xs={12} md={8} justify="center" alignItems="center" className={ classes.container }>
-            <LogoAndTitle altText="How reliable is the LA Metro Network today?" timestamp={ timestamp } altImg="/static/images/logo_network.svg"/>
+            <LogoAndTitle
+              altText="How reliable is the LA Metro Network today?"
+              timestamp={ timestamp }
+              altImg="/static/images/logo_network.svg"
+            />
           </Grid>
-          <Grid container spacing={16} item xs={12} lg={9} justify="space-between" alignItems="center">
+          <Grid
+            container
+            spacing={16}
+            item
+            xs={12}
+            lg={9}
+            justify="space-between"
+            alignItems="center"
+          >
             <Grid item xs={2}>
               <FilterPanel
                 line={ state.currentLine }
@@ -95,10 +111,13 @@ class Index extends Component {
               />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <ScoreCard data={ data } width={ this.props.width } />
+              <ScoreCard data={ latestData } width={ this.props.width } />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <SimpleScoreCard width={this.props.width} data={ data }/>
+              <SimpleScoreCard width={this.props.width} data={ latestData }/>
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>
             </Grid>
           </Grid>
         </Grid>
