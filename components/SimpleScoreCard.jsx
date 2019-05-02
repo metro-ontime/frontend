@@ -3,7 +3,8 @@ import {
   Typography,
   Card,
   CardMedia,
-  Grid
+  Grid,
+  Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { linesById } from '~/helpers/LineInfo.js';
@@ -34,6 +35,9 @@ const styles = theme => ({
   },
   container: {
     height: 'calc(100% - 3em)'
+  },
+  separator: {
+    margin: 10
   }
 });
 
@@ -49,7 +53,7 @@ const SimpleScoreCard = (props) => {
         )}/>
       </div>
       <SimpleScoreCardHeader title="Average Wait Time" />
-      <Grid container justifyContent="center" alignItems="center" classes={classes}>
+      <Grid container justifyContent="center" alignItems="center" className={ classes.separator }>
         <Grid item xs={6}>
           <img
             src="/static/images/waiting.svg"
@@ -67,6 +71,7 @@ const SimpleScoreCard = (props) => {
         </Grid>
         {data.most_frequent && (
           <Grid item xs={12}>
+            <Divider light variant="middle" className={ classes.separator } />
             <Typography color="textPrimary" gutterBottom>
               Most Frequent
             </Typography>

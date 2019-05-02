@@ -31,7 +31,7 @@ const styles = theme => ({
   container: {
   },
   item: {
-    height: '75%'
+    height: '100%'
   }
 });
 
@@ -82,8 +82,8 @@ class Index extends Component {
           <Grid container item xs={12} md={8} justify="center" alignItems="center" className={ classes.container }>
             <LogoAndTitle altText="How reliable is the LA Metro Network today?" timestamp={ timestamp } altImg="/static/images/logo_network.svg"/>
           </Grid>
-          <Grid container spacing={16} item xs={12} lg={8} justify="space-between" alignItems="center">
-            <Grid item xs={12}>
+          <Grid container spacing={16} item xs={12} lg={9} justify="space-between" alignItems="center">
+            <Grid item xs={2}>
               <FilterPanel
                 line={ state.currentLine }
                 handleLineChange={ this.handleLineChange }
@@ -94,7 +94,7 @@ class Index extends Component {
                 handleDate={ this.handleDate }
               />
             </Grid>
-            <Grid item xs={12} md={6} classes={ classes }>
+            <Grid item xs={12} md={5} classes={ classes }>
               <ScoreCard data={ data } width={ this.props.width } />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
