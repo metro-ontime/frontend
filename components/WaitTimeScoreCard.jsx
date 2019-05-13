@@ -24,7 +24,7 @@ const styles = theme => ({
   },
 });
 
-const SimpleScoreCard = (props) => {
+const WaitTimeScoreCard = (props) => {
   const { data, classes } = props;
   return (
     <Card elevation={1} className={classes.paper}>
@@ -48,4 +48,4 @@ const SimpleScoreCard = (props) => {
   )
 }
 
-export default withStyles(styles)(SimpleScoreCard);
+export default withStyles(styles)(WaitTimeScoreCard);

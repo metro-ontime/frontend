@@ -7,8 +7,8 @@ import {withStyles} from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
 import LogoAndTitle from '~/components/LogoAndTitle';
-import ScoreCard from '~/components/ScoreCard';
-import SimpleScoreCard from '~/components/SimpleScoreCard';
+import PerformanceScoreCard from '~/components/PerformanceScoreCard';
+import WaitTimeScoreCard from '~/components/WaitTimeScoreCard';
 import LineSelector from '~/components/LineSelector';
 import DiagramLink from '~/components/DiagramLink';
 
@@ -17,11 +17,11 @@ const styles = theme => ({
     marginTop: '1em'
   }
 });
-
 const TrainStats = (props) => {
   const {classes} = props;
   const data = props.data;
   const switchTab = props.switchTab;
+
   return (
     <Fragment>
       <Grid container spacing={24} justify="space-around">
@@ -32,11 +32,11 @@ const TrainStats = (props) => {
         </Grid>
         <Grid container item spacing={16} xs={12} lg={8} justify="space-between" alignItems="center">
           <Grid item xs={12} md={6}>
-            <ScoreCard data={ data } width={ props.width } />
+            <PerformanceScoreCard data={ data } width={ props.width } />
           </Grid>
           <Grid container item xs={12} md={5}>
             <Grid item xs={12}>
-              <SimpleScoreCard width={props.width} data={ data }/>
+              <WaitTimeScoreCard width={props.width} data={ data }/>
             </Grid>
             <Hidden smDown>
               <Grid item xs={12} className={ classes.spaceTop }>

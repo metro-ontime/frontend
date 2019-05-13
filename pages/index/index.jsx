@@ -19,8 +19,8 @@ import SimpleMenu from '~/components/SimpleMenu';
 import { lines } from '~/helpers/LineInfo';
 import { whenListAllObjects, whenGotS3Object } from '~/helpers/DataFinder';
 import LogoAndTitle from '~/components/LogoAndTitle';
-import ScoreCard from '~/components/ScoreCard';
-import SimpleScoreCard from '~/components/SimpleScoreCard';
+import PerformanceScoreCard from '~/components/PerformanceScoreCard';
+import WaitTimeScoreCard from '~/components/WaitTimeScoreCard';
 
 const styles = theme => ({
   cardImage: {
@@ -60,10 +60,10 @@ class Index extends Component {
           </Grid>
           <Grid container spacing={16} item xs={12} lg={8} justify="space-between" alignItems="center">
             <Grid item xs={12} md={6}>
-              <ScoreCard data={ data } width={ this.props.width } />
+              <PerformanceScoreCard data={ data } width={ this.props.width } />
             </Grid>
             <Grid item xs={12} md={5}>
-              <SimpleScoreCard width={this.props.width} data={ data }/>
+              <WaitTimeScoreCard width={this.props.width} data={ data }/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineSelector />
