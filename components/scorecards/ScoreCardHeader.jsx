@@ -16,7 +16,7 @@ const styles = theme => ({
   }
 });
 
-const SimpleScoreCardHeader = (props) => {
+const ScoreCardHeader = (props) => {
   const { title, classes } = props;
   return (
     <CardHeader classes={ classes } title={ title }>
@@ -24,5 +24,5 @@ const SimpleScoreCardHeader = (props) => {
   )
 }
 
-export default withStyles(styles)(SimpleScoreCardHeader);
+export default withStyles(styles)(ScoreCardHeader);
 
