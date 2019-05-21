@@ -12,7 +12,7 @@ import SimpleMenu from '~/components/SimpleMenu';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import Dropdown from '~/components/Dropdown';
-import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
+import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 
 
 const styles = theme => ({
@@ -67,7 +67,7 @@ const arrivalWindows = [
   }
 ];
 
-class ScoreCard extends Component {
+class PerformanceScoreCard extends Component {
   constructor(props) {
     super(props);
     this.handleMenuChange = this.handleMenuChange.bind(this);
@@ -119,7 +119,7 @@ class ScoreCard extends Component {
             </Fragment>
           )}/>
         </div>
-        <SimpleScoreCardHeader title="On-Time Performance" />
+        <ScoreCardHeader title="On-Time Performance" />
         <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
           <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
@@ -138,4 +138,4 @@ class ScoreCard extends Component {
 
 }
 
-export default withStyles(styles)(ScoreCard);
+export default withStyles(styles)(PerformanceScoreCard);
