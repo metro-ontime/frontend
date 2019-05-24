@@ -42,7 +42,7 @@ class Index extends Component {
     this.state = {
       currentLine: 'All',
       arrivalWindow: '1_min',
-      date: 'Today'
+      date: null
     };
     this.handleLineChange = this.handleLineChange.bind(this);
     this.handleArrivalWindow = this.handleArrivalWindow.bind(this);
@@ -53,9 +53,10 @@ class Index extends Component {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedLineData = Object.values(data[0]);
     const allLineData = data[1];
+    const dates = allLineData.map(allLineData => allLineData.date);
     const latestData = allLineData[allLineData.length-1]
     const timestamp = latestData.timestamp;
-    return { query, latestData, timestamp, formattedLineData, allLineData };
+    return { query, latestData, timestamp, formattedLineData, allLineData, dates };
   }
 
   handleLineChange(e) {
@@ -68,14 +69,14 @@ class Index extends Component {
     this.setState({ arrivalWindow: newValue });
   }
 
-  handleDate(e) {
-    const newValue = e.target.value;
+  handleDate(date) {
+    const newValue = date.toLocaleDateString();
     console.log(newValue);
     this.setState({ date: newValue });
   }
 
   render() {
-    const { classes, latestData, timestamp, formattedLineData, allLineData } = this.props;
+    const { classes, latestData, timestamp, formattedLineData, allLineData, dates } = this.props;
     const state = this.state;
     return (
       <Layout
@@ -105,8 +106,8 @@ class Index extends Component {
                 handleLineChange={ this.handleLineChange }
                 arrivalWindow={ state.arrivalWindow }
                 handleArrivalWindow={ this.handleArrivalWindow }
-                date={ state.date }
-                dates={["Today", "Yesterday"]}
+                date={ state.date || dates[dates.length - 1]}
+                dates={ dates }
                 handleDate={ this.handleDate }
               />
             </Grid>

@@ -12,6 +12,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { lines, linesByName } from '../helpers/LineInfo.js';
+import DatePicker from "./DateWidget";
 
 const styles = theme => ({
   avatar: {
@@ -136,15 +137,11 @@ class FilterPanel extends Component {
             </Select>
           </FormControl>
           <FormControl className={ classes.formControl }>
-            <InputLabel>Date</InputLabel>
-            <Select
-              className={ classes.selectEmpty }
-              value={ date }
-              onChange={ handleDate }
-              name="Date"
-            >
-              { dateSelectors }
-            </Select>
+            <DatePicker
+              date = { date } 
+              dates = { dates }
+              onChange = { handleDate }
+            />
           </FormControl>
         </CardContent>
       </Card>
