@@ -13,6 +13,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import Dropdown from '~/components/Dropdown';
 import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
+import { linesByName } from '~/helpers/LineInfo';
 
 
 const styles = theme => ({
@@ -68,61 +69,28 @@ const arrivalWindows = [
 ];
 
 class ScoreCard extends Component {
-  constructor(props) {
-    super(props);
-    this.handleMenuChange = this.handleMenuChange.bind(this);
-    this.state = {
-      selectedArrivalWindow: {
-        index: 0,
-        menuLabel: arrivalWindows[0].menuLabel,
-        dataLabel: arrivalWindows[0].dataLabel
-      }
-    };
-  }
-
-  handleMenuChange(item, index) {
-    this.setState({
-      selectedArrivalWindow: {
-        index: index,
-        menuLabel: arrivalWindows[index].menuLabel,
-        dataLabel: arrivalWindows[index].dataLabel
-      }
-    })
-  }
-
   render() {
-    const { classes } = this.props;
-    const data = this.props.data;
-    const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
-    const selector = (
-        <Grid container item xs={12} md={12} justify="center">
-          <Grid item xs={12}>
-            <Typography component="p" className={ classes.description }>Trains running within { this.state.selectedArrivalWindow.menuLabel } of schedule.
-            </Typography>
-          </Grid>
-          <Grid item xs={10} sm={8} md={6} className={ classes.spacer }>
-            <Dropdown
-              menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
-              handleMenuChange = {this.handleMenuChange}
-              selected = {this.state.selectedArrivalWindow.index}
-            />
-          </Grid>
-        </Grid>
-    )
+    const { classes, data, currentLine, arrivalWindow, formattedLineData } = this.props;
+    let scoreData = data
+    const lineId = linesByName[currentLine]
+    if (lineId && lineId.id)
+      scoreData = formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
+    const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10;
+
     return (
       <Card elevation={1} className={ classes.card }>
         <div className={ classes.iconPosition }>
           <TooltipCustom title={(
             <Fragment>
               <Typography color="inherit">Performance Score</Typography>
-              This figure is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
+              This figure is based on {scoreData.total_arrivals_analyzed} train arrivals estimated so far out of {scoreData.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * scoreData.total_arrivals_analyzed / scoreData.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
             </Fragment>
           )}/>
         </div>
         <SimpleScoreCardHeader title="On-Time Performance" />
         <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
           <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
+            <OnTimePie bins={scoreData.ontime} total={scoreData.total_arrivals_analyzed} selected={arrivalWindow}/>
           </Grid>
           <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <Typography variant={this.props.width === 'xs'

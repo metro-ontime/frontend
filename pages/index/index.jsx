@@ -70,13 +70,12 @@ class Index extends Component {
 
   handleDate(e) {
     const newValue = e.target.value;
-    console.log(newValue);
     this.setState({ date: newValue });
   }
 
   render() {
-    const { classes, latestData, timestamp, formattedLineData, allLineData } = this.props;
-    const state = this.state;
+    const { classes, latestData, timestamp, formattedLineData, allLineData, width } = this.props;
+    const { currentLine, arrivalWindow, date } = this.state;
     return (
       <Layout
         pageTitle="Network Summary"
@@ -101,20 +100,20 @@ class Index extends Component {
           >
             <Grid item xs={2}>
               <FilterPanel
-                line={ state.currentLine }
+                line={ currentLine }
                 handleLineChange={ this.handleLineChange }
-                arrivalWindow={ state.arrivalWindow }
+                arrivalWindow={ arrivalWindow }
                 handleArrivalWindow={ this.handleArrivalWindow }
-                date={ state.date }
+                date={ date }
                 dates={["Today", "Yesterday"]}
                 handleDate={ this.handleDate }
               />
             </Grid>
-            <Grid item xs={12} md={5} classes={ classes }>
-              <ScoreCard data={ latestData } width={ this.props.width } />
+            <Grid item xs={12} md={5} classes={classes}>
+              <ScoreCard data={ latestData } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData} />
             </Grid>
-            <Grid item xs={12} md={5} classes={ classes }>
-              <SimpleScoreCard width={this.props.width} data={ latestData }/>
+            <Grid item xs={12} md={5} classes={classes}>
+              <SimpleScoreCard width={width} data={latestData}/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>
