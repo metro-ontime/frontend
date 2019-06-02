@@ -14,7 +14,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 import Circle from '~/components/Circle';
 import Dropdown from '~/components/Dropdown';
-import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
+import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 import { linesByName, linesById } from '~/helpers/LineInfo';
 
 
@@ -80,7 +80,29 @@ const arrivalWindows = [
   }
 ];
 
-class ScoreCard extends Component {
+class PerformanceScoreCard extends Component {
+  constructor(props) {
+    super(props);
+    this.handleMenuChange = this.handleMenuChange.bind(this);
+    this.state = {
+      selectedArrivalWindow: {
+        index: 0,
+        menuLabel: arrivalWindows[0].menuLabel,
+        dataLabel: arrivalWindows[0].dataLabel
+      }
+    };
+  }
+
+  handleMenuChange(item, index) {
+    this.setState({
+      selectedArrivalWindow: {
+        index: index,
+        menuLabel: arrivalWindows[index].menuLabel,
+        dataLabel: arrivalWindows[index].dataLabel
+      }
+    })
+  }
+
   render() {
     const { classes, data, currentLine, arrivalWindow, formattedLineData } = this.props;
     let scoreData = data
@@ -99,7 +121,7 @@ class ScoreCard extends Component {
             </Fragment>
           )}/>
         </div>
-        <SimpleScoreCardHeader title="On-Time Performance" />
+        <ScoreCardHeader title="On-Time Performance" />
         <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
           <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <OnTimePie bins={scoreData.ontime} total={scoreData.total_arrivals_analyzed} selected={arrivalWindow}/>
@@ -151,4 +173,4 @@ class ScoreCard extends Component {
 
 }
 
-export default withStyles(styles)(ScoreCard);
+export default withStyles(styles)(PerformanceScoreCard);

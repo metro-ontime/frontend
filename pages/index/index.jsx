@@ -19,8 +19,8 @@ import SimpleMenu from '~/components/SimpleMenu';
 import { lines } from '~/helpers/LineInfo';
 import { whenListAllObjects, whenGotS3Object } from '~/helpers/DataFinder';
 import LogoAndTitle from '~/components/LogoAndTitle';
-import ScoreCard from '~/components/ScoreCard';
-import SimpleScoreCard from '~/components/SimpleScoreCard';
+import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
+import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
 import FilterPanel from '~/components/FilterPanel';
 import CONFIG from '~/config';
 import LineComparison from '~/components/LineComparison';
@@ -109,11 +109,11 @@ class Index extends Component {
                 handleDate={ this.handleDate }
               />
             </Grid>
-            <Grid item xs={12} md={5} classes={classes}>
-              <ScoreCard data={ latestData } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData} />
+            <Grid item xs={12} md={5} classes={ classes }>
+              <PerformanceScoreCard data={ latestData } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData}  />
             </Grid>
-            <Grid item xs={12} md={5} classes={classes}>
-              <SimpleScoreCard width={width} data={latestData}/>
+            <Grid item xs={12} md={5} classes={ classes }>
+              <WaitTimeScoreCard width={width} data={ latestData }/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>

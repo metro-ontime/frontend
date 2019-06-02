@@ -10,7 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { linesById } from '~/helpers/LineInfo.js';
 import Circle from '~/components/Circle';
 import TooltipCustom from '~/components/TooltipCustom';
-import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
+import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 
 const styles = theme => ({
   root: {
@@ -41,7 +41,7 @@ const styles = theme => ({
   }
 });
 
-const SimpleScoreCard = (props) => {
+const WaitTimeScoreCard = (props) => {
   const { data, classes } = props;
   return (
     <Card elevation={1} classes={classes}>
@@ -52,7 +52,7 @@ const SimpleScoreCard = (props) => {
           </Fragment>
         )}/>
       </div>
-      <SimpleScoreCardHeader title="Average Wait Time" />
+      <ScoreCardHeader title="Average Wait Time" />
       <Grid container justifyContent="center" alignItems="center" className={ classes.separator }>
         <Grid item xs={6}>
           <img
@@ -107,4 +107,4 @@ const SimpleScoreCard = (props) => {
   );
 };
 
-export default withStyles(styles)(SimpleScoreCard);
+export default withStyles(styles)(WaitTimeScoreCard);
