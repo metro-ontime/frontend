@@ -3,7 +3,8 @@ import {
   Typography,
   Grid,
   Tooltip,
-  Card
+  Card,
+  Divider
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import TooltipCustom from '~/components/TooltipCustom';
@@ -11,9 +12,10 @@ import OnTimePie from '~/components/charts/OnTimePie';
 import SimpleMenu from '~/components/SimpleMenu';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
+import Circle from '~/components/Circle';
 import Dropdown from '~/components/Dropdown';
 import SimpleScoreCardHeader from '~/components/SimpleScoreCardHeader';
-import { linesByName } from '~/helpers/LineInfo';
+import { linesByName, linesById } from '~/helpers/LineInfo';
 
 
 const styles = theme => ({
@@ -31,7 +33,7 @@ const styles = theme => ({
     top: 0,
     right: 0
   },
-  score: {
+  center: {
     textAlign: 'center'
   },
   description: {
@@ -46,6 +48,16 @@ const styles = theme => ({
   },
   cardContainer: {
     height: 'calc(100% - 3em)'
+  },
+  performer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  separator: {
+    margin: 10
   }
 });
 
@@ -75,7 +87,7 @@ class ScoreCard extends Component {
     const lineId = linesByName[currentLine]
     if (lineId && lineId.id)
       scoreData = formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
-    const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10;
+    const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10
 
     return (
       <Card elevation={1} className={ classes.card }>
@@ -95,10 +107,43 @@ class ScoreCard extends Component {
           <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
             <Typography variant={this.props.width === 'xs'
                 ? 'h3'
-                : 'h2'} component="p" className={ classes.score }>
+                : 'h2'} component="p" className={ classes.center }>
               {score}%
             </Typography>
           </Grid>
+          {scoreData.most_reliable && (
+            <Grid item xs={12}>
+              <Divider light variant="middle" className={ classes.separator } />
+              <Typography color="textPrimary" gutterBottom className={classes.center}>
+                Most Reliable
+              </Typography>
+              <div className={classes.performer}>
+                <Circle color={linesById[scoreData.most_reliable[arrivalWindow].line.slice(0,3)].color} />
+                <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                  {linesById[scoreData.most_reliable[arrivalWindow].line.slice(0,3)].name}
+                  {' Line '}
+                  {(scoreData.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+                  {'% on-time'}
+                </Typography>
+              </div>
+            </Grid>
+          )}
+          {scoreData.least_reliable && (
+            <Grid item xs={12}>
+              <Typography color="textPrimary" gutterBottom className={classes.center}>
+                Least Reliable
+              </Typography>
+              <div className={classes.performer}>
+                <Circle color={linesById[scoreData.least_reliable[arrivalWindow].line.slice(0,3)].color} />
+                <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                  {linesById[scoreData.least_reliable[arrivalWindow].line.slice(0,3)].name}
+                  {' Line '}
+                  {(scoreData.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+                  {'% on-time'}
+                </Typography>
+              </div>
+            </Grid>
+          )}
         </Grid>
       </Card>
     )
