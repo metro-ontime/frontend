@@ -114,10 +114,10 @@ class Index extends Component {
               />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <PerformanceScoreCard data={ data } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData}  />
+              <PerformanceScoreCard data={ data } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData} />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <WaitTimeScoreCard width={width} data={ data }/>
+              <WaitTimeScoreCard width={width} data={ data }  currentLine={currentLine} formattedLineData={formattedLineData} />
             </Grid>
             <Grid item xs={12} md={12}>
               <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>

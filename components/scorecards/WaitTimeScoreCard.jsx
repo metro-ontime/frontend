@@ -7,7 +7,7 @@ import {
   Divider
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesById } from '~/helpers/LineInfo.js';
+import { linesById, linesByName } from '~/helpers/LineInfo.js';
 import Circle from '~/components/Circle';
 import TooltipCustom from '~/components/TooltipCustom';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
@@ -42,7 +42,11 @@ const styles = theme => ({
 });
 
 const WaitTimeScoreCard = (props) => {
-  const { data, classes } = props;
+  const { classes, data, currentLine, formattedLineData, width } = props;
+  const lineId = linesByName[currentLine]
+  const waitData = lineId && lineId.id ?
+    formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`] :
+    data
   return (
     <Card elevation={1} classes={classes}>
       <div className={ classes.iconPosition }>
@@ -60,43 +64,43 @@ const WaitTimeScoreCard = (props) => {
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography variant={props.width === 'xs'
+          <Typography variant={width === 'xs'
             ? 'h3'
             : 'h1'} component="p" align="center">
-          {Math.round(data.mean_time_between / 60)}
+          {Math.round(waitData.mean_time_between / 60)}
           </Typography>
           <Typography variant="h5" align="center">
             minutes
           </Typography>
         </Grid>
-        {data.most_frequent && (
+        {waitData.most_frequent && (
           <Grid item xs={12}>
             <Divider light variant="middle" className={ classes.separator } />
             <Typography color="textPrimary" gutterBottom>
               Most Frequent
             </Typography>
             <div className={classes.performer}>
-              <Circle color={linesById[data.most_frequent.name].color} />
+              <Circle color={linesById[waitData.most_frequent.name].color} />
               <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-                {linesById[data.most_frequent.name].name}
+                {linesById[waitData.most_frequent.name].name}
                 {' Line every '}
-                {Math.round(data.most_frequent.mean_time_between / 60)}
+                {Math.round(waitData.most_frequent.mean_time_between / 60)}
                 {' minutes'}
               </Typography>
             </div>
           </Grid>
         )}
-        {data.least_frequent && (
+        {waitData.least_frequent && (
           <Grid item xs={12}>
             <Typography color="textPrimary" gutterBottom>
               Least Frequent
             </Typography>
             <div className={classes.performer}>
-              <Circle color={linesById[data.least_frequent.name].color} />
+              <Circle color={linesById[waitData.least_frequent.name].color} />
               <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-                {linesById[data.least_frequent.name].name}
+                {linesById[waitData.least_frequent.name].name}
                 {' Line every '}
-                {Math.round(data.least_frequent.mean_time_between / 60)}
+                {Math.round(waitData.least_frequent.mean_time_between / 60)}
                 {' minutes'}
               </Typography>
             </div>

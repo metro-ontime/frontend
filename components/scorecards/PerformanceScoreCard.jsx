@@ -105,10 +105,10 @@ class PerformanceScoreCard extends Component {
 
   render() {
     const { classes, data, currentLine, arrivalWindow, formattedLineData, width } = this.props;
-    let scoreData = data
     const lineId = linesByName[currentLine]
-    if (lineId && lineId.id)
-      scoreData = formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
+    const scoreData = lineId && lineId.id ?
+      formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`] :
+      data
     const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10
 
     return (
