@@ -61,11 +61,17 @@ const styles = theme => ({
 });
 
 const LogoAndTitle = (props) => {
-  const { classes, timestamp, line } = props;
+  const { classes, timestamp, line, date } = props;
   let defaultText = "";
-  if (line) {
-    defaultText = `How reliable is the ${linesById[line]["name"]} Line today?`
-  };
+  if (line === 'All') {
+    defaultText = date === 'Yesterday' ?
+      'How reliable was the LA Metro Network yesterday?' :
+      'How reliable is the LA Metro Network today?'
+  } else if (date === 'Today') {
+    defaultText = `How reliable is the ${line} Line today?`
+  } else if (date === 'Yesterday') {
+    defaultText = `How reliable was the ${line} Line yesterday?`
+  }
   return (
     <Card elevation={0} className={ classes.card }>
       <div className={ classes.iconPosition }>
@@ -81,7 +87,7 @@ const LogoAndTitle = (props) => {
           { props.altText ? props.altText : defaultText }
         </Typography>
         <Typography component="p" variant="body2" className={ classes.updateTime }>
-          <b>Latest Update: </b>
+          <b>Data from: </b>
           {
             timestamp
               ? <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{timestamp}</Moment>

@@ -53,9 +53,7 @@ class Index extends Component {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedLineData = Object.values(data[0]);
     const allLineData = data[1];
-    const latestData = allLineData[allLineData.length-1]
-    const timestamp = latestData.timestamp;
-    return { query, latestData, timestamp, formattedLineData, allLineData };
+    return { query, formattedLineData, allLineData };
   }
 
   handleLineChange(e) {
@@ -74,8 +72,13 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, latestData, timestamp, formattedLineData, allLineData, width } = this.props;
+    const { classes,  formattedLineData, allLineData, width } = this.props;
     const { currentLine, arrivalWindow, date } = this.state;
+    const data = date === 'Yesterday' ?
+      allLineData[allLineData.length - 2] :
+      allLineData[allLineData.length - 1];
+    const timestamp = data.timestamp
+
     return (
       <Layout
         pageTitle="Network Summary"
@@ -84,8 +87,9 @@ class Index extends Component {
         <Grid container spacing={24} justify="space-around" className={ classes.container }>
           <Grid container item xs={12} md={8} justify="center" alignItems="center" className={ classes.container }>
             <LogoAndTitle
-              altText="How reliable is the LA Metro Network today?"
               timestamp={ timestamp }
+              line={currentLine}
+              date={date}
               altImg="/static/images/logo_network.svg"
             />
           </Grid>
@@ -110,10 +114,10 @@ class Index extends Component {
               />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <PerformanceScoreCard data={ latestData } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData}  />
+              <PerformanceScoreCard data={ data } width={ width } currentLine={currentLine} arrivalWindow={arrivalWindow} formattedLineData={formattedLineData}  />
             </Grid>
             <Grid item xs={12} md={5} classes={ classes }>
-              <WaitTimeScoreCard width={width} data={ latestData }/>
+              <WaitTimeScoreCard width={width} data={ data }/>
             </Grid>
             <Grid item xs={12} md={12}>
               <LineComparison formattedData={formattedLineData} allLineData={allLineData}/>
