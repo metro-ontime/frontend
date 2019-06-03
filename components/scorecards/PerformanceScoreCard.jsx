@@ -43,8 +43,8 @@ const styles = theme => ({
   spacer: {
     margin: '2em 0'
   },
-  maxWidth300: {
-    maxWidth: 300
+  maxWidth150: {
+    maxWidth: 150
   },
   cardContainer: {
     height: 'calc(100% - 3em)'
@@ -104,7 +104,7 @@ class PerformanceScoreCard extends Component {
   }
 
   render() {
-    const { classes, data, currentLine, arrivalWindow, formattedLineData } = this.props;
+    const { classes, data, currentLine, arrivalWindow, formattedLineData, width } = this.props;
     let scoreData = data
     const lineId = linesByName[currentLine]
     if (lineId && lineId.id)
@@ -123,17 +123,17 @@ class PerformanceScoreCard extends Component {
         </div>
         <ScoreCardHeader title="On-Time Performance" />
         <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
+          <Grid item xs={6} className={ classes.maxWidth150 }>
             <OnTimePie bins={scoreData.ontime} total={scoreData.total_arrivals_analyzed} selected={arrivalWindow}/>
           </Grid>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <Typography variant={this.props.width === 'xs'
+          <Grid item xs={6}>
+            <Typography variant={width === 'xs'
                 ? 'h3'
                 : 'h2'} component="p" className={ classes.center }>
               {score}%
             </Typography>
           </Grid>
-          {scoreData.most_reliable && (
+          {scoreData.most_reliable && scoreData.least_reliable && (
             <Grid item xs={12}>
               <Divider light variant="middle" className={ classes.separator } />
               <Typography color="textPrimary" gutterBottom className={classes.center}>
@@ -148,10 +148,6 @@ class PerformanceScoreCard extends Component {
                   {'% on-time'}
                 </Typography>
               </div>
-            </Grid>
-          )}
-          {scoreData.least_reliable && (
-            <Grid item xs={12}>
               <Typography color="textPrimary" gutterBottom className={classes.center}>
                 Least Reliable
               </Typography>

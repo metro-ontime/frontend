@@ -96,9 +96,9 @@ class Index extends Component {
             xs={12}
             lg={9}
             justify="space-between"
-            alignItems="center"
+            alignItems="top"
           >
-            <Grid item xs={2}>
+            <Grid item xs={12} md={2}>
               <FilterPanel
                 line={ currentLine }
                 handleLineChange={ this.handleLineChange }
