@@ -17,12 +17,10 @@ const styles = theme => ({
   avatar: {
     height: 25,
     width: 25,
-    marginLeft: 10,
     marginRight: 10
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
-    marginLeft: ".5em",
     marginBottom: '-.25em',
   },
   lineDot: {
@@ -34,7 +32,7 @@ const styles = theme => ({
   },
   formControl: {
     margin: theme.spacing.unit,
-    minWidth: 120,
+    width: 120,
   }
 });
 
@@ -63,7 +61,7 @@ class FilterPanel extends Component {
   }
 
   render() {
-    const { 
+    const {
       classes,
       line,
       handleLineChange,
@@ -102,7 +100,7 @@ class FilterPanel extends Component {
     return (
       <Card>
         <CardHeader style={{ paddingBottom: 0 }} title="Filter By" titleTypographyProps={{ variant: 'body1' }}/>
-        <CardContent style={{ paddingTop: 0 }}>
+        <CardContent style={{ paddingTop: 0, paddingLeft: '.5em' }}>
           <FormControl className={ classes.formControl }>
             <InputLabel>Line</InputLabel>
             <Select
@@ -113,12 +111,12 @@ class FilterPanel extends Component {
             >
               <MenuItem value={"All"}>
                 <div style={{display: "flex", alignItems: "center"}}>
-                <ListItemAvatar>
-                  <Avatar className={ classes.avatar }>
-                    <div style={{ backgroundColor: '#dddddd', }} className={ classes.lineDot } />
-                  </Avatar>
-                </ListItemAvatar>
-                All Lines
+                  <ListItemAvatar>
+                    <Avatar className={ classes.avatar }>
+                      <div style={{ backgroundColor: '#dddddd', }} className={ classes.lineDot } />
+                    </Avatar>
+                  </ListItemAvatar>
+                  All Lines
                 </div>
               </MenuItem>
               { lineSelectors }

@@ -3,7 +3,8 @@ import {
   Typography,
   Grid,
   Tooltip,
-  Card
+  Card,
+  Divider
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import TooltipCustom from '~/components/TooltipCustom';
@@ -11,8 +12,10 @@ import OnTimePie from '~/components/charts/OnTimePie';
 import SimpleMenu from '~/components/SimpleMenu';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
+import Circle from '~/components/Circle';
 import Dropdown from '~/components/Dropdown';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
+import { linesByName, linesById } from '~/helpers/LineInfo';
 
 
 const styles = theme => ({
@@ -30,7 +33,7 @@ const styles = theme => ({
     top: 0,
     right: 0
   },
-  score: {
+  center: {
     textAlign: 'center'
   },
   description: {
@@ -40,11 +43,21 @@ const styles = theme => ({
   spacer: {
     margin: '2em 0'
   },
-  maxWidth300: {
-    maxWidth: 300
+  maxWidth150: {
+    maxWidth: 150
   },
   cardContainer: {
     height: 'calc(100% - 3em)'
+  },
+  performer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    marginBottom: 10
+  },
+  separator: {
+    margin: 10
   }
 });
 
@@ -91,46 +104,64 @@ class PerformanceScoreCard extends Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const data = this.props.data;
-    const score = Math.round(data.ontime[this.state.selectedArrivalWindow.dataLabel] / data.total_arrivals_analyzed * 1000) / 10;
-    const selector = (
-        <Grid container item xs={12} md={12} justify="center">
-          <Grid item xs={12}>
-            <Typography component="p" className={ classes.description }>Trains running within { this.state.selectedArrivalWindow.menuLabel } of schedule.
-            </Typography>
-          </Grid>
-          <Grid item xs={10} sm={8} md={6} className={ classes.spacer }>
-            <Dropdown
-              menuItems={ arrivalWindows.map((item) => { return item.menuLabel }) }
-              handleMenuChange = {this.handleMenuChange}
-              selected = {this.state.selectedArrivalWindow.index}
-            />
-          </Grid>
-        </Grid>
-    )
+    const { classes, data, currentLine, arrivalWindow, formattedLineData, width } = this.props;
+    const lineId = linesByName[currentLine]
+    const scoreData = lineId && lineId.id ?
+      formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`] :
+      data
+    const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10
+
     return (
       <Card elevation={1} className={ classes.card }>
         <div className={ classes.iconPosition }>
           <TooltipCustom title={(
             <Fragment>
               <Typography color="inherit">Performance Score</Typography>
-              This figure is based on {data.total_arrivals_analyzed} train arrivals estimated so far out of {data.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * data.total_arrivals_analyzed / data.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
+              This figure is based on {scoreData.total_arrivals_analyzed} train arrivals estimated so far out of {scoreData.total_scheduled_arrivals} scheduled for today ({ Math.round(1000 * scoreData.total_arrivals_analyzed / scoreData.total_scheduled_arrivals) / 10 }%). It includes trains both running ahead and behind schedule (early and late).
             </Fragment>
           )}/>
         </div>
         <ScoreCardHeader title="On-Time Performance" />
         <Grid container item justify="center" alignItems="center" xs={12} className={ classes.cardContainer }>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <OnTimePie bins={data.ontime} total={data.total_arrivals_analyzed} selected={this.state.selectedArrivalWindow.dataLabel}/>
+          <Grid item xs={6} className={ classes.maxWidth150 }>
+            <OnTimePie bins={scoreData.ontime} total={scoreData.total_arrivals_analyzed} selected={arrivalWindow}/>
           </Grid>
-          <Grid item xs={12} md={4} className={ classes.maxWidth300 }>
-            <Typography variant={this.props.width === 'xs'
+          <Grid item xs={6}>
+            <Typography variant={width === 'xs'
                 ? 'h3'
-                : 'h2'} component="p" className={ classes.score }>
+                : 'h2'} component="p" className={ classes.center }>
               {score}%
             </Typography>
           </Grid>
+          {scoreData.most_reliable && scoreData.least_reliable && (
+            <Grid item xs={12}>
+              <Divider light variant="middle" className={ classes.separator } />
+              <Typography color="textPrimary" gutterBottom className={classes.center}>
+                Most Reliable
+              </Typography>
+              <div className={classes.performer}>
+                <Circle color={linesById[scoreData.most_reliable[arrivalWindow].line.slice(0,3)].color} />
+                <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                  {linesById[scoreData.most_reliable[arrivalWindow].line.slice(0,3)].name}
+                  {' Line '}
+                  {(scoreData.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+                  {'% on-time'}
+                </Typography>
+              </div>
+              <Typography color="textPrimary" gutterBottom className={classes.center}>
+                Least Reliable
+              </Typography>
+              <div className={classes.performer}>
+                <Circle color={linesById[scoreData.least_reliable[arrivalWindow].line.slice(0,3)].color} />
+                <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+                  {linesById[scoreData.least_reliable[arrivalWindow].line.slice(0,3)].name}
+                  {' Line '}
+                  {(scoreData.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+                  {'% on-time'}
+                </Typography>
+              </div>
+            </Grid>
+          )}
         </Grid>
       </Card>
     )
