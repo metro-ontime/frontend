@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { AppBar, Typography, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
@@ -40,7 +40,7 @@ const Nav = (props) => {
     navClasses,
     width,
     children,
-    handleMenuButton
+    handleMenuButton,
   } = props;
   return (
     <AppBar
@@ -65,6 +65,6 @@ const Nav = (props) => {
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default flowRight([withStyles(styles), withWidth()])(Nav);

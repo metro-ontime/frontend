@@ -19,12 +19,12 @@ class DataParser extends Component {
     this.fetchData(line, date);
   }
 
-  componentDidUpdate(prevProps) {
+  componentWillUpdate(prevProps) {
     const { date, line } = this.props;
     if (date !== prevProps.date || line !== prevProps.line) {
-      this.setState({
-        trips: null, schedule: null, minTime: null, maxTime: null,
-      });
+      // this.setState({
+      //   trips: null, schedule: null, minTime: null, maxTime: null,
+      // });
       this.fetchData(line, date);
     }
   }
@@ -50,7 +50,7 @@ class DataParser extends Component {
       trips,
       schedule,
       minTime,
-      maxTime
+      maxTime,
     } = this.state;
     const { direction, line } = this.props;
     return (

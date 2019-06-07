@@ -1,4 +1,6 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import LinePropType from '~/models/LinePropType';
 import {
   Grid,
   Hidden,
@@ -24,7 +26,7 @@ const TrainStats = (props) => {
     data,
     switchTab,
     line,
-    width
+    width,
   } = props;
   return (
     <Fragment>
@@ -55,6 +57,19 @@ const TrainStats = (props) => {
       </Grid>
     </Fragment>
   );
+};
+
+TrainStats.defaultProps = {
+  classes: {},
+  width: 'lg',
+};
+
+TrainStats.propTypes = {
+  classes: PropTypes.object,
+  data: LinePropType.isRequired,
+  switchTab: PropTypes.func.isRequired,
+  line: PropTypes.number.isRequired,
+  width: PropTypes.string,
 };
 
 export default flowRight([withStyles(styles), withWidth()])(TrainStats);

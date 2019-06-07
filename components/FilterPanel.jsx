@@ -66,8 +66,8 @@ const FilterPanel = (props) => {
     dates,
     handleDate,
   } = props;
-  const windows = arrivalWindows.map((item, i) => (
-    <MenuItem value={item.dataLabel} key={i}>
+  const windows = arrivalWindows.map(item => (
+    <MenuItem value={item.dataLabel} key={item.dataLabel}>
       { item.menuLabel }
     </MenuItem>
   ));
@@ -83,8 +83,8 @@ const FilterPanel = (props) => {
       </div>
     </MenuItem>
   ));
-  const dateSelectors = dates.map((item, i) => (
-    <MenuItem value={item} key={i}>
+  const dateSelectors = dates.map(item => (
+    <MenuItem value={item} key={item}>
       { item }
     </MenuItem>
   ));

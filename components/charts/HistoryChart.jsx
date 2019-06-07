@@ -15,7 +15,6 @@ const HistoryChart = (props) => {
   const {
     bgColor,
     chartFormat,
-    classes,
     xTickFormat,
     yTickFormat,
     graphData,

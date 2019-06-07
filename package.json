@@ -6,10 +6,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js",
-    "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "build": "npm run lint && next build",
+    "start": "npm run lint && NODE_ENV=production node server.js",
     "export": "next export",
-    "lint": "eslint src/*.js components/*.jsx components/**/*.jsx pages/*.jsx pages/**/*.jsx"
+    "lint": "eslint src/*.js components/*.jsx components/**/*.jsx pages/*.jsx pages/**/*.jsx models/*.js"
   },
   "repository": {
     "type": "git",
@@ -70,6 +70,7 @@
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-railstats": "file:./eslint",
     "eslint-plugin-react": "^7.11.1"
   }
 }

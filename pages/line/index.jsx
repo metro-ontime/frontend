@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import LinePropType from '~/models/LinePropType';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import Layout from '~/components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
-import { linesById } from '~/helpers/LineInfo.js';
+import { linesById } from '~/helpers/LineInfo';
 import CONFIG from '~/config';
 
 class Line extends Component {
@@ -81,9 +82,15 @@ Line
 }
 
 Line.defaultProps = {
-  id: 9,
+  data: {},
+  query: { id: 801 },
 };
+
 Line.propTypes = {
-  id: PropTypes.number,
+  query: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  data: LinePropType,
 };
+
 export default Line;

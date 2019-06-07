@@ -2,7 +2,7 @@ import React from 'react';
 import Layout from '~/components/Layout';
 import { Grid, Typography } from '@material-ui/core';
 
-const About = props => (
+const About = () => (
   <Layout
     pageTitle="About"
     toolbarTitle="About"

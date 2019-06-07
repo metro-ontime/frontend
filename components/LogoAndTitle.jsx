@@ -60,7 +60,7 @@ const styles = theme => ({
 
 const LogoAndTitle = (props) => {
   const {
-    classes, timestamp, line, date, altImg, width, altText
+    classes, timestamp, line, date, altImg, width, altText,
   } = props;
   let defaultText = '';
   if (line === 'All') {

@@ -7,7 +7,13 @@ import positionStops from '~/helpers/PositionStops';
 
 class Highchart extends Component {
   render() {
-    const { line, direction, min, max, observations } = this.props;
+    const {
+      line,
+      direction,
+      min,
+      max,
+      observations,
+    } = this.props;
     const ticks = stopPositions[`${line}_${direction}`];
 
     // This technique is a bit of a hack!
@@ -23,8 +29,9 @@ class Highchart extends Component {
     });
 
     const posToStopNames = stopsByPosition.reduce((map, obj) => {
-      map[obj.pos] = obj.name;
-      return map;
+      const newMap = map;
+      newMap[obj.pos] = obj.name;
+      return newMap;
     }, {});
 
     const tickPositions = Object.keys(ticks).map((stop) => {

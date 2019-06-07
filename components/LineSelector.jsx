@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import {
   Button,
   Card,
@@ -6,7 +6,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { lines } from '~/helpers/LineInfo.js';
+import { lines } from '~/helpers/LineInfo';
 import Circle from '~/components/Circle';
 import Link from 'next/link';
 
@@ -38,7 +38,7 @@ const LineSelector = (props) => {
             <Typography component="h4">
               {line.name}
               {' '}
-Line
+              Line
             </Typography>
           </div>
         </div>

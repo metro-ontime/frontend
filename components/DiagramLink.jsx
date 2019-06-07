@@ -20,7 +20,7 @@ const DiagramLink = (props) => {
     <Card>
       <CardContent>
         <Typography variant="body2" align="center" className={classes.padding}>
-          View today's Marey Diagram
+          View today&#39;s Marey Diagram
         </Typography>
         <Typography variant="h5" align="center" className={classes.padding}>
           <Button variant="outlined" onClick={() => { action({}, 1); }}>

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Toolbar } from '@material-ui/core';
 import DataParser from '~/components/DataParser';
 import { withStyles } from '@material-ui/core/styles';
 import SimpleMenu from '~/components/SimpleMenu';
-import directionNames from '~/helpers/Directions.js';
-import { whenListAllObjects } from '~/helpers/DataFinder.js';
+import directionNames from '~/helpers/Directions';
+import { whenListAllObjects } from '~/helpers/DataFinder';
 
 const styles = theme => ({
   paper: {
@@ -26,10 +27,11 @@ const styles = theme => ({
 class TrainDetails extends Component {
   constructor(props) {
     super(props);
+    const { date } = props;
     this.state = {
       direction: 0,
-      date: props.date,
-      availableDates: [props.date],
+      date,
+      availableDates: [date],
     };
     this.handleDirectionChange = this.handleDirectionChange.bind(this);
     this.populateDates = this.populateDates.bind(this);
@@ -40,7 +42,7 @@ class TrainDetails extends Component {
     const { line } = this.props;
     const listParams = {
       Bucket: 'h4la-metro-performance',
-      Prefix: `data/schedule/${line}_lametro-rail`
+      Prefix: `data/schedule/${line}_lametro-rail`,
     };
     whenListAllObjects(listParams).then(this.populateDates);
   }
@@ -81,5 +83,15 @@ class TrainDetails extends Component {
     );
   }
 }
+
+TrainDetails.defaultProps = {
+  classes: {},
+};
+
+TrainDetails.propTypes = {
+  date: PropTypes.string.isRequired,
+  classes: PropTypes.object,
+  line: PropTypes.number.isRequired,
+};
 
 export default withStyles(styles)(TrainDetails);

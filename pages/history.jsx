@@ -4,14 +4,14 @@ import HistoryMenu from '~/components/HistoryMenu';
 import HistoryTable from '~/components/HistoryTable';
 import HistoryChart from '~/components/charts/HistoryChart';
 import {
-  AppBar, Button, Tab, Tabs, Grid, Typography, Card, Select, MenuItem, ListItemAvatar, Avatar,
+  AppBar, Tab, Tabs, Grid, Card,
 } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { linesByName } from '../helpers/LineInfo.js';
+import { linesByName } from '~/helpers/LineInfo';
 import {
   dateToString, deriveLine, deriveXAxis, deriveYAxis, prepareTableData,
-} from '../helpers/formatHistory';
+} from '~/helpers/formatHistory';
 import PropTypes from 'prop-types';
 import CONFIG from '~/config';
 
@@ -44,11 +44,10 @@ class History extends React.Component {
     yAxis: 'Average Wait Time',
     yTickFormat: { formatter() { return `${this.value} min`; } },
     dataFormat: 'chart',
-    value: 0,
     color: '#dddddd',
   };
 
-  static async getInitialProps({ query, res }) {
+  static async getInitialProps({ query }) {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedData = Object.values(data[0]);
     const allLineData = data[1];
@@ -56,28 +55,59 @@ class History extends React.Component {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (!state.rows[0] && !state.graphData[0]) {
+    const {
+      rows,
+      graphData,
+      line,
+      xAxis,
+      yAxis,
+    } = state;
+    const { formattedData, allLineData } = props;
+    if (!rows[0] && !graphData[0]) {
       return {
-        rows: prepareTableData(props.allLineData),
-        graphData: deriveYAxis(deriveXAxis(deriveLine(props.formattedData, state.line, props.allLineData), state.xAxis), state.yAxis),
+        rows: prepareTableData(allLineData),
+        graphData: deriveYAxis(
+          deriveXAxis(
+            deriveLine(formattedData, line, allLineData),
+            xAxis,
+          ),
+          yAxis,
+        ),
       };
     }
     return null;
   }
 
   handleLineChange = (event) => {
+    const { formattedData, allLineData } = this.props;
+    const { xAxis, yAxis } = this.state;
     this.setState({
       line: event.target.value,
       color: linesByName[event.target.value].color,
-      rows: prepareTableData(deriveLine(this.props.formattedData, event.target.value, this.props.allLineData)),
-      graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, event.target.value, this.props.allLineData), this.state.xAxis), this.state.yAxis),
+      rows: prepareTableData(
+        deriveLine(formattedData, event.target.value, allLineData),
+      ),
+      graphData: deriveYAxis(
+        deriveXAxis(
+          deriveLine(formattedData, event.target.value, allLineData), xAxis,
+        ),
+        yAxis,
+      ),
     });
   };
 
   handleXAxisChange = (event) => {
+    const { formattedData, allLineData } = this.props;
+    const { yAxis, line } = this.state;
     this.setState({
       xAxis: event.target.value,
-      graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line, this.props.allLineData), event.target.value), this.state.yAxis),
+      graphData: deriveYAxis(
+        deriveXAxis(
+          deriveLine(formattedData, line, allLineData),
+          event.target.value,
+        ),
+        yAxis,
+      ),
     });
     if (event.target.value === 'Weekday Average') {
       this.setState({ xTickFormat: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] });
@@ -87,10 +117,14 @@ class History extends React.Component {
   };
 
   handleYAxisChange = (event) => {
+    const { formattedData, allLineData } = this.props;
+    const { xAxis, line } = this.state;
     this.setState({
       yAxis: event.target.value,
-      graphData: deriveYAxis(deriveXAxis(deriveLine(this.props.formattedData, this.state.line, this.props.allLineData), this.state.xAxis), event.target.value),
-
+      graphData: deriveYAxis(
+        deriveXAxis(deriveLine(formattedData, line, allLineData), xAxis),
+        event.target.value,
+      ),
     });
     if (event.target.value === 'Average Wait Time') {
       this.setState({
@@ -118,7 +152,15 @@ class History extends React.Component {
   render() {
     const { classes } = this.props;
     const {
-      line, rows, dataFormat, xTickFormat, yTickFormat, color, graphData, xAxis, yAxis,
+      line,
+      rows,
+      dataFormat,
+      xTickFormat,
+      yTickFormat,
+      color,
+      graphData,
+      xAxis,
+      yAxis,
     } = this.state;
     return (
       <Layout
@@ -175,6 +217,5 @@ class History extends React.Component {
 History.propTypes = {
   classes: PropTypes.object.isRequired,
 };
-
 
 export default withStyles(styles)(History);

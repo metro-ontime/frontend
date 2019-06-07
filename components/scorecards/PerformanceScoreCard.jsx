@@ -56,25 +56,6 @@ const styles = theme => ({
   },
 });
 
-const arrivalWindows = [
-  {
-    menuLabel: '1 minute',
-    dataLabel: '1_min',
-  }, {
-    menuLabel: '2 minutes',
-    dataLabel: '2_min',
-  }, {
-    menuLabel: '3 minutes',
-    dataLabel: '3_min',
-  }, {
-    menuLabel: '4 minutes',
-    dataLabel: '4_min',
-  }, {
-    menuLabel: '5 minutes',
-    dataLabel: '5_min',
-  },
-];
-
 const PerformanceScoreCard = (props) => {
   const {
     classes, data, currentLine, arrivalWindow, formattedLineData, width,
@@ -83,7 +64,9 @@ const PerformanceScoreCard = (props) => {
   const scoreData = lineId && lineId.id
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
-  const score = Math.round(scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000) / 10;
+  const score = Math.round(
+    scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000
+  ) / 10;
 
   return (
     <Card elevation={1} className={classes.card}>
@@ -100,7 +83,14 @@ train arrivals estimated so far out of
             {scoreData.total_scheduled_arrivals}
             {' '}
 scheduled for today (
-            { Math.round(1000 * scoreData.total_arrivals_analyzed / scoreData.total_scheduled_arrivals) / 10 }
+            {
+              Math.round(
+                1000
+                * scoreData.total_arrivals_analyzed
+                / scoreData.total_scheduled_arrivals
+              )
+              / 10
+            }
 %). It includes trains both running ahead and behind schedule (early and late).
           </Fragment>
         )}

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
@@ -128,5 +129,20 @@ class Index extends Component {
     );
   }
 }
+
+Index.defaultProps = {
+  width: 'lg',
+  classes: {},
+  formattedLineData: [],
+  allLineData: [],
+};
+
+Index.propTypes = {
+  classes: PropTypes.object,
+  formattedLineData: PropTypes.arrayOf(PropTypes.object),
+  allLineData: PropTypes.arrayOf(PropTypes.object),
+  width: PropTypes.string,
+};
+
 
 export default flowRight([withStyles(styles), withWidth()])(Index);

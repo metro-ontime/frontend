@@ -92,14 +92,19 @@ class Layout extends Component {
       children,
       toolbarTitle,
       toolbarChildren,
-      style
+      style,
     } = this.props;
     const { drawerOpen, subMenuOpen } = this.state;
 
     const links = (
       <List>
         {lines.map(line => (
-          <Link prefetch href={{ pathname: '/line', query: { id: line.id } }} as={`/line/${line.id}`} key={line.id.toString()}>
+          <Link
+            prefetch
+            href={{ pathname: '/line', query: { id: line.id } }}
+            as={`/line/${line.id}`}
+            key={line.id.toString()}
+          >
             <ListItem button onClick={this.handleDrawer}>
               <ListItemAvatar>
                 <Avatar className={classes.avatar}>
@@ -127,7 +132,7 @@ class Layout extends Component {
       <div style={{ minHeight: '100%' }}>
         <Head>
           <title>
-RailStats LA |
+            RailStats LA |
             {pageTitle}
           </title>
         </Head>
@@ -174,7 +179,7 @@ RailStats LA |
         </Drawer>
         <Nav
           navClasses={classNames(classes.content, {
-            [classes.contentShift]: drawerOpen
+            [classes.contentShift]: drawerOpen,
           })}
           pageTitle={toolbarTitle}
           handleMenuButton={this.handleDrawer}
@@ -183,7 +188,7 @@ RailStats LA |
         </Nav>
         <div
           className={classNames(classes.main, classes.content, {
-            [classes.contentShift]: drawerOpen
+            [classes.contentShift]: drawerOpen,
           })}
           style={{ ...style }}
         >

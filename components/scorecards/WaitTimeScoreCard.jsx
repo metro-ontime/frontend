@@ -54,7 +54,10 @@ const WaitTimeScoreCard = (props) => {
         <TooltipCustom title={(
           <Fragment>
             <Typography color="inherit">Average Wait Time</Typography>
-            This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+            This is an average over all stop intervals measured for the day so far.
+            Obviously, this interval should be split by time of day since trains
+            run more frequently during peak times.
+            Feature coming soon!
           </Fragment>
         )}
         />

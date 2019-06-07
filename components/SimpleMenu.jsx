@@ -27,9 +27,14 @@ class SimpleMenu extends React.Component {
     const { anchorEl } = this.state;
     const { menuItems, label, selected } = this.props;
     const menuItemList = menuItems.map((item, index) => (
-      <MenuItem onClick={() => this.handleClose(item, index)} key={item}>
+      <MenuItem
+        onClick={() => this.handleClose(item, index)}
+        key={item}
+      >
         { item }
-      </MenuItem>));
+      </MenuItem>
+    ));
+
     return (
       <span>
         <Button

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';2
+import React, { Component } from 'react';
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 
@@ -30,7 +30,9 @@ class OnTimePie extends Component {
     const separated = {};
     separated[binList[0].name] = Math.round(binList[0].value / total * 1000) / 10;
     binList.reduce((acc, currentValue) => {
-      separated[currentValue.name] = Math.round((currentValue.value - acc.value) / total * 1000) / 10;
+      separated[currentValue.name] = Math.round(
+        (currentValue.value - acc.value) / total * 1000
+      ) / 10;
       return currentValue;
     });
     separated['>5_mins'] = Math.round((total - binList[4].value) / total * 1000) / 10;

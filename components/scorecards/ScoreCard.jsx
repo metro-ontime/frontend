@@ -40,7 +40,7 @@ const styles = theme => ({
 
 const ScoreCard = (props) => {
   const {
-    classes, headerText, title, tooltip, blockA, blockB, blockC, width
+    classes, headerText, title, tooltip, blockA, blockB, blockC, width,
   } = props;
   return (
     <Card elevation={1} classes={classes}>
