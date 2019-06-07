@@ -28,9 +28,6 @@ const styles = theme => ({
     top: 0,
     right: 0,
   },
-  center: {
-    textAlign: 'center',
-  },
   description: {
     textAlign: 'center',
     marginTop: '1em',
@@ -78,11 +75,11 @@ const PerformanceScoreCard = (props) => {
             {' '}
             {scoreData.total_arrivals_analyzed}
             {' '}
-train arrivals estimated so far out of
+            train arrivals estimated so far out of
             {' '}
             {scoreData.total_scheduled_arrivals}
             {' '}
-scheduled for today (
+            scheduled for today (
             {
               Math.round(
                 1000
@@ -91,7 +88,7 @@ scheduled for today (
               )
               / 10
             }
-%). It includes trains both running ahead and behind schedule (early and late).
+            %). It includes trains both running ahead and behind schedule (early and late).
           </Fragment>
         )}
         />
@@ -111,16 +108,16 @@ scheduled for today (
               ? 'h3'
               : 'h2'}
             component="p"
-            className={classes.center}
+            align="center"
           >
             {score}
-%
+            %
           </Typography>
         </Grid>
         {scoreData.most_reliable && scoreData.least_reliable && (
           <Grid item xs={12}>
             <Divider light variant="middle" className={classes.separator} />
-            <Typography color="textPrimary" gutterBottom className={classes.center}>
+            <Typography color="textPrimary" align="center">
               Most Reliable
             </Typography>
             <div className={classes.performer}>
@@ -134,7 +131,7 @@ scheduled for today (
                 {'% on-time'}
               </Typography>
             </div>
-            <Typography color="textPrimary" gutterBottom className={classes.center}>
+            <Typography color="textPrimary" align="center">
               Least Reliable
             </Typography>
             <div className={classes.performer}>

@@ -14,11 +14,6 @@ import CONFIG from '~/config';
 import LineComparison from '~/components/LineComparison';
 
 const styles = () => ({
-  cardImage: {
-    width: '100%',
-  },
-  container: {
-  },
   item: {
     height: 400,
   },
@@ -90,7 +85,7 @@ class Index extends Component {
             xs={12}
             lg={9}
             justify="space-between"
-            alignItems="top"
+            alignItems="flex-start"
           >
             <Grid item xs={12} md={2}>
               <FilterPanel

@@ -1,15 +1,17 @@
 import React, { Fragment } from 'react';
 import {
   Typography,
-  Card,
   Grid,
+  Card,
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesById, linesByName } from '~/helpers/LineInfo';
-import Circle from '~/components/Circle';
 import TooltipCustom from '~/components/TooltipCustom';
+import OnTimePie from '~/components/charts/OnTimePie';
+import Circle from '~/components/Circle';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
+import { linesByName, linesById } from '~/helpers/LineInfo';
+
 
 const styles = theme => ({
   root: {
@@ -42,32 +44,36 @@ const styles = theme => ({
 
 const WaitTimeScoreCard = (props) => {
   const {
-    classes, data, currentLine, formattedLineData, width,
+    classes,
+    data,
+    currentLine,
+    formattedLineData,
+    width,
   } = props;
   const lineId = linesByName[currentLine];
   const waitData = lineId && lineId.id
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
+
   return (
-    <Card elevation={1} classes={classes}>
+    <Card elevation={1} className={classes.card}>
       <div className={classes.iconPosition}>
         <TooltipCustom title={(
           <Fragment>
             <Typography color="inherit">Average Wait Time</Typography>
             This is an average over all stop intervals measured for the day so far.
-            Obviously, this interval should be split by time of day since trains
-            run more frequently during peak times.
-            Feature coming soon!
+            Obviously, this interval should be split by time of day since trains run
+            more frequently during peak times. Feature coming soon!
           </Fragment>
         )}
         />
       </div>
       <ScoreCardHeader title="Average Wait Time" />
-      <Grid container justifyContent="center" alignItems="center" className={classes.separator}>
+      <Grid container className={classes.separator}>
         <Grid item xs={6}>
           <img
-            src="/static/images/waiting.svg"
             alt="waiting"
+            src="/static/images/waiting.svg"
           />
         </Grid>
         <Grid item xs={6}>
@@ -87,7 +93,7 @@ const WaitTimeScoreCard = (props) => {
         {waitData.most_frequent && (
           <Grid item xs={12}>
             <Divider light variant="middle" className={classes.separator} />
-            <Typography color="textPrimary" gutterBottom>
+            <Typography color="textPrimary" align="center">
               Most Frequent
             </Typography>
             <div className={classes.performer}>
@@ -103,7 +109,7 @@ const WaitTimeScoreCard = (props) => {
         )}
         {waitData.least_frequent && (
           <Grid item xs={12}>
-            <Typography color="textPrimary" gutterBottom>
+            <Typography color="textPrimary" align="center">
               Least Frequent
             </Typography>
             <div className={classes.performer}>
