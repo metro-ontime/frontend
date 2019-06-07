@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
 import Highchart from './charts/Highchart';
 import LinearIndeterminate from './LinearIndeterminate';
-import { prepareObservations, prepareSchedule } from '../helpers/PrepareData';
-import { whenListAllObjects, whenGotS3Object } from '../helpers/DataFinder';
+import { prepareObservations, prepareSchedule } from '~/helpers/PrepareData';
 
 class DataParser extends Component {
   constructor(props) {
     super(props);
-    this.state = { trips: null, schedule: null, minTime: null, maxTime: null };
+    this.state = {
+      trips: null, schedule: null, minTime: null, maxTime: null,
+    };
     this.updateTrips = this.updateTrips.bind(this);
     this.updateSchedule = this.updateSchedule.bind(this);
     this.fetchData = this.fetchData.bind(this);
+  }
+
+  componentDidMount() {
+    const { line, date } = this.props;
+    this.fetchData(line, date);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { date, line } = this.props;
+    if (date !== prevProps.date || line !== prevProps.line) {
+      this.setState({
+        trips: null, schedule: null, minTime: null, maxTime: null,
+      });
+      this.fetchData(line, date);
+    }
   }
 
   fetchData(line, date) {
@@ -21,32 +37,44 @@ class DataParser extends Component {
     prepareSchedule(schedulePath, line, this.updateSchedule);
   }
 
-  componentDidMount() {
-    this.fetchData(this.props.line, this.props.date)
-  }
-
-  componentDidUpdate(prevProps) {
-    if (this.props.date !== prevProps.date || this.props.line !== prevProps.line) {
-      this.setState({ trips: null, schedule: null, minTime: null, maxTime: null });
-      this.fetchData(this.props.line, this.props.date);
-    }
-  }
-
   updateTrips(trips0, trips1) {
     this.setState({ trips: [trips0, trips1] });
   }
 
   updateSchedule(trips0, trips1, minTime, maxTime) {
-    this.setState({ schedule: [trips0, trips1], minTime: minTime, maxTime: maxTime });
+    this.setState({ schedule: [trips0, trips1], minTime, maxTime });
   }
 
   render() {
+    const {
+      trips,
+      schedule,
+      minTime,
+      maxTime
+    } = this.state;
+    const { direction, line } = this.props;
     return (
       <div>
-        {this.state.trips && this.state.schedule ? (
+        {trips && schedule ? (
           <div>
-            {this.props.direction == 0 && <Highchart observations={this.state.trips[0].concat(this.state.schedule[0])} min={this.state.minTime} max={this.state.maxTime} direction={ 0 } line={ this.props.line }/>}
-            {this.props.direction == 1 && <Highchart observations={this.state.trips[1].concat(this.state.schedule[1])} min={this.state.minTime} max={this.state.maxTime} direction={ 1 } line={ this.props.line }/>}
+            {direction === 0 && (
+              <Highchart
+                observations={trips[0].concat(schedule[0])}
+                min={minTime}
+                max={maxTime}
+                direction={0}
+                line={line}
+              />
+            )}
+            {direction === 1 && (
+              <Highchart
+                observations={trips[1].concat(schedule[1])}
+                min={minTime}
+                max={maxTime}
+                direction={1}
+                line={line}
+              />
+            )}
           </div>
         ) : (
           <LinearIndeterminate />

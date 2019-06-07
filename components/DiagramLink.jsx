@@ -1,35 +1,37 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import {
   Button,
   Card,
   CardContent,
-  Typography
+  Typography,
 } from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
-import { linesById } from '~/helpers/LineInfo.js';
+import { withStyles } from '@material-ui/core/styles';
+import { linesById } from '~/helpers/LineInfo';
 
-const styles = theme => ({
+const styles = () => ({
   padding: {
-    padding: '0.5em'
-  }
+    padding: '0.5em',
+  },
 });
 
 const DiagramLink = (props) => {
-  const { classes } = props;
+  const { classes, line, action } = props;
   return (
     <Card>
       <CardContent>
-        <Typography variant="body2" align="center" className={ classes.padding }>
+        <Typography variant="body2" align="center" className={classes.padding}>
           View today's Marey Diagram
         </Typography>
-        <Typography variant="h5" align="center" className={ classes.padding }>
-          <Button variant="outlined" onClick={ () => { props.action({}, 1) } }>
-            { linesById[props.line]["name"] } Line Visualizer
+        <Typography variant="h5" align="center" className={classes.padding}>
+          <Button variant="outlined" onClick={() => { action({}, 1); }}>
+            { linesById[line].name }
+            {' '}
+Line Visualizer
           </Button>
         </Typography>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
 export default withStyles(styles)(DiagramLink);

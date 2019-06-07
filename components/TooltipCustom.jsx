@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Tooltip,
 } from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -14,25 +14,30 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(12),
     border: '1px solid #dadde9',
     '& b': {
-      fontWeight: theme.typography.fontWeightMedium
-    }
-  }
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+  },
 });
 
 const TooltipCustom = (props) => {
   const defaultIcon = (
     <IconButton aria-label="Delete">
-      <InfoIcon/>
+      <InfoIcon />
     </IconButton>
   );
-  const { classes } = props;
+  const { classes, title, children } = props;
   return (
-    <Tooltip classes={{
-        tooltip: classes.htmlTooltip
-      }} title={ props.title } enterTouchDelay={0} leaveTouchDelay={2000}>
-      { props.children ? props.children : defaultIcon }
+    <Tooltip
+      classes={{
+        tooltip: classes.htmlTooltip,
+      }}
+      title={title}
+      enterTouchDelay={0}
+      leaveTouchDelay={2000}
+    >
+      { children || defaultIcon }
     </Tooltip>
-  )
-}
+  );
+};
 
 export default withStyles(styles)(TooltipCustom);

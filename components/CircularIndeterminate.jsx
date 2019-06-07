@@ -6,7 +6,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 const styles = {
   root: {
     flexGrow: 1,
-  }
+  },
 };
 
 function CircularIndeterminate(props) {

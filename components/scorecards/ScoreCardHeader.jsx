@@ -1,28 +1,25 @@
-import React, { Fragment} from 'react';
+import React from 'react';
 import {
-  Typography,
-  CardHeader
+  CardHeader,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
+const styles = () => ({
   root: {
     backgroundColor: '#eee',
-    height: '3em'
+    height: '3em',
   },
   title: {
     fontSize: '1em',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 const ScoreCardHeader = (props) => {
   const { title, classes } = props;
   return (
-    <CardHeader classes={ classes } title={ title }>
-    </CardHeader>
-  )
-}
+    <CardHeader classes={classes} title={title} />
+  );
+};
 
 export default withStyles(styles)(ScoreCardHeader);
-

@@ -2,7 +2,6 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Typography } from '@material-ui/core';
 
 class SimpleMenu extends React.Component {
   constructor(props) {
@@ -12,22 +11,25 @@ class SimpleMenu extends React.Component {
     };
   }
 
-  handleClick = event => {
+  handleClick = (event) => {
     this.setState({ anchorEl: event.currentTarget });
   };
 
   handleClose = (item, index) => {
+    const { handleMenuChange, menuItems } = this.props;
     this.setState({ anchorEl: null });
-    if (this.props.menuItems.includes(item)) {
-      this.props.handleMenuChange(item, index);
+    if (menuItems.includes(item)) {
+      handleMenuChange(item, index);
     }
   };
 
   render() {
     const { anchorEl } = this.state;
-    const menuItems = this.props.menuItems.map((item, index) => {
-      return <MenuItem onClick={() => this.handleClose(item, index)} key={item}>{ item }</MenuItem>
-    });
+    const { menuItems, label, selected } = this.props;
+    const menuItemList = menuItems.map((item, index) => (
+      <MenuItem onClick={() => this.handleClose(item, index)} key={item}>
+        { item }
+      </MenuItem>));
     return (
       <span>
         <Button
@@ -35,7 +37,8 @@ class SimpleMenu extends React.Component {
           aria-haspopup="true"
           onClick={this.handleClick}
         >
-          { this.props.label }{ this.props.menuItems[this.props.selected] }
+          { label }
+          { menuItems[selected] }
         </Button>
         <Menu
           id="simple-menu"
@@ -43,7 +46,7 @@ class SimpleMenu extends React.Component {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          { menuItems }
+          { menuItemList }
         </Menu>
       </span>
     );

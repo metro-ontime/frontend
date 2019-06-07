@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import { Typography, Grid, Toolbar, Paper, Divider } from '@material-ui/core';
-import Highchart from '~/components/charts/Highchart';
+import { Grid, Toolbar } from '@material-ui/core';
 import DataParser from '~/components/DataParser';
 import { withStyles } from '@material-ui/core/styles';
 import SimpleMenu from '~/components/SimpleMenu';
 import directionNames from '~/helpers/Directions.js';
-import { whenGotS3Object, whenListAllObjects } from '~/helpers/DataFinder.js';
+import { whenListAllObjects } from '~/helpers/DataFinder.js';
 
 const styles = theme => ({
   paper: {
@@ -15,13 +14,13 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
   },
   root: {
-    margin: '20px 0'
+    margin: '20px 0',
   },
   optionsBar: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
+  },
 });
 
 class TrainDetails extends Component {
@@ -30,7 +29,7 @@ class TrainDetails extends Component {
     this.state = {
       direction: 0,
       date: props.date,
-      availableDates: [props.date]
+      availableDates: [props.date],
     };
     this.handleDirectionChange = this.handleDirectionChange.bind(this);
     this.populateDates = this.populateDates.bind(this);
@@ -38,16 +37,19 @@ class TrainDetails extends Component {
   }
 
   componentDidMount() {
-    const listParams = {Bucket: 'h4la-metro-performance', Prefix: `data/schedule/${this.props.line}_lametro-rail`};
+    const { line } = this.props;
+    const listParams = {
+      Bucket: 'h4la-metro-performance',
+      Prefix: `data/schedule/${line}_lametro-rail`
+    };
     whenListAllObjects(listParams).then(this.populateDates);
   }
 
   populateDates(datePaths) {
-    const prefix = `data/schedule/${this.props.line}_lametro-rail/`;
+    const { line } = this.props;
+    const prefix = `data/schedule/${line}_lametro-rail/`;
     const myRegexp = new RegExp(`${prefix}(.*).csv`);
-    const formattedDates = datePaths.reverse().map((path) => {
-      return myRegexp.exec(path)[1]
-    });
+    const formattedDates = datePaths.reverse().map(path => myRegexp.exec(path)[1]);
     this.setState({ availableDates: formattedDates });
   }
 
@@ -56,26 +58,27 @@ class TrainDetails extends Component {
   }
 
   changeDate(newDate) {
-    this.setState({ date: newDate })
+    this.setState({ date: newDate });
   }
 
   render() {
-    const { classes } = this.props;
-    const directions = [directionNames[`${this.props.line}_0`], directionNames[`${this.props.line}_1`]];
+    const { classes, line } = this.props;
+    const { direction, availableDates, date } = this.state;
+    const directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
 
     return (
       <Grid container justify="center" spacing={24}>
         <Grid item xs={12}>
-          <Toolbar color="primary" className={ classes.optionsBar }>
-            <SimpleMenu label={`Towards: ${directions[this.state.direction]}`} menuItems={directions} handleMenuChange={ this.handleDirectionChange } />
-            <SimpleMenu label={`Select Date: ${this.state.date}`} menuItems={this.state.availableDates} handleMenuChange={ this.changeDate } />
+          <Toolbar color="primary" className={classes.optionsBar}>
+            <SimpleMenu label={`Towards: ${directions[direction]}`} menuItems={directions} handleMenuChange={this.handleDirectionChange} />
+            <SimpleMenu label={`Select Date: ${date}`} menuItems={availableDates} handleMenuChange={this.changeDate} />
           </Toolbar>
         </Grid>
         <Grid item xs={12}>
-          <DataParser line={ this.props.line } direction={ this.state.direction } date={this.state.date}/>
+          <DataParser line={line} direction={direction} date={date} />
         </Grid>
       </Grid>
-    )
+    );
   }
 }
 
