@@ -7,11 +7,9 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TooltipCustom from '~/components/TooltipCustom';
-import OnTimePie from '~/components/charts/OnTimePie';
 import Circle from '~/components/Circle';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 import { linesByName, linesById } from '~/helpers/LineInfo';
-
 
 const styles = theme => ({
   root: {
