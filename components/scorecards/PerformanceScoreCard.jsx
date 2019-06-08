@@ -62,7 +62,7 @@ const PerformanceScoreCard = (props) => {
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
   const score = Math.round(
-    scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000
+    scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000,
   ) / 10;
 
   return (
@@ -84,7 +84,7 @@ const PerformanceScoreCard = (props) => {
               Math.round(
                 1000
                 * scoreData.total_arrivals_analyzed
-                / scoreData.total_scheduled_arrivals
+                / scoreData.total_scheduled_arrivals,
               )
               / 10
             }

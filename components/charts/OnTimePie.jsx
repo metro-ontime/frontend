@@ -31,7 +31,7 @@ class OnTimePie extends Component {
     separated[binList[0].name] = Math.round(binList[0].value / total * 1000) / 10;
     binList.reduce((acc, currentValue) => {
       separated[currentValue.name] = Math.round(
-        (currentValue.value - acc.value) / total * 1000
+        (currentValue.value - acc.value) / total * 1000,
       ) / 10;
       return currentValue;
     });
