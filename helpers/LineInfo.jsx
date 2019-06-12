@@ -1,3 +1,4 @@
+import React from 'react';
 import { MenuItem, ListItemAvatar, Avatar } from '@material-ui/core';
 
 const lines = [
@@ -29,8 +30,8 @@ const linesByName = {
 };
 
 const lineLinks = classes => (
-  lines.map((metLine, i) => (
-    <MenuItem value={`${metLine.name}`} key={i}>
+  lines.map(metLine => (
+    <MenuItem value={`${metLine.name}`} key={metLine.name}>
       <div style={{ display: 'flex', alignItems: 'center' }}>
         <ListItemAvatar>
           <Avatar className={classes.avatar}>

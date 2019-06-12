@@ -9,7 +9,7 @@
     "build": "npm run lint && next build",
     "start": "npm run lint && NODE_ENV=production node server.js",
     "export": "next export",
-    "lint": "eslint src/*.js components/*.jsx components/**/*.jsx pages/*.jsx pages/**/*.jsx models/*.js"
+    "lint": "eslint src/*.js helpers/*.js components/*.jsx components/**/*.jsx pages/*.jsx pages/**/*.jsx models/*.js"
   },
   "repository": {
     "type": "git",
@@ -64,12 +64,14 @@
     "victory": "^32.1.0"
   },
   "devDependencies": {
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "babel-plugin-root-import": "^6.1.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-loader": "^2.1.1",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
-    "eslint-plugin-react": "^7.11.1"
+    "eslint-plugin-react": "^7.11.1",
+    "nodemon": "^1.19.1"
   }
 }
