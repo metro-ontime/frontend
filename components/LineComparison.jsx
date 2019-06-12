@@ -1,84 +1,80 @@
-import React from "react";
+import React from 'react';
 import {
   Card,
   Typography,
-  MenuItem,
   Select,
-  Avatar,
-  ListItemAvatar
-} from "@material-ui/core";
-import { Slider } from "@material-ui/lab";
-import { withStyles } from "@material-ui/core/styles";
-import HistoryChart from "~/components/charts/HistoryChart";
+} from '@material-ui/core';
+import { Slider } from '@material-ui/lab';
+import { withStyles } from '@material-ui/core/styles';
+import HistoryChart from '~/components/charts/HistoryChart';
 import {
   dateToString,
   deriveLine,
   deriveXAxis,
   deriveYAxis,
-  prepareTableData
-} from "../helpers/formatHistory";
-import { lineLinks, linesByName } from "../helpers/LineInfo.js";
+} from '../helpers/formatHistory';
+import { lineLinks, linesByName } from '~/helpers/LineInfo';
 
 const styles = theme => ({
   card: {
     maxWidth: 1200,
-    margin: "auto",
-    marginTop: 20
+    margin: 'auto',
+    marginTop: 20,
   },
   chartContainer: {
-    margin: "auto",
-    width: "100%",
-    marginTop: "1em",
-    marginBottom: "1em",
-    paddingTop: "2em",
-    paddingBottom: "2em",
-    paddingLeft: "5%",
-    paddingRight: "5%",
-    backgroundColor: "#f8f8f8"
+    margin: 'auto',
+    width: '100%',
+    marginTop: '1em',
+    marginBottom: '1em',
+    paddingTop: '2em',
+    paddingBottom: '2em',
+    paddingLeft: '5%',
+    paddingRight: '5%',
+    backgroundColor: '#f8f8f8',
   },
   headerContainer: {
-    marginTop: "1em",
-    paddingBottom: "1em",
-    display: "flex",
-    alignItems: "flex-end",
-    justifyContent: "space-around",
-    flexWrap: "wrap"
+    marginTop: '1em',
+    paddingBottom: '1em',
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'space-around',
+    flexWrap: 'wrap',
   },
   header: {
     fontSize: 36,
-    marginBottom: "-.25em",
-    textAlign: "center"
+    marginBottom: '-.25em',
+    textAlign: 'center',
   },
   compareText: {
-    fontSize: 16
+    fontSize: 16,
   },
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
-    marginLeft: ".5em",
-    marginBottom: "-.25em"
+    marginLeft: '.5em',
+    marginBottom: '-.25em',
   },
   avatar: {
     width: 16,
     height: 16,
-    marginRight: ".5em"
+    marginRight: '.5em',
   },
   slider: {
-    padding: "22px 0px"
+    padding: '22px 0px',
   },
   sliderContainer: {
-    width: "30%",
-    marginLeft: "auto",
-    marginRight: "auto",
-    paddingBottom: "1em",
-    paddingTop: "1em",
-    textAlign: "center"
+    width: '30%',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    paddingBottom: '1em',
+    paddingTop: '1em',
+    textAlign: 'center',
   },
   trackBefore: {
-    opacity: ".2"
+    opacity: '.2',
   },
   trackAfter: {
-    opacity: "1"
-  }
+    opacity: '1',
+  },
 });
 
 class LineComparison extends React.Component {
@@ -87,18 +83,18 @@ class LineComparison extends React.Component {
     this.state = {
       graphData: [],
       allLineGraph: [],
-      line: "Blue",
-      xAxis: "All Daily Data",
+      line: 'Blue',
+      xAxis: 'All Daily Data',
       xTickFormat: [],
-      yAxis: "% Within 5 Minutes",
+      yAxis: '% Within 5 Minutes',
       yTickFormat: {
-        formatter: function() {
+        formatter() {
           return `${this.value}%`;
-        }
+        },
       },
-      color: "#2461aa",
+      color: '#2461aa',
       value: 0,
-      sliderLabel: "All Time"
+      sliderLabel: 'All Time',
     };
   }
 
@@ -108,54 +104,57 @@ class LineComparison extends React.Component {
         graphData: deriveYAxis(
           deriveXAxis(
             deriveLine(props.formattedData, state.line, props.allLineData),
-            state.xAxis
+            state.xAxis,
           ),
-          state.yAxis
+          state.yAxis,
         ),
         allLineGraph: deriveYAxis(
           deriveXAxis(
-            deriveLine(props.formattedData, "All Lines", props.allLineData),
-            state.xAxis
+            deriveLine(props.formattedData, 'All Lines', props.allLineData),
+            state.xAxis,
           ),
-          state.yAxis
-        )
+          state.yAxis,
+        ),
       };
     }
     return null;
   }
 
-  handleSlide = (event, value) => {
-    this.setState({ value });
-    this.setLabel(value);
-    this.formatGraphData(value);
-  };
+  componentDidMount() {
+    this.setState(prevState => ({
+      xTickFormat: prevState.graphData.map((item, i) => (
+        dateToString(prevState.graphData.length - 1 - i)
+      )),
+    }));
+  }
 
-  setLabel = value => {
+  setLabel = (value) => {
     switch (value) {
       case 0:
-        this.setState({ sliderLabel: "All Time" });
+        this.setState({ sliderLabel: 'All Time' });
         break;
       case 1:
-        this.setState({ sliderLabel: "90 Days" });
+        this.setState({ sliderLabel: '90 Days' });
         break;
       case 2:
-        this.setState({ sliderLabel: "30 Days" });
+        this.setState({ sliderLabel: '30 Days' });
         break;
       default:
-        this.setState({ sliderLabel: "7 Days" });
+        this.setState({ sliderLabel: '7 Days' });
         break;
     }
   };
 
-  formatGraphData = value => {
+  formatGraphData = (value) => {
     const { formattedData, allLineData } = this.props;
+    const { xAxis, yAxis, line } = this.state;
     let cutOff;
     switch (value) {
       case 0:
         cutOff = formattedData.length;
         break;
       case 1:
-        if (90 < formattedData.length) {
+        if (formattedData.length > 90) {
           cutOff = 90;
         }
         break;
@@ -172,55 +171,55 @@ class LineComparison extends React.Component {
           deriveLine(
             formattedData.slice(
               formattedData.length - cutOff,
-              formattedData.length
+              formattedData.length,
             ),
-            this.state.line,
-            allLineData.slice(allLineData.length - cutOff, allLineData.length)
+            line,
+            allLineData.slice(allLineData.length - cutOff, allLineData.length),
           ),
-          this.state.xAxis
+          xAxis,
         ),
-        this.state.yAxis
+        yAxis,
       ),
       allLineGraph: deriveYAxis(
         deriveXAxis(
           deriveLine(
             formattedData.slice(
               formattedData.length - cutOff,
-              formattedData.length
+              formattedData.length,
             ),
-            "All Lines",
-            allLineData.slice(allLineData.length - cutOff, allLineData.length)
+            'All Lines',
+            allLineData.slice(allLineData.length - cutOff, allLineData.length),
           ),
-          this.state.xAxis
+          xAxis,
         ),
-        this.state.yAxis
-      )
+        yAxis,
+      ),
     });
   };
 
-  componentDidMount() {
-    this.setState(prevState => ({
-      xTickFormat: prevState.graphData.map((item, i) => {
-        return dateToString(prevState.graphData.length - 1 - i);
-      })
-    }));
-  }
+  handleSlide = (event, value) => {
+    this.setState({ value });
+    this.setLabel(value);
+    this.formatGraphData(value);
+  };
 
-  handleLineChange = event => {
+  handleLineChange = (event) => {
+    const { formattedData, allLineData } = this.props;
+    const { xAxis, yAxis } = this.state;
     this.setState({
       line: event.target.value,
-      color: linesByName[event.target.value]["color"],
+      color: linesByName[event.target.value].color,
       graphData: deriveYAxis(
         deriveXAxis(
           deriveLine(
-            this.props.formattedData,
+            formattedData,
             event.target.value,
-            this.props.allLineData
+            allLineData,
           ),
-          this.state.xAxis
+          xAxis,
         ),
-        this.state.yAxis
-      )
+        yAxis,
+      ),
     });
   };
 
@@ -235,7 +234,7 @@ class LineComparison extends React.Component {
       yTickFormat,
       yAxis,
       line,
-      sliderLabel
+      sliderLabel,
     } = this.state;
 
     return (
@@ -245,7 +244,7 @@ class LineComparison extends React.Component {
             All Line Performance Chart
           </Typography>
           <div>
-            <Typography className={classes.compareText} inline={true}>
+            <Typography className={classes.compareText} inline>
               Compare:
             </Typography>
             <Select
@@ -260,27 +259,30 @@ class LineComparison extends React.Component {
         </div>
         <div className={classes.chartContainer}>
           <HistoryChart
-            chartFormat={"line"}
-            bgColor={"#f8f8f8"}
+            chartFormat="line"
+            bgColor="#f8f8f8"
             graphData={graphData}
             color={color}
             xTickFormat={xTickFormat}
             yTickFormat={yTickFormat}
             yAxis={yAxis}
             secondSeries={{
-              name: "",
-              color: "#c8c8c8",
-              data: allLineGraph
+              name: '',
+              color: '#c8c8c8',
+              data: allLineGraph,
             }}
           />
         </div>
         <div className={classes.sliderContainer}>
-          <Typography id="slider-icon">View data for {sliderLabel}</Typography>
+          <Typography id="slider-icon">
+View data for
+            {sliderLabel}
+          </Typography>
           <Slider
             classes={{
               container: classes.slider,
               trackBefore: classes.trackBefore,
-              trackAfter: classes.trackAfter
+              trackAfter: classes.trackAfter,
             }}
             value={value}
             min={0}

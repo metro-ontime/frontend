@@ -1,73 +1,88 @@
-import React, { Fragment} from 'react';
+import React, { Fragment } from 'react';
 import {
   Typography,
-  Card,
-  CardMedia,
   Grid,
-  Divider
+  Card,
+  Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesById, linesByName } from '~/helpers/LineInfo.js';
-import Circle from '~/components/Circle';
 import TooltipCustom from '~/components/TooltipCustom';
+import Circle from '~/components/Circle';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
+import { linesByName, linesById } from '~/helpers/LineInfo';
 
 const styles = theme => ({
   root: {
-    //padding: theme.spacing.unit * 2,
+    // padding: theme.spacing.unit * 2,
     padding: 0,
     textAlign: 'center',
     color: theme.palette.text.secondary,
     position: 'relative',
-    height: '100%'
+    height: '100%',
   },
   iconPosition: {
     position: 'absolute',
     top: 0,
-    right: 0
+    right: 0,
   },
   performer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
-    marginBottom: 10
+    marginBottom: 10,
   },
   container: {
-    height: 'calc(100% - 3em)'
+    height: 'calc(100% - 3em)',
   },
   separator: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });
 
 const WaitTimeScoreCard = (props) => {
-  const { classes, data, currentLine, formattedLineData, width } = props;
-  const lineId = linesByName[currentLine]
-  const waitData = lineId && lineId.id ?
-    formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`] :
-    data
+  const {
+    classes,
+    data,
+    currentLine,
+    formattedLineData,
+    width,
+  } = props;
+  const lineId = linesByName[currentLine];
+  const waitData = lineId && lineId.id
+    ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
+    : data;
+
   return (
-    <Card elevation={1} classes={classes}>
-      <div className={ classes.iconPosition }>
-        <TooltipCustom title={(<Fragment>
+    <Card elevation={1} className={classes.card}>
+      <div className={classes.iconPosition}>
+        <TooltipCustom title={(
+          <Fragment>
             <Typography color="inherit">Average Wait Time</Typography>
-            This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!
+            This is an average over all stop intervals measured for the day so far.
+            Obviously, this interval should be split by time of day since trains run
+            more frequently during peak times. Feature coming soon!
           </Fragment>
-        )}/>
+        )}
+        />
       </div>
       <ScoreCardHeader title="Average Wait Time" />
-      <Grid container justifyContent="center" alignItems="center" className={ classes.separator }>
+      <Grid container className={classes.separator}>
         <Grid item xs={6}>
           <img
+            alt="waiting"
             src="/static/images/waiting.svg"
           />
         </Grid>
         <Grid item xs={6}>
-          <Typography variant={width === 'xs'
-            ? 'h3'
-            : 'h1'} component="p" align="center">
-          {Math.round(waitData.mean_time_between / 60)}
+          <Typography
+            variant={width === 'xs'
+              ? 'h3'
+              : 'h1'}
+            component="p"
+            align="center"
+          >
+            {Math.round(waitData.mean_time_between / 60)}
           </Typography>
           <Typography variant="h5" align="center">
             minutes
@@ -75,8 +90,8 @@ const WaitTimeScoreCard = (props) => {
         </Grid>
         {waitData.most_frequent && (
           <Grid item xs={12}>
-            <Divider light variant="middle" className={ classes.separator } />
-            <Typography color="textPrimary" gutterBottom>
+            <Divider light variant="middle" className={classes.separator} />
+            <Typography color="textPrimary" align="center">
               Most Frequent
             </Typography>
             <div className={classes.performer}>
@@ -92,7 +107,7 @@ const WaitTimeScoreCard = (props) => {
         )}
         {waitData.least_frequent && (
           <Grid item xs={12}>
-            <Typography color="textPrimary" gutterBottom>
+            <Typography color="textPrimary" align="center">
               Least Frequent
             </Typography>
             <div className={classes.performer}>

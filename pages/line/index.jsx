@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
+import LinePropType from '~/models/LinePropType';
 import { Hidden, Tab, Tabs } from '@material-ui/core';
 import Layout from '~/components/Layout';
 import TrainDetails from './TrainDetails';
 import TrainStats from './TrainStats';
-import { linesById } from '~/helpers/LineInfo.js';
-import { whenGotS3Object, whenListAllObjects } from '~/helpers/DataFinder.js';
+import { linesById } from '~/helpers/LineInfo';
 import CONFIG from '~/config';
-
-import S3 from 'aws-sdk/clients/s3';
-const s3 = new S3();
 
 class Line extends Component {
   constructor(props) {
@@ -20,7 +17,7 @@ class Line extends Component {
     };
   }
 
-  static async getInitialProps({ query, res }) {
+  static async getInitialProps({ query }) {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/line/${query.id}`);
     return { query, data };
   }
@@ -30,12 +27,12 @@ class Line extends Component {
   };
 
   handleTabChange = (event, newValue) => {
-    this.setState(state => ({ selectedTab: newValue }));
+    this.setState({ selectedTab: newValue });
   };
 
   render() {
-    const { id } = this.props.query;
-    const { data } = this.props;
+    const { data, query } = this.props;
+    const { id } = query;
     const { selectedTab } = this.state;
     const switchTab = this.handleTabChange;
     const toolbarChildren = (
@@ -46,10 +43,14 @@ class Line extends Component {
         </Tabs>
       </Hidden>
     );
-    const pageTitle = `${ linesById[id].name } Line`;
+    const pageTitle = `${linesById[id].name} Line`;
     const toolbarTitle = (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        Metro { linesById[id].name } Line
+        Metro
+        {' '}
+        { linesById[id].name }
+        {' '}
+Line
         <div
           style={{
             backgroundColor: linesById[id].color,
@@ -67,18 +68,29 @@ class Line extends Component {
     );
 
     return (
-      <Layout style={{ minHeight: '100%' }} pageTitle={pageTitle} toolbarTitle={toolbarTitle} toolbarChildren={toolbarChildren}>
-        {selectedTab === 0 && <TrainStats line={id} data={data} switchTab={ switchTab }/>}
-        {selectedTab === 1 && <TrainDetails line={id} date={data["date"]} />}
+      <Layout
+        style={{ minHeight: '100%' }}
+        pageTitle={pageTitle}
+        toolbarTitle={toolbarTitle}
+        toolbarChildren={toolbarChildren}
+      >
+        {selectedTab === 0 && <TrainStats line={id} data={data} switchTab={switchTab} />}
+        {selectedTab === 1 && <TrainDetails line={id} date={data.date} />}
       </Layout>
     );
   }
 }
 
 Line.defaultProps = {
-  id: 9,
+  data: {},
+  query: { id: 801 },
 };
+
 Line.propTypes = {
-  id: PropTypes.number,
+  query: PropTypes.shape({
+    id: PropTypes.number,
+  }),
+  data: LinePropType,
 };
+
 export default Line;

@@ -14,7 +14,7 @@ const Circle = (props) => {
         float: 'left',
       }}
     />
-  )
-}
+  );
+};
 
 export default Circle;
