@@ -1,12 +1,9 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import {
-  Typography,
   Card,
   Grid,
-  Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import TooltipCustom from '~/components/TooltipCustom';
 import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 
 const styles = theme => ({
@@ -16,7 +13,6 @@ const styles = theme => ({
     textAlign: 'center',
     color: theme.palette.text.secondary,
     position: 'relative',
-    height: '100%',
   },
   iconPosition: {
     position: 'absolute',
@@ -40,56 +36,16 @@ const styles = theme => ({
 
 const ScoreCard = (props) => {
   const {
-    classes, headerText, title, tooltip, blockA, blockB, blockC, width,
+    classes, title, tooltip, content,
   } = props;
   return (
     <Card elevation={1} classes={classes}>
       <div className={classes.iconPosition}>
-        <TooltipCustom title={(
-          <Fragment>
-            <Typography color="inherit">{tooltip.header}</Typography>
-            {tooltip.content}
-          </Fragment>
-        )}
-        />
+        { tooltip }
       </div>
-      <ScoreCardHeader title={headerText} />
+      <ScoreCardHeader title={title} />
       <Grid container justifyContent="center" alignItems="center" className={classes.separator}>
-        <Grid item xs={12} className={classes.separator}>
-          <Typography
-            variant={width === 'xs'
-              ? 'h3'
-              : 'h2'}
-            component="p"
-            align="center"
-          >
-            {title}
-          </Typography>
-          <Divider light variant="middle" className={classes.separator} />
-        </Grid>
-        {blockA && (
-          <Grid item xs={12}>
-            <Typography color="textPrimary" gutterBottom>
-              {blockA}
-            </Typography>
-          </Grid>
-        )}
-        {blockB && (
-        <Grid item xs={12} className={classes.separator}>
-          <Divider light variant="middle" className={classes.separator} />
-          <Typography color="textPrimary" gutterBottom>
-            {blockB}
-          </Typography>
-        </Grid>
-        )}
-        {blockC && (
-        <Grid item xs={12} className={classes.separator}>
-          <Divider light variant="middle" className={classes.separator} />
-          <Typography color="textPrimary" gutterBottom>
-            {blockC}
-          </Typography>
-        </Grid>
-        )}
+        {content}
       </Grid>
     </Card>
   );

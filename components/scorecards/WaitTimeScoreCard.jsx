@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import {
   Typography,
   Grid,
-  Card,
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TooltipCustom from '~/components/TooltipCustom';
 import Circle from '~/components/Circle';
-import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 import { linesByName, linesById } from '~/helpers/LineInfo';
+import ScoreCard from './ScoreCard';
+import Comparison from './Comparison';
 
 const styles = theme => ({
   root: {
@@ -52,77 +52,74 @@ const WaitTimeScoreCard = (props) => {
   const waitData = lineId && lineId.id
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
+  const tooltip = (
+    <TooltipCustom title={(
+      <Fragment>
+        <Typography color="inherit">Average Wait Time</Typography>
+        This is an average over all stop intervals measured for the day so far.
+        Obviously, this interval should be split by time of day since trains run
+        more frequently during peak times. Feature coming soon!
+      </Fragment>
+    )}
+    />
+  );
+  const title = 'Average Wait Time';
+  const mostFrequentText = (
+    <Fragment>
+    {linesById[waitData.most_frequent.name].name}
+    {' Line every '}
+    {Math.round(waitData.most_frequent.mean_time_between / 60)}
+    {' minutes'}
+    </Fragment>
+  )
+  const mostFrequent = {
+    title: 'Most Frequent',
+    color: linesById[waitData.most_frequent.name].color,
+    text: mostFrequentText,
+  };
+  const leastFrequent = {
+    title: 'Least Frequent',
+    color: linesById[waitData.least_frequent.name].color,
+    text: (
+      <Fragment>
+      {linesById[waitData.least_frequent.name].name}
+      {' Line every '}
+      {Math.round(waitData.least_frequent.mean_time_between / 60)}
+      {' minutes'}
+      </Fragment>
+    )
+  };
+  const content = (
+    <Grid container className={classes.separator}>
+      <Grid item xs={6}>
+        <img
+          alt="waiting"
+          src="/static/images/waiting.svg"
+        />
+      </Grid>
+      <Grid item xs={6}>
+        <Typography
+          variant={width === 'xs'
+            ? 'h3'
+            : 'h1'}
+          component="p"
+          align="center"
+        >
+          {Math.round(waitData.mean_time_between / 60)}
+        </Typography>
+        <Typography variant="h5" align="center">
+          minutes
+        </Typography>
+      </Grid>
+      <Divider light variant="middle" className={classes.separator} />
+      <Comparison comparisons={[mostFrequent, leastFrequent]} />
+    </Grid>
+  );
+
+
 
   return (
-    <Card elevation={1} className={classes.card}>
-      <div className={classes.iconPosition}>
-        <TooltipCustom title={(
-          <Fragment>
-            <Typography color="inherit">Average Wait Time</Typography>
-            This is an average over all stop intervals measured for the day so far.
-            Obviously, this interval should be split by time of day since trains run
-            more frequently during peak times. Feature coming soon!
-          </Fragment>
-        )}
-        />
-      </div>
-      <ScoreCardHeader title="Average Wait Time" />
-      <Grid container className={classes.separator}>
-        <Grid item xs={6}>
-          <img
-            alt="waiting"
-            src="/static/images/waiting.svg"
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Typography
-            variant={width === 'xs'
-              ? 'h3'
-              : 'h1'}
-            component="p"
-            align="center"
-          >
-            {Math.round(waitData.mean_time_between / 60)}
-          </Typography>
-          <Typography variant="h5" align="center">
-            minutes
-          </Typography>
-        </Grid>
-        {waitData.most_frequent && (
-          <Grid item xs={12}>
-            <Divider light variant="middle" className={classes.separator} />
-            <Typography color="textPrimary" align="center">
-              Most Frequent
-            </Typography>
-            <div className={classes.performer}>
-              <Circle color={linesById[waitData.most_frequent.name].color} />
-              <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-                {linesById[waitData.most_frequent.name].name}
-                {' Line every '}
-                {Math.round(waitData.most_frequent.mean_time_between / 60)}
-                {' minutes'}
-              </Typography>
-            </div>
-          </Grid>
-        )}
-        {waitData.least_frequent && (
-          <Grid item xs={12}>
-            <Typography color="textPrimary" align="center">
-              Least Frequent
-            </Typography>
-            <div className={classes.performer}>
-              <Circle color={linesById[waitData.least_frequent.name].color} />
-              <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-                {linesById[waitData.least_frequent.name].name}
-                {' Line every '}
-                {Math.round(waitData.least_frequent.mean_time_between / 60)}
-                {' minutes'}
-              </Typography>
-            </div>
-          </Grid>
-        )}
-      </Grid>
-    </Card>
+    <ScoreCard title={title} content={content} tooltip={tooltip} />
   );
 };
 
