@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Typography,
   Grid,
@@ -13,6 +13,7 @@ const styles = theme => ({
     justifyContent: 'center',
     flexDirection: 'row',
     marginBottom: 10,
+    width: '100%'
   }
 });
 
@@ -20,29 +21,27 @@ const Comparison = (props) => {
   const {
     classes, comparisons
   } = props;
-  const structure = function(obj) {
+  const list = comparisons.map((comparison, i) => {
     return(
-      <Grid item xs={12}>
+      <Grid key={i} item xs={12}>
         <Typography color="textPrimary" align="center">
-        {obj.title}
+        {comparison.title}
         </Typography>
         <div className={classes.performer}>
-        <Circle color={obj.color} />
-        <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-          {obj.text}
-        </Typography>
+          <Circle color={comparison.color} />
+          <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
+            {comparison.text}
+          </Typography>
         </div>
       </Grid>
     );
-  };
+  });
 
-  const list = comparisons.map(comparison => structure(comparison))
-  
   return (
-    <div>
+    <Fragment>
       {list}
-    </div>
+    </Fragment>
   );
 };
 
-export default withStyles(Comparison);
+export default withStyles(styles)(Comparison);

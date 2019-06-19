@@ -12,31 +12,9 @@ import ScoreCard from './ScoreCard';
 import Comparison from './Comparison';
 
 const styles = theme => ({
-  root: {
-    // padding: theme.spacing.unit * 2,
-    padding: 0,
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-    position: 'relative',
-    height: '100%',
-  },
-  iconPosition: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-  },
-  performer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  container: {
-    height: 'calc(100% - 3em)',
-  },
   separator: {
-    margin: 10,
+    margin: '10px 0',
+    width: '100%'
   },
 });
 
@@ -48,10 +26,13 @@ const WaitTimeScoreCard = (props) => {
     formattedLineData,
     width,
   } = props;
-  const lineId = linesByName[currentLine];
+
+  const lineId = linesByName[currentLine]
+  ;
   const waitData = lineId && lineId.id
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
+
   const tooltip = (
     <TooltipCustom title={(
       <Fragment>
@@ -63,20 +44,22 @@ const WaitTimeScoreCard = (props) => {
     )}
     />
   );
+
   const title = 'Average Wait Time';
-  const mostFrequentText = (
-    <Fragment>
-    {linesById[waitData.most_frequent.name].name}
-    {' Line every '}
-    {Math.round(waitData.most_frequent.mean_time_between / 60)}
-    {' minutes'}
-    </Fragment>
-  )
+
   const mostFrequent = {
     title: 'Most Frequent',
     color: linesById[waitData.most_frequent.name].color,
-    text: mostFrequentText,
+    text: (
+      <Fragment>
+      {linesById[waitData.most_frequent.name].name}
+      {' Line every '}
+      {Math.round(waitData.most_frequent.mean_time_between / 60)}
+      {' minutes'}
+      </Fragment>
+    )
   };
+
   const leastFrequent = {
     title: 'Least Frequent',
     color: linesById[waitData.least_frequent.name].color,
@@ -89,8 +72,9 @@ const WaitTimeScoreCard = (props) => {
       </Fragment>
     )
   };
+
   const content = (
-    <Grid container className={classes.separator}>
+    <Fragment>
       <Grid item xs={6}>
         <img
           alt="waiting"
@@ -107,20 +91,16 @@ const WaitTimeScoreCard = (props) => {
         >
           {Math.round(waitData.mean_time_between / 60)}
         </Typography>
-        <Typography variant="h5" align="center">
+        <Typography variant="body1" align="center">
           minutes
         </Typography>
       </Grid>
       <Divider light variant="middle" className={classes.separator} />
       <Comparison comparisons={[mostFrequent, leastFrequent]} />
-    </Grid>
+    </Fragment>
   );
 
-
-
-  return (
-    <ScoreCard title={title} content={content} tooltip={tooltip} />
-  );
+  return <ScoreCard title={title} content={content} tooltip={tooltip} />
 };
 
 export default withStyles(styles)(WaitTimeScoreCard);

@@ -8,30 +8,21 @@ import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
 
 const styles = theme => ({
   root: {
-    // padding: theme.spacing.unit * 2,
     padding: 0,
     textAlign: 'center',
     color: theme.palette.text.secondary,
     position: 'relative',
+    width: '100%',
+    margin: 0
   },
   iconPosition: {
     position: 'absolute',
     top: 0,
     right: 0,
   },
-  performer: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
-    marginBottom: 10,
-  },
-  container: {
-    height: 'calc(100% - 3em)',
-  },
-  separator: {
-    margin: 10,
-  },
+  content: {
+    padding: 10
+  }
 });
 
 const ScoreCard = (props) => {
@@ -39,12 +30,12 @@ const ScoreCard = (props) => {
     classes, title, tooltip, content,
   } = props;
   return (
-    <Card elevation={1} classes={classes}>
+    <Card elevation={1} classes={{ root: classes.root }}>
       <div className={classes.iconPosition}>
         { tooltip }
       </div>
       <ScoreCardHeader title={title} />
-      <Grid container justifyContent="center" alignItems="center" className={classes.separator}>
+      <Grid container className={ classes.content }>
         {content}
       </Grid>
     </Card>

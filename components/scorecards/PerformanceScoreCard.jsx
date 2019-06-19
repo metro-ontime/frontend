@@ -10,31 +10,14 @@ import OnTimePie from '~/components/charts/OnTimePie';
 import Circle from '~/components/Circle';
 import { linesByName, linesById } from '~/helpers/LineInfo';
 import ScoreCard from './ScoreCard';
+import Comparison from './Comparison';
 
 
 const styles = theme => ({
-  progress: {
-    margin: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
-  },
-  card: {
-    position: 'relative',
-    padding: 0,
-    height: '100%',
-  },
-  description: {
-    textAlign: 'center',
-    marginTop: '1em',
-  },
-  spacer: {
-    margin: '2em 0',
-  },
-  maxWidth150: {
-    maxWidth: 150,
-  },
-  cardContainer: {
-    height: 'calc(100% - 3em)',
-  },
+  separator: {
+    margin: 10,
+    width: '100%'
+  }
 });
 
 const PerformanceScoreCard = (props) => {
@@ -72,10 +55,38 @@ const PerformanceScoreCard = (props) => {
       )}
     />
   );
+
   const title = 'On-Time Performance';
+
+  const mostReliable = {
+    title: 'Most Reliable',
+    color: linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].color,
+    text: (
+      <Fragment>
+        {linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].name}
+        {' Line '}
+        {(scoreData.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+        {'% on-time'}
+      </Fragment>
+    )
+  };
+
+  const leastReliable = {
+    title: 'Least Reliable',
+    color: linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].color,
+    text: (
+      <Fragment>
+        {linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].name}
+        {' Line '}
+        {(scoreData.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+        {'% on-time'}
+      </Fragment>
+    )
+  };
+
   const content = (
-    <Grid container item justify="center" alignItems="center" xs={12} className={classes.cardContainer}>
-      <Grid item xs={6} className={classes.maxWidth150}>
+    <Grid container item justify="center" alignItems="center" xs={12} >
+      <Grid item xs={6} md={4} >
         <OnTimePie
           bins={scoreData.ontime}
           total={scoreData.total_arrivals_analyzed}
@@ -95,38 +106,7 @@ const PerformanceScoreCard = (props) => {
         </Typography>
       </Grid>
       <Divider light variant="middle" className={classes.separator} />
-      {scoreData.most_reliable && scoreData.least_reliable && (
-        <Grid item xs={12}>
-          <Typography color="textPrimary" align="center">
-            Most Reliable
-          </Typography>
-          <div className={classes.performer}>
-            <Circle
-              color={linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].color}
-            />
-            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-              {linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].name}
-              {' Line '}
-              {(scoreData.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
-              {'% on-time'}
-            </Typography>
-          </div>
-          <Typography color="textPrimary" align="center">
-            Least Reliable
-          </Typography>
-          <div className={classes.performer}>
-            <Circle
-              color={linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].color}
-            />
-            <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
-              {linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].name}
-              {' Line '}
-              {(scoreData.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
-              {'% on-time'}
-            </Typography>
-          </div>
-        </Grid>
-      )}
+      <Comparison comparisons={[mostReliable, leastReliable]} />
     </Grid>
   );
 
