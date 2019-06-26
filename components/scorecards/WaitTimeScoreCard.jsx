@@ -5,7 +5,6 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import TooltipCustom from '~/components/TooltipCustom';
 import Circle from '~/components/Circle';
 import { linesByName, linesById } from '~/helpers/LineInfo';
 import ScoreCard from './ScoreCard';
@@ -33,17 +32,10 @@ const WaitTimeScoreCard = (props) => {
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
 
-  const tooltip = (
-    <TooltipCustom title={(
-      <Fragment>
-        <Typography color="inherit">Average Wait Time</Typography>
-        This is an average over all stop intervals measured for the day so far.
-        Obviously, this interval should be split by time of day since trains run
-        more frequently during peak times. Feature coming soon!
-      </Fragment>
-    )}
-    />
-  );
+  const tooltip = {
+    title: "Average Wait Time",
+    content: "This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!"
+  };
 
   const title = 'Average Wait Time';
 

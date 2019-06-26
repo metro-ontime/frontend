@@ -75,13 +75,7 @@ const LogoAndTitle = (props) => {
   return (
     <Card elevation={0} className={classes.card}>
       <div className={classes.iconPosition}>
-        <TooltipCustom title={(
-          <Fragment>
-            <Typography color="inherit">Update Timing</Typography>
-            Latest statistics are provided roughly every 30 minutes.
-          </Fragment>
-)}
-        />
+        <TooltipCustom title="Update Timing" content="Latest statistics are provided roughly every 30 minutes." />
       </div>
       <CardMedia component="img" className={classes.logo} src={altImg || `/static/images/logo_${line}.svg`} />
       <CardContent className={classes.cardContent}>

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Tooltip,
+  Typography
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
@@ -25,17 +26,23 @@ const TooltipCustom = (props) => {
       <InfoIcon />
     </IconButton>
   );
-  const { classes, title, children } = props;
+  const { classes, title, content } = props;
+  const customIcon = props.children;
   return (
     <Tooltip
       classes={{
         tooltip: classes.htmlTooltip,
       }}
-      title={title}
+      title={(
+        <Fragment>
+          <Typography color="inherit">{ title }</Typography>
+          { content }
+        </Fragment>
+      )}
       enterTouchDelay={0}
       leaveTouchDelay={2000}
     >
-      { children || defaultIcon }
+      { customIcon || defaultIcon }
     </Tooltip>
   );
 };

@@ -36,25 +36,10 @@ const PerformanceScoreCard = (props) => {
     / scoreData.total_scheduled_arrivals,
   )
   / 10;
-  const tooltip = (
-    <TooltipCustom title={(
-      <Fragment>
-        <Typography color="inherit">Performance Score</Typography>
-        This figure is based on
-        {' '}
-        {scoreData.total_arrivals_analyzed}
-        {' '}
-        train arrivals estimated so far out of
-        {' '}
-        {scoreData.total_scheduled_arrivals}
-        {' '}
-        scheduled for today (
-        { percentAnalyzed }
-        %). It includes trains both running ahead and behind schedule (early and late).
-      </Fragment>
-      )}
-    />
-  );
+  const tooltip = {
+    title: "Performance Score",
+    content: `This figure is based on ${scoreData.total_arrivals_analyzed} train arrivals estimated so far out of ${scoreData.total_scheduled_arrivals} scheduled for today (${ percentAnalyzed } %). It includes trains both running ahead and behind schedule (early and late).`
+  };
 
   const title = 'On-Time Performance';
 
