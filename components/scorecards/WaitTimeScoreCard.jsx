@@ -5,7 +5,6 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import Circle from '~/components/Circle';
 import { linesByName, linesById } from '~/helpers/LineInfo';
 import ScoreCard from './ScoreCard';
 import Comparison from './Comparison';
@@ -17,53 +16,56 @@ const styles = theme => ({
   },
 });
 
-const WaitTimeScoreCard = (props) => {
-  const {
-    classes,
-    data,
-    currentLine,
-    formattedLineData,
-    width,
-  } = props;
+const WaitTimeScoreCard = ({
+  classes,
+  data,
+  currentLine,
+  formattedLineData,
+  width,
+}) => {
+  const showComparison = currentLine === 'All';
 
-  const lineId = linesByName[currentLine]
-  ;
+  const lineId = linesByName[currentLine];
   const waitData = lineId && lineId.id
     ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
     : data;
 
   const tooltip = {
-    title: "Average Wait Time",
-    content: "This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!"
+    title: 'Average Wait Time',
+    content: 'This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!'
   };
 
   const title = 'Average Wait Time';
 
-  const mostFrequent = {
-    title: 'Most Frequent',
-    color: linesById[waitData.most_frequent.name].color,
-    text: (
-      <Fragment>
-      {linesById[waitData.most_frequent.name].name}
-      {' Line every '}
-      {Math.round(waitData.most_frequent.mean_time_between / 60)}
-      {' minutes'}
-      </Fragment>
-    )
-  };
+  const mostFrequent = showComparison
+    ? {
+      title: 'Most Frequent',
+      color: linesById[waitData.most_frequent.name].color,
+      text: (
+        <Fragment>
+          {linesById[waitData.most_frequent.name].name}
+          {' Line every '}
+          {Math.round(waitData.most_frequent.mean_time_between / 60)}
+          {' minutes'}
+        </Fragment>
+      )
+    }
+    : null;
 
-  const leastFrequent = {
-    title: 'Least Frequent',
-    color: linesById[waitData.least_frequent.name].color,
-    text: (
-      <Fragment>
-      {linesById[waitData.least_frequent.name].name}
-      {' Line every '}
-      {Math.round(waitData.least_frequent.mean_time_between / 60)}
-      {' minutes'}
-      </Fragment>
-    )
-  };
+  const leastFrequent = showComparison
+    ? {
+      title: 'Least Frequent',
+      color: linesById[waitData.least_frequent.name].color,
+      text: (
+        <Fragment>
+          {linesById[waitData.least_frequent.name].name}
+          {' Line every '}
+          {Math.round(waitData.least_frequent.mean_time_between / 60)}
+          {' minutes'}
+        </Fragment>
+      )
+    }
+    : null;
 
   const content = (
     <Fragment>
@@ -88,7 +90,7 @@ const WaitTimeScoreCard = (props) => {
         </Typography>
       </Grid>
       <Divider light variant="middle" className={classes.separator} />
-      <Comparison comparisons={[mostFrequent, leastFrequent]} />
+      {showComparison && <Comparison comparisons={[mostFrequent, leastFrequent]} />}
     </Fragment>
   );
 
