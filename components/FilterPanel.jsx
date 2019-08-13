@@ -22,6 +22,7 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: '-.25em',
+    width: '100%'
   },
   lineDot: {
     width: '100%',
@@ -31,9 +32,12 @@ const styles = theme => ({
     borderRadius: '50%',
   },
   formControl: {
-    margin: theme.spacing.unit,
-    width: 120,
+    padding: theme.spacing.unit,
+    width: '100%',
   },
+  label: {
+    padding: theme.spacing.unit
+  }
 });
 
 const arrivalWindows = [
@@ -93,7 +97,7 @@ const FilterPanel = (props) => {
       <CardHeader style={{ paddingBottom: 0 }} title="Filter By" titleTypographyProps={{ variant: 'body1' }} />
       <CardContent style={{ paddingTop: 0, paddingLeft: '.5em' }}>
         <FormControl className={classes.formControl}>
-          <InputLabel>Line</InputLabel>
+          <InputLabel className={ classes.label }>Line</InputLabel>
           <Select
             className={classes.selectEmpty}
             value={line}
@@ -114,7 +118,7 @@ const FilterPanel = (props) => {
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Cutoff</InputLabel>
+          <InputLabel className={ classes.label }>Cutoff</InputLabel>
           <Select
             className={classes.selectEmpty}
             value={arrivalWindow}
@@ -125,7 +129,7 @@ const FilterPanel = (props) => {
           </Select>
         </FormControl>
         <FormControl className={classes.formControl}>
-          <InputLabel>Date</InputLabel>
+          <InputLabel className={ classes.label }>Date</InputLabel>
           <Select
             className={classes.selectEmpty}
             value={date}

@@ -5,7 +5,7 @@ import { Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
-import Layout from '~/components/Layout';
+import Layout from '~/components/SimpleLayout';
 import LogoAndTitle from '~/components/LogoAndTitle';
 import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
 import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
@@ -114,9 +114,6 @@ class Index extends Component {
                 currentLine={currentLine}
                 formattedLineData={formattedLineData}
               />
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <LineComparison formattedData={formattedLineData} allLineData={allLineData} />
             </Grid>
           </Grid>
         </Grid>
