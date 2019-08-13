@@ -133,6 +133,7 @@ class Layout extends Component {
         <Head>
           <title>
             RailStats LA |
+            {' '}
             {pageTitle}
           </title>
         </Head>

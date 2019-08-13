@@ -66,8 +66,8 @@ class Index extends Component {
 
     return (
       <Layout
-        pageTitle="Network Summary"
-        toolbarTitle="Network Summary"
+        pageTitle="Rail Summary"
+        toolbarTitle="Rail Summary"
       >
         <Grid container spacing={24} justify="space-around" className={classes.container}>
           <Grid container item xs={12} md={8} justify="center" alignItems="center" className={classes.container}>
