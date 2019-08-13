@@ -65,8 +65,8 @@ const LogoAndTitle = (props) => {
   let defaultText = '';
   if (line === 'All') {
     defaultText = date === 'Yesterday'
-      ? 'How reliable was the LA Metro Network yesterday?'
-      : 'How reliable is the LA Metro Network today?';
+      ? 'How reliable was LA Metro Rail service yesterday?'
+      : 'How reliable is LA Metro Network service today?';
   } else if (date === 'Today') {
     defaultText = `How reliable is the ${line} Line today?`;
   } else if (date === 'Yesterday') {
