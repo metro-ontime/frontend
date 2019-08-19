@@ -11,6 +11,7 @@ import flowRight from 'lodash/flowRight';
 import Moment from 'react-moment';
 import 'moment-timezone';
 import TooltipCustom from '~/components/TooltipCustom';
+import { linesByName } from '~/helpers/LineInfo';
 
 const styles = theme => ({
   card: {
@@ -64,26 +65,23 @@ const LogoAndTitle = (props) => {
   } = props;
   let defaultText = '';
   if (line === 'All') {
-    defaultText = date === 'Yesterday'
-      ? 'How reliable was LA Metro Rail service yesterday?'
-      : 'How reliable is LA Metro Network service today?';
-  } else if (date === 'Today') {
-    defaultText = `How reliable is the ${line} Line today?`;
-  } else if (date === 'Yesterday') {
-    defaultText = `How reliable was the ${line} Line yesterday?`;
+    defaultText = 'LA Metro Rail - Network Performance'
+  } else {
+    defaultText = `LA Metro Rail - ${line} Line Performance`;
   }
   return (
     <Card elevation={0} className={classes.card}>
       <div className={classes.iconPosition}>
         <TooltipCustom title="Update Timing" content="Latest statistics are provided roughly every 30 minutes." />
       </div>
-      <CardMedia component="img" className={classes.logo} src={altImg || `/static/images/logo_${line}.svg`} />
+      <CardMedia component="img" className={classes.logo} src={linesByName[line] ? `/static/images/logo_${linesByName[line].id}.svg` : altImg } />
       <CardContent className={classes.cardContent}>
         <Typography variant={width === 'xs' ? 'h6' : 'h4'} className={classes.title}>
           { altText || defaultText }
         </Typography>
         <Typography component="p" variant="body2" className={classes.updateTime}>
-          <b>Data from: </b>
+          Rail performance on the selected date was last updated at
+          {' '}
           {
             timestamp
               ? <Moment format="D MMMM YYYY, h:mma" tz="America/Los_Angeles">{timestamp}</Moment>

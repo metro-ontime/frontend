@@ -20,16 +20,11 @@ const WaitTimeScoreCard = ({
   classes,
   data,
   currentLine,
-  formattedLineData,
   width,
 }) => {
   const showComparison = currentLine === 'All';
 
   const lineId = linesByName[currentLine];
-  const waitData = lineId && lineId.id
-    ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
-    : data;
-
   const tooltip = {
     title: 'Average Wait Time',
     content: 'This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!'
@@ -40,12 +35,12 @@ const WaitTimeScoreCard = ({
   const mostFrequent = showComparison
     ? {
       title: 'Most Frequent',
-      color: linesById[waitData.most_frequent.name].color,
+      color: linesById[data.most_frequent.name].color,
       text: (
         <Fragment>
-          {linesById[waitData.most_frequent.name].name}
+          {linesById[data.most_frequent.name].name}
           {' Line every '}
-          {Math.round(waitData.most_frequent.mean_time_between / 60)}
+          {Math.round(data.most_frequent.mean_time_between / 60)}
           {' minutes'}
         </Fragment>
       )
@@ -55,12 +50,12 @@ const WaitTimeScoreCard = ({
   const leastFrequent = showComparison
     ? {
       title: 'Least Frequent',
-      color: linesById[waitData.least_frequent.name].color,
+      color: linesById[data.least_frequent.name].color,
       text: (
         <Fragment>
-          {linesById[waitData.least_frequent.name].name}
+          {linesById[data.least_frequent.name].name}
           {' Line every '}
-          {Math.round(waitData.least_frequent.mean_time_between / 60)}
+          {Math.round(data.least_frequent.mean_time_between / 60)}
           {' minutes'}
         </Fragment>
       )
@@ -83,7 +78,7 @@ const WaitTimeScoreCard = ({
           component="p"
           align="center"
         >
-          {Math.round(waitData.mean_time_between / 60)}
+          {Math.round(data.mean_time_between / 60)}
         </Typography>
         <Typography variant="body1" align="center">
           minutes

@@ -19,36 +19,33 @@ const styles = theme => ({
 });
 
 const PerformanceScoreCard = ({
-  classes, data, currentLine, arrivalWindow, formattedLineData, width,
+  classes, data, currentLine, arrivalWindow, width,
 }) => {
   const showComparison = currentLine === 'All';
   const lineId = linesByName[currentLine];
-  const scoreData = lineId && lineId.id
-    ? formattedLineData[formattedLineData.length - 1][`${lineId.id}_lametro-rail`]
-    : data;
   const score = Math.round(
-    scoreData.ontime[arrivalWindow] / scoreData.total_arrivals_analyzed * 1000,
+    data.ontime[arrivalWindow] / data.total_arrivals_analyzed * 1000,
   ) / 10;
   const percentAnalyzed = Math.round(
-    1000 * scoreData.total_arrivals_analyzed
-    / scoreData.total_scheduled_arrivals,
+    1000 * data.total_arrivals_analyzed
+    / data.total_scheduled_arrivals,
   )
   / 10;
   const tooltip = {
     title: 'Performance Score',
-    content: `This figure is based on ${scoreData.total_arrivals_analyzed} train arrivals estimated so far out of ${scoreData.total_scheduled_arrivals} scheduled for today (${ percentAnalyzed } %). It includes trains both running ahead and behind schedule (early and late).`
+    content: `This figure is based on ${data.total_arrivals_analyzed} train arrivals estimated so far out of ${data.total_scheduled_arrivals} scheduled for today (${ percentAnalyzed } %). It includes trains both running ahead and behind schedule (early and late).`
   };
 
   const title = 'On-Time Performance';
   const mostReliable = showComparison
     ? {
       title: 'Most Reliable',
-      color: linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].color,
+      color: linesById[data.most_reliable[arrivalWindow].line.slice(0, 3)].color,
       text: (
         <Fragment>
-          {linesById[scoreData.most_reliable[arrivalWindow].line.slice(0, 3)].name}
+          {linesById[data.most_reliable[arrivalWindow].line.slice(0, 3)].name}
           {' Line '}
-          {(scoreData.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+          {(data.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
           {'% on-time'}
         </Fragment>
       )
@@ -58,12 +55,12 @@ const PerformanceScoreCard = ({
   const leastReliable = showComparison
     ? {
       title: 'Least Reliable',
-      color: linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].color,
+      color: linesById[data.least_reliable[arrivalWindow].line.slice(0, 3)].color,
       text: (
         <Fragment>
-          {linesById[scoreData.least_reliable[arrivalWindow].line.slice(0, 3)].name}
+          {linesById[data.least_reliable[arrivalWindow].line.slice(0, 3)].name}
           {' Line '}
-          {(scoreData.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
+          {(data.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
           {'% on-time'}
         </Fragment>
       )
@@ -74,8 +71,8 @@ const PerformanceScoreCard = ({
     <Grid container item justify="center" alignItems="center" xs={12}>
       <Grid item xs={6} md={4}>
         <OnTimePie
-          bins={scoreData.ontime}
-          total={scoreData.total_arrivals_analyzed}
+          bins={data.ontime}
+          total={data.total_arrivals_analyzed}
           selected={arrivalWindow}
         />
       </Grid>

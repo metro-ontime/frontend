@@ -11,7 +11,7 @@ import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
 import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
 import FilterPanel from '~/components/FilterPanel';
 import CONFIG from '~/config';
-import LineComparison from '~/components/LineComparison';
+import { linesByName } from '~/helpers/LineInfo';
 
 const styles = () => ({
   item: {
@@ -23,45 +23,47 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      data: props.data,
       currentLine: 'All',
       arrivalWindow: '1_min',
-      date: 'Today',
+      date: props.dates[props.dates.length - 1],
     };
-    this.handleLineChange = this.handleLineChange.bind(this);
-    this.handleArrivalWindow = this.handleArrivalWindow.bind(this);
-    this.handleDate = this.handleDate.bind(this);
   }
 
   static async getInitialProps({ query }) {
-    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
-    const formattedLineData = Object.values(data[0]);
-    const allLineData = data[1];
-    return { query, formattedLineData, allLineData };
+    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
+    const { data: { dates } } = await axios.get(`${CONFIG.RAILSTATS_API}/dates`);
+    return { query, dates, data };
   }
 
-  handleLineChange(e) {
+  handleLineChange = e => {
     const selectedLine = e.target.value;
-    this.setState({ currentLine: selectedLine });
+    if (selectedLine === 'All') {
+      axios.get(`${CONFIG.RAILSTATS_API}/network`)
+        .then(({ data }) => this.setState({ data, currentLine: selectedLine }));
+    } else {
+      axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[selectedLine].id}`)
+        .then(({ data }) => this.setState({ data, currentLine: selectedLine }));
+    }
   }
 
-  handleArrivalWindow(e) {
+  handleArrivalWindow = e => {
     const newValue = e.target.value;
     this.setState({ arrivalWindow: newValue });
   }
 
-  handleDate(e) {
+  handleDate = e => {
     const newValue = e.target.value;
     this.setState({ date: newValue });
+    axios.get(`${CONFIG.RAILSTATS_API}/network?date=${newValue}`)
+      .then(({ data }) => { console.log(data); this.setState({ data }) });
   }
 
   render() {
     const {
-      classes, formattedLineData, allLineData, width,
+      classes, width
     } = this.props;
-    const { currentLine, arrivalWindow, date } = this.state;
-    const data = date === 'Yesterday'
-      ? allLineData[allLineData.length - 2]
-      : allLineData[allLineData.length - 1];
+    const { currentLine, arrivalWindow, date, data } = this.state;
     const { timestamp } = data;
 
     return (
@@ -94,7 +96,7 @@ class Index extends Component {
                 arrivalWindow={arrivalWindow}
                 handleArrivalWindow={this.handleArrivalWindow}
                 date={date}
-                dates={['Today', 'Yesterday']}
+                dates={this.props.dates}
                 handleDate={this.handleDate}
               />
             </Grid>
@@ -104,7 +106,6 @@ class Index extends Component {
                 width={width}
                 currentLine={currentLine}
                 arrivalWindow={arrivalWindow}
-                formattedLineData={formattedLineData}
               />
             </Grid>
             <Grid item xs={12} md={5} classes={classes}>
@@ -112,7 +113,6 @@ class Index extends Component {
                 width={width}
                 data={data}
                 currentLine={currentLine}
-                formattedLineData={formattedLineData}
               />
             </Grid>
           </Grid>
@@ -125,14 +125,10 @@ class Index extends Component {
 Index.defaultProps = {
   width: 'lg',
   classes: {},
-  formattedLineData: [],
-  allLineData: [],
 };
 
 Index.propTypes = {
   classes: PropTypes.object,
-  formattedLineData: PropTypes.arrayOf(PropTypes.object),
-  allLineData: PropTypes.arrayOf(PropTypes.object),
   width: PropTypes.string,
 };
 
