@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "node server.js",
-    "build": "npm run lint && next build",
-    "start": "npm run lint && NODE_ENV=production node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
     "export": "next export",
     "lint": "eslint src/*.js helpers/*.js components/*.jsx components/**/*.jsx pages/*.jsx pages/**/*.jsx models/*.js"
   },
@@ -33,6 +33,8 @@
     "babel-eslint": "^10.0.1",
     "babel-polyfill": "^6.26.0",
     "babel-preset-env": "^1.7.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "babel-plugin-root-import": "^6.1.0",
     "classnames": "^2.2.6",
     "compression": "^1.7.3",
     "d3-axis": "^1.0.12",
@@ -64,8 +66,6 @@
     "victory": "^32.1.0"
   },
   "devDependencies": {
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "babel-plugin-root-import": "^6.1.0",
     "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-loader": "^2.1.1",

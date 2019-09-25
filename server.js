@@ -12,7 +12,7 @@ app
     server.use(compression());
 
     server.get('/line/:id', (req, res) => {
-      const actualPage = '/line';
+      const actualPage = '/';
       const queryParams = { id: parseInt(req.params.id) };
       app.render(req, res, actualPage, queryParams);
     });

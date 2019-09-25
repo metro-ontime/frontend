@@ -1,5 +1,5 @@
 const prodConfig = {
-  RAILSTATS_API: '127.0.0.1:8080',
+  RAILSTATS_API: process.env.RAILSTATS_API || 'http://railstats-frontend-1563011401.us-west-1.elb.amazonaws.com',
 };
 
 const devConfig = {
