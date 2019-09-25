@@ -1,5 +1,5 @@
 const prodConfig = {
-  RAILSTATS_API: 'https://api.railstats.org',
+  RAILSTATS_API: '127.0.0.1:8080',
 };
 
 const devConfig = {
