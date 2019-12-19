@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import OnTimePie from '~/components/charts/OnTimePie';
-import { linesByName, linesById } from '~/helpers/LineInfo';
+import { linesById } from '~/helpers/LineInfo';
 import ScoreCard from './ScoreCard';
 import Comparison from './Comparison';
 
@@ -14,15 +14,14 @@ import Comparison from './Comparison';
 const styles = theme => ({
   separator: {
     margin: 10,
-    width: '100%'
-  }
+    width: '100%',
+  },
 });
 
 const PerformanceScoreCard = ({
   classes, data, currentLine, arrivalWindow, width,
 }) => {
   const showComparison = currentLine === 'All';
-  const lineId = linesByName[currentLine];
   const score = Math.round(
     data.ontime[arrivalWindow] / data.total_arrivals_analyzed * 1000,
   ) / 10;
@@ -48,7 +47,7 @@ const PerformanceScoreCard = ({
           {(data.most_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
           {'% on-time'}
         </Fragment>
-      )
+      ),
     }
     : null;
 
@@ -63,7 +62,7 @@ const PerformanceScoreCard = ({
           {(data.least_reliable[arrivalWindow].percent_ontime * 100).toFixed(1)}
           {'% on-time'}
         </Fragment>
-      )
+      ),
     }
     : null;
 

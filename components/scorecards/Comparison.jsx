@@ -18,8 +18,8 @@ const styles = () => ({
 });
 
 const Comparison = ({ classes, comparisons }) => {
-  const list = comparisons.map((comparison, i) => (
-    <Grid key={i} item xs={12}>
+  const list = comparisons.map(comparison => (
+    <Grid key={comparison.title} item xs={12}>
       <Typography color="textPrimary" align="center">
         {comparison.title}
       </Typography>

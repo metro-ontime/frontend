@@ -24,7 +24,6 @@ const WaitTimeScoreCard = ({
 }) => {
   const showComparison = currentLine === 'All';
 
-  const lineId = linesByName[currentLine];
   const tooltip = {
     title: 'Average Wait Time',
     content: 'This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!'

@@ -36,7 +36,7 @@ class Index extends Component {
     return { query, dates, data };
   }
 
-  handleLineChange = e => {
+  handleLineChange = (e) => {
     const selectedLine = e.target.value;
     if (selectedLine === 'All') {
       axios.get(`${CONFIG.RAILSTATS_API}/network`)
@@ -47,24 +47,31 @@ class Index extends Component {
     }
   }
 
-  handleArrivalWindow = e => {
+  handleArrivalWindow = (e) => {
     const newValue = e.target.value;
     this.setState({ arrivalWindow: newValue });
   }
 
-  handleDate = e => {
+  handleDate = (e) => {
     const newValue = e.target.value;
     this.setState({ date: newValue });
     axios.get(`${CONFIG.RAILSTATS_API}/network?date=${newValue}`)
-      .then(({ data }) => { console.log(data); this.setState({ data }) });
+      .then(({ data }) => this.setState({ data }));
   }
 
   render() {
     const {
-      classes, width
+      classes, width, dates,
     } = this.props;
-    const { currentLine, arrivalWindow, date, data } = this.state;
+    const {
+      currentLine,
+      arrivalWindow,
+      date,
+      data,
+    } = this.state;
     const { timestamp } = data;
+
+    console.log(currentLine)
 
     return (
       <Layout
@@ -96,7 +103,7 @@ class Index extends Component {
                 arrivalWindow={arrivalWindow}
                 handleArrivalWindow={this.handleArrivalWindow}
                 date={date}
-                dates={this.props.dates}
+                dates={dates}
                 handleDate={this.handleDate}
               />
             </Grid>

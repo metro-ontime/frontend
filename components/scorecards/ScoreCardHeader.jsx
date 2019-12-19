@@ -25,7 +25,7 @@ const ScoreCardHeader = (props) => {
   const { title, tooltip, classes } = props;
   return (
     <Fragment>
-      <CardHeader classes={{  root: classes.root, title: classes.title }} title={title} />
+      <CardHeader classes={{ root: classes.root, title: classes.title }} title={title} />
       <div className={classes.iconPosition}>
         <TooltipCustom title={tooltip.title} content={tooltip.content} />
       </div>
