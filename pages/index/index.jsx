@@ -15,6 +15,7 @@ import { linesByName } from '~/helpers/LineInfo';
 import directionNames from '~/helpers/Directions';
 import DataParser from '~/components/DataParser';
 import SimpleMenu from '~/components/SimpleMenu';
+import About from '~/pages/about';
 
 const styles = () => ({
 });
@@ -141,6 +142,7 @@ class Index extends Component {
             </Grid>
           )}
         </Grid>
+        <About />
       </Layout>
     );
   }
