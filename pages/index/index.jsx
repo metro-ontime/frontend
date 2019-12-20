@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
-import { Grid } from '@material-ui/core';
+import { Grid, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
@@ -12,11 +12,11 @@ import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
 import FilterPanel from '~/components/FilterPanel';
 import CONFIG from '~/config';
 import { linesByName } from '~/helpers/LineInfo';
+import directionNames from '~/helpers/Directions';
+import DataParser from '~/components/DataParser';
+import SimpleMenu from '~/components/SimpleMenu';
 
 const styles = () => ({
-  item: {
-    height: 400,
-  },
 });
 
 class Index extends Component {
@@ -27,6 +27,7 @@ class Index extends Component {
       currentLine: 'All',
       arrivalWindow: '1_min',
       date: props.dates[props.dates.length - 1],
+      direction: 0,
     };
   }
 
@@ -34,6 +35,10 @@ class Index extends Component {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
     const { data: { dates } } = await axios.get(`${CONFIG.RAILSTATS_API}/dates`);
     return { query, dates, data };
+  }
+
+  handleDirectionChange = (newDirection, index) => {
+    this.setState({ direction: index });
   }
 
   handleLineChange = (e) => {
@@ -68,11 +73,15 @@ class Index extends Component {
       arrivalWindow,
       date,
       data,
+      direction,
     } = this.state;
     const { timestamp } = data;
-
-    console.log(currentLine)
-
+    let line;
+    let directions;
+    if (currentLine !== 'All') {
+      line = linesByName[currentLine].id;
+      directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
+    }
     return (
       <Layout
         pageTitle="Rail Summary"
@@ -123,6 +132,14 @@ class Index extends Component {
               />
             </Grid>
           </Grid>
+          {currentLine !== 'All' && (
+            <Grid item xs={12} style={{ padding: 24 }}>
+              <Toolbar color="primary">
+                <SimpleMenu label={`Towards: ${directions[direction]}`} menuItems={directions} handleMenuChange={this.handleDirectionChange} />
+              </Toolbar>
+              <DataParser line={line} direction={0} date={date} />
+            </Grid>
+          )}
         </Grid>
       </Layout>
     );
