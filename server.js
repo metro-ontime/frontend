@@ -1,6 +1,5 @@
 const express = require('express');
 const next = require('next');
-
 const compression = require('compression') 
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({ dev });
@@ -13,7 +12,7 @@ app
     server.use(compression());
 
     server.get('/line/:id', (req, res) => {
-      const actualPage = '/line';
+      const actualPage = '/';
       const queryParams = { id: parseInt(req.params.id) };
       app.render(req, res, actualPage, queryParams);
     });

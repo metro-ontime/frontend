@@ -6,3 +6,5 @@ WORKDIR /src
 RUN npm install --production && npm run build
 
 EXPOSE 3000
+
+ENTRYPOINT ["npm", "start"]

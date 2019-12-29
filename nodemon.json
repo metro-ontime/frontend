@@ -1,0 +1,4 @@
+{
+  "watch": ["components", "helpers", "models", "pages", "src"],
+  "exec": "node server.js"
+}

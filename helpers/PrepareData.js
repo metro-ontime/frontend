@@ -1,20 +1,18 @@
 import DataFrame from 'dataframe-js';
-import stopPositions from './StopPositions.js';
 import moment from 'moment-timezone';
+import stopPositions from './StopPositions.js';
 
 
 const collectObservedTrip = (trip) => {
   const theTrip = trip.group
     .toCollection()
-    .map(row => {
-      return (
-        {
-          x: row.relative_position, 
-          y: new Date(row.datetime).getTime(),
-          name: null
-        }
-      )
-    });
+    .map(row => (
+      {
+        x: row.relative_position,
+        y: new Date(row.datetime).getTime(),
+        name: null,
+      }
+    ));
   return { data: theTrip, color: '#f00', enableMouseTracking: false };
 };
 
@@ -36,8 +34,8 @@ const prepareObservations = (url, updateFunction) => {
 };
 
 const getStations = (line) => {
-  DataFrame.fromCSV(``)
-}
+  DataFrame.fromCSV('');
+};
 
 const prepareSchedule = (url, line, updateFunction) => {
   DataFrame.fromCSV(url).then((df) => {
@@ -56,33 +54,29 @@ const prepareSchedule = (url, line, updateFunction) => {
     const collectScheduleTrip0 = (trip) => {
       const theTrip = trip.group
         .toCollection()
-        .map(row => {
-          return (
-            {
-              // This conditional exists because of an upstream bug,
-              // sometimes stops on other lines end up in the CSV
-              x: stops0[row.stop_id] ? stops0[row.stop_id]["relative_position"] : 0,
-              y: new Date(row.datetime).getTime(),
-              name: stops0[row.stop_id] ? stops0[row.stop_id]["stop_name"] : "Error"
-            }
-          )
-        });
+        .map(row => (
+          {
+            // This conditional exists because of an upstream bug,
+            // sometimes stops on other lines end up in the CSV
+            x: stops0[row.stop_id] ? stops0[row.stop_id].relative_position : 0,
+            y: new Date(row.datetime).getTime(),
+            name: stops0[row.stop_id] ? stops0[row.stop_id].stop_name : 'Error',
+          }
+        ));
       return { data: theTrip, color: '#aaaaaa' };
     };
     const collectScheduleTrip1 = (trip) => {
       const theTrip = trip.group
         .toCollection()
-        .map(row => {
-          return (
-            {
-              // This conditional exists because of an upstream bug,
-              // sometimes stops on other lines end up in the CSV
-              x: stops1[row.stop_id] ? stops1[row.stop_id]["relative_position"] : 0,
-              y: new Date(row.datetime).getTime(),
-              name: stops1[row.stop_id] ? stops1[row.stop_id]["stop_name"] : "Error"
-            }
-          )
-        });
+        .map(row => (
+          {
+            // This conditional exists because of an upstream bug,
+            // sometimes stops on other lines end up in the CSV
+            x: stops1[row.stop_id] ? stops1[row.stop_id].relative_position : 0,
+            y: new Date(row.datetime).getTime(),
+            name: stops1[row.stop_id] ? stops1[row.stop_id].stop_name : 'Error',
+          }
+        ));
       return { data: theTrip, color: '#aaaaaa' };
     };
 

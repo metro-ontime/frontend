@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import {
   Tooltip,
+  Typography
 } from '@material-ui/core';
-import {withStyles} from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
 import IconButton from '@material-ui/core/IconButton';
 
@@ -14,25 +15,36 @@ const styles = theme => ({
     fontSize: theme.typography.pxToRem(12),
     border: '1px solid #dadde9',
     '& b': {
-      fontWeight: theme.typography.fontWeightMedium
-    }
-  }
+      fontWeight: theme.typography.fontWeightMedium,
+    },
+  },
 });
 
 const TooltipCustom = (props) => {
   const defaultIcon = (
     <IconButton aria-label="Delete">
-      <InfoIcon/>
+      <InfoIcon />
     </IconButton>
   );
-  const { classes } = props;
+  const { classes, title, content } = props;
+  const customIcon = props.children;
   return (
-    <Tooltip classes={{
-        tooltip: classes.htmlTooltip
-      }} title={ props.title } enterTouchDelay={0} leaveTouchDelay={2000}>
-      { props.children ? props.children : defaultIcon }
+    <Tooltip
+      classes={{
+        tooltip: classes.htmlTooltip,
+      }}
+      title={(
+        <Fragment>
+          <Typography color="inherit">{ title }</Typography>
+          { content }
+        </Fragment>
+      )}
+      enterTouchDelay={0}
+      leaveTouchDelay={2000}
+    >
+      { customIcon || defaultIcon }
     </Tooltip>
-  )
-}
+  );
+};
 
 export default withStyles(styles)(TooltipCustom);
