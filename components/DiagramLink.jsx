@@ -26,7 +26,7 @@ const DiagramLink = (props) => {
           <Button variant="outlined" onClick={() => { action({}, 1); }}>
             { linesById[line].name }
             {' '}
-Line Visualizer
+            Line Visualizer
           </Button>
         </Typography>
       </CardContent>

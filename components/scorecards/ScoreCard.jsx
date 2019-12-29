@@ -13,11 +13,11 @@ const styles = theme => ({
     color: theme.palette.text.secondary,
     position: 'relative',
     width: '100%',
-    margin: 0
+    margin: 0,
   },
   content: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
 
 const ScoreCard = (props) => {
@@ -27,7 +27,7 @@ const ScoreCard = (props) => {
   return (
     <Card elevation={1} classes={{ root: classes.root }}>
       <ScoreCardHeader title={title} tooltip={tooltip} />
-      <Grid container className={ classes.content }>
+      <Grid container className={classes.content}>
         {content}
       </Grid>
     </Card>
