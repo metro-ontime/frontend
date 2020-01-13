@@ -1,13 +1,12 @@
 import React from 'react';
 import {
-  Typography, Card, Select, MenuItem, ListItemAvatar, Avatar,
+  Typography, Card, Select, MenuItem,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { lineLinks } from '~/helpers/LineInfo';
 
 const styles = theme => ({
   card: {
-    maxWidth: 1200,
+    maxWidth: '100%',
     margin: 'auto',
     marginTop: 20,
   },
@@ -35,7 +34,7 @@ const styles = theme => ({
 
 const HistoryMenu = (props) => {
   const {
-    classes, line, handleLineChange, dataFormat, xAxis, handleXAxisChange, yAxis, handleYAxisChange,
+    classes, dataFormat, xAxis, handleXAxisChange, yAxis, handleYAxisChange,
   } = props;
   return (
     <Card className={classes.card}>
@@ -46,35 +45,6 @@ View Data for
 
             {' '}
           </Typography>
-          <Select
-            value={line}
-            onChange={handleLineChange}
-            name="line"
-            className={classes.selectEmpty}
-          >
-            <MenuItem value="All Lines">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    <div
-                      style={{
-                        backgroundColor: '#dddddd',
-                        width: '100%',
-                        padding: 0,
-                        height: '100%',
-                        margin: 0,
-                        borderRadius: '50%',
-                      }}
-                    />
-                  </Avatar>
-                </ListItemAvatar>
-              All Lines
-
-                {' '}
-              </div>
-            </MenuItem>
-            {lineLinks(classes)}
-          </Select>
         </div>
         { dataFormat === 'chart' ? (
           <React.Fragment>

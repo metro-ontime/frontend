@@ -1,5 +1,4 @@
 import React from 'react';
-import Layout from '~/components/Layout';
 import HistoryMenu from '~/components/HistoryMenu';
 import HistoryTable from '~/components/HistoryTable';
 import HistoryChart from '~/components/charts/HistoryChart';
@@ -8,22 +7,17 @@ import {
 } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { linesByName } from '~/helpers/LineInfo';
 import {
   dateToString, deriveLine, deriveXAxis, deriveYAxis, prepareTableData,
 } from '~/helpers/formatHistory';
+import { linesByName } from '~/helpers/LineInfo';
 import PropTypes from 'prop-types';
 import CONFIG from '~/config';
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    flexGrow: 1,
-  },
   card: {
-    maxWidth: 1200,
     margin: 'auto',
+    maxWidth: '100%',
     marginTop: 20,
   },
   chartContainer: {
@@ -38,31 +32,36 @@ class History extends React.Component {
   state = {
     rows: [],
     graphData: [],
-    line: 'All Lines',
     xAxis: 'Last 30 Days',
     xTickFormat: new Array(30).fill('').map((item, i) => dateToString(30 - i)),
     yAxis: 'Average Wait Time',
     yTickFormat: { formatter() { return `${this.value} min`; } },
     dataFormat: 'chart',
-    color: '#dddddd',
+    formattedData: [],
+    allLineData: [],
   };
 
-  static async getInitialProps({ query }) {
+  async componentDidMount() {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedData = Object.values(data[0]);
     const allLineData = data[1];
-    return { query, allLineData, formattedData };
+    this.setState({
+      formattedData,
+      allLineData,
+    });
   }
 
   static getDerivedStateFromProps(props, state) {
     const {
       rows,
       graphData,
-      line,
       xAxis,
       yAxis,
+      formattedData,
+      allLineData,
     } = state;
-    const { formattedData, allLineData } = props;
+    const { line } = props;
+
     if (!rows[0] && !graphData[0]) {
       return {
         rows: prepareTableData(allLineData),
@@ -78,27 +77,11 @@ class History extends React.Component {
     return null;
   }
 
-  handleLineChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { xAxis, yAxis } = this.state;
-    this.setState({
-      line: event.target.value,
-      color: linesByName[event.target.value].color,
-      rows: prepareTableData(
-        deriveLine(formattedData, event.target.value, allLineData),
-      ),
-      graphData: deriveYAxis(
-        deriveXAxis(
-          deriveLine(formattedData, event.target.value, allLineData), xAxis,
-        ),
-        yAxis,
-      ),
-    });
-  };
-
   handleXAxisChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { yAxis, line } = this.state;
+    const {
+      yAxis, formattedData, allLineData,
+    } = this.state;
+    const { line } = this.props;
     this.setState({
       xAxis: event.target.value,
       graphData: deriveYAxis(
@@ -117,8 +100,10 @@ class History extends React.Component {
   };
 
   handleYAxisChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { xAxis, line } = this.state;
+    const {
+      xAxis, formattedData, allLineData,
+    } = this.state;
+    const { line } = this.props;
     this.setState({
       yAxis: event.target.value,
       graphData: deriveYAxis(
@@ -150,26 +135,20 @@ class History extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, line } = this.props;
     const {
-      line,
       rows,
       dataFormat,
       xTickFormat,
       yTickFormat,
-      color,
       graphData,
       xAxis,
       yAxis,
     } = this.state;
+    const { color } = linesByName[line];
     return (
-      <Layout
-        pageTitle="History"
-        toolbarTitle="History"
-      >
+      <div>
         <HistoryMenu
-          line={line}
-          handleLineChange={this.handleLineChange}
           dataFormat={dataFormat}
           xAxis={xAxis}
           handleXAxisChange={this.handleXAxisChange}
@@ -209,13 +188,18 @@ class History extends React.Component {
             : <HistoryTable rows={rows} />
           }
         </Card>
-      </Layout>
+      </div>
     );
   }
 }
 
 History.propTypes = {
   classes: PropTypes.object.isRequired,
+  line: PropTypes.string,
+};
+
+History.defaultProps = {
+  line: 'All lines'
 };
 
 export default withStyles(styles)(History);

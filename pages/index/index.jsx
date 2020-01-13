@@ -5,7 +5,6 @@ import { Grid, Toolbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
-import Layout from '~/components/SimpleLayout';
 import LogoAndTitle from '~/components/LogoAndTitle';
 import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
 import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
@@ -16,6 +15,7 @@ import directionNames from '~/helpers/Directions';
 import DataParser from '~/components/DataParser';
 import SimpleMenu from '~/components/SimpleMenu';
 import About from '~/pages/about';
+import History from '~/pages/history';
 
 const styles = () => ({
 });
@@ -84,10 +84,7 @@ class Index extends Component {
       directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
     }
     return (
-      <Layout
-        pageTitle="Rail Summary"
-        toolbarTitle="Rail Summary"
-      >
+      <div>
         <Grid container spacing={24} justify="space-around" className={classes.container}>
           <Grid container item xs={12} md={8} justify="center" alignItems="center" className={classes.container}>
             <LogoAndTitle
@@ -133,6 +130,9 @@ class Index extends Component {
               />
             </Grid>
           </Grid>
+          <Grid item xs={12} style={{ padding: 24 }}>
+            <History classes={classes} line={currentLine === 'All' ? 'All Lines' : currentLine} />
+          </Grid>
           {currentLine !== 'All' && (
             <Grid item xs={12} style={{ padding: 24 }}>
               <Toolbar color="primary">
@@ -143,7 +143,7 @@ class Index extends Component {
           )}
         </Grid>
         <About />
-      </Layout>
+      </div>
     );
   }
 }
