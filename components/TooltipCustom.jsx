@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import {
   Tooltip,
-  Typography
+  Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import InfoIcon from '@material-ui/icons/Info';
@@ -26,8 +26,9 @@ const TooltipCustom = (props) => {
       <InfoIcon />
     </IconButton>
   );
-  const { classes, title, content } = props;
-  const customIcon = props.children;
+  const {
+    classes, title, content, children,
+  } = props;
   return (
     <Tooltip
       classes={{
@@ -42,7 +43,7 @@ const TooltipCustom = (props) => {
       enterTouchDelay={0}
       leaveTouchDelay={2000}
     >
-      { customIcon || defaultIcon }
+      { children || defaultIcon }
     </Tooltip>
   );
 };
