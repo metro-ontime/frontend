@@ -3,7 +3,6 @@ import {
   Typography,
   Grid,
 } from '@material-ui/core';
-import Circle from '~/components/Circle';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = () => ({
@@ -15,6 +14,14 @@ const styles = () => ({
     marginBottom: 10,
     width: '100%',
   },
+  circle: {
+    width: '25px',
+    padding: 0,
+    height: '25px',
+    margin: 0,
+    borderRadius: '25px',
+    float: 'left',
+  }
 });
 
 const Comparison = ({ classes, comparisons }) => {
@@ -24,7 +31,10 @@ const Comparison = ({ classes, comparisons }) => {
         {comparison.title}
       </Typography>
       <div className={classes.performer}>
-        <Circle color={comparison.color} />
+        <div
+          className={classes.circle}
+          style={{ backgroundColor: comparison.color }}
+        />
         <Typography color="textSecondary" style={{ marginLeft: 10 }} component="h3">
           {comparison.text}
         </Typography>

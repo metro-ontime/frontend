@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { Grid, Toolbar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
+import { withStyles } from '@material-ui/core/styles';
 import flowRight from 'lodash/flowRight';
-import Layout from '~/components/SimpleLayout';
 import LogoAndTitle from '~/components/LogoAndTitle';
 import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
 import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
@@ -15,9 +14,16 @@ import { linesByName } from '~/helpers/LineInfo';
 import directionNames from '~/helpers/Directions';
 import DataParser from '~/components/DataParser';
 import SimpleMenu from '~/components/SimpleMenu';
-import About from '~/pages/about';
+import About from '~/components/About';
+import History from '~/components/history';
 
 const styles = () => ({
+  root: {
+    flexGrow: 1,
+    margin: 0,
+    padding: '0 15px',
+    width: '100%',
+  },
 });
 
 class Index extends Component {
@@ -34,7 +40,7 @@ class Index extends Component {
 
   static async getInitialProps({ query }) {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
-    const { data: { dates } } = await axios.get(`${CONFIG.RAILSTATS_API}/dates`);
+    const dates = await axios.get(`${CONFIG.RAILSTATS_API}/dates`).then(response => response.data);
     return { query, dates, data };
   }
 
@@ -83,28 +89,22 @@ class Index extends Component {
       line = linesByName[currentLine].id;
       directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
     }
+
     return (
-      <Layout
-        pageTitle="Rail Summary"
-        toolbarTitle="Rail Summary"
-      >
-        <Grid container spacing={24} justify="space-around" className={classes.container}>
-          <Grid container item xs={12} md={8} justify="center" alignItems="center" className={classes.container}>
-            <LogoAndTitle
-              timestamp={timestamp}
-              line={currentLine}
-              date={date}
-              altImg="/static/images/logo_network.svg"
-            />
-          </Grid>
+      <Grid container spacing={24} justify="space-around" className={classes.root}>
+        <Grid item>
+          <LogoAndTitle
+            timestamp={timestamp}
+            line={currentLine}
+            date={date}
+            altImg="/static/images/logo_network.svg"
+          />
+        </Grid>
+        <Grid item xs={12}>
           <Grid
             container
             spacing={16}
-            item
-            xs={12}
-            lg={9}
-            justify="space-between"
-            alignItems="flex-start"
+            justify="center"
           >
             <Grid item xs={12} md={2}>
               <FilterPanel
@@ -117,7 +117,7 @@ class Index extends Component {
                 handleDate={this.handleDate}
               />
             </Grid>
-            <Grid item xs={12} md={5} classes={classes}>
+            <Grid item xs={12} md={5}>
               <PerformanceScoreCard
                 data={data}
                 width={width}
@@ -125,7 +125,7 @@ class Index extends Component {
                 arrivalWindow={arrivalWindow}
               />
             </Grid>
-            <Grid item xs={12} md={5} classes={classes}>
+            <Grid item xs={12} md={5}>
               <WaitTimeScoreCard
                 width={width}
                 data={data}
@@ -133,17 +133,26 @@ class Index extends Component {
               />
             </Grid>
           </Grid>
-          {currentLine !== 'All' && (
-            <Grid item xs={12} style={{ padding: 24 }}>
-              <Toolbar color="primary">
-                <SimpleMenu label={`Towards: ${directions[direction]}`} menuItems={directions} handleMenuChange={this.handleDirectionChange} />
-              </Toolbar>
-              <DataParser line={line} direction={0} date={date} />
-            </Grid>
-          )}
         </Grid>
-        <About />
-      </Layout>
+        <Grid item xs={12}>
+          <History line={currentLine === 'All' ? 'All Lines' : currentLine} />
+        </Grid>
+        {currentLine !== 'All' && (
+          <Grid item xs={12}>
+            <Toolbar color="primary">
+              <SimpleMenu
+                label={`Towards: ${directions[direction]}`}
+                menuItems={directions}
+                handleMenuChange={this.handleDirectionChange}
+              />
+            </Toolbar>
+            <DataParser line={line} direction={0} date={date} />
+          </Grid>
+        )}
+        <Grid item xs={12}>
+          <About />
+        </Grid>
+      </Grid>
     );
   }
 }

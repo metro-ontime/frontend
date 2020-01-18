@@ -5,14 +5,14 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesByName, linesById } from '~/helpers/LineInfo';
+import { linesById } from '~/helpers/LineInfo';
 import ScoreCard from './ScoreCard';
 import Comparison from './Comparison';
 
-const styles = theme => ({
+const styles = () => ({
   separator: {
     margin: '10px 0',
-    width: '100%'
+    width: '100%',
   },
 });
 
@@ -88,7 +88,7 @@ const WaitTimeScoreCard = ({
     </Fragment>
   );
 
-  return <ScoreCard title={title} content={content} tooltip={tooltip} />
+  return <ScoreCard title={title} content={content} tooltip={tooltip} />;
 };
 
 export default withStyles(styles)(WaitTimeScoreCard);

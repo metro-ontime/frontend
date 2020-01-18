@@ -11,7 +11,7 @@ import ScoreCard from './ScoreCard';
 import Comparison from './Comparison';
 
 
-const styles = theme => ({
+const styles = () => ({
   separator: {
     margin: 10,
     width: '100%',

@@ -1,31 +1,20 @@
 import React from 'react';
-import Layout from '~/components/Layout';
-import HistoryMenu from '~/components/HistoryMenu';
-import HistoryTable from '~/components/HistoryTable';
+import HistoryMenu from './HistoryMenu';
+import HistoryTable from './HistoryTable';
 import HistoryChart from '~/components/charts/HistoryChart';
 import {
   AppBar, Tab, Tabs, Grid, Card,
 } from '@material-ui/core';
 import axios from 'axios';
 import { withStyles } from '@material-ui/core/styles';
-import { linesByName } from '~/helpers/LineInfo';
 import {
   dateToString, deriveLine, deriveXAxis, deriveYAxis, prepareTableData,
 } from '~/helpers/formatHistory';
+import { linesByName } from '~/helpers/LineInfo';
 import PropTypes from 'prop-types';
 import CONFIG from '~/config';
 
-const styles = theme => ({
-  root: {
-    width: '100%',
-    marginTop: theme.spacing.unit * 3,
-    flexGrow: 1,
-  },
-  card: {
-    maxWidth: 1200,
-    margin: 'auto',
-    marginTop: 20,
-  },
+const styles = () => ({
   chartContainer: {
     margin: 'auto',
     width: '90%',
@@ -38,31 +27,36 @@ class History extends React.Component {
   state = {
     rows: [],
     graphData: [],
-    line: 'All Lines',
     xAxis: 'Last 30 Days',
     xTickFormat: new Array(30).fill('').map((item, i) => dateToString(30 - i)),
     yAxis: 'Average Wait Time',
     yTickFormat: { formatter() { return `${this.value} min`; } },
     dataFormat: 'chart',
-    color: '#dddddd',
+    formattedData: [],
+    allLineData: [],
   };
 
-  static async getInitialProps({ query }) {
+  async componentDidMount() {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/history`);
     const formattedData = Object.values(data[0]);
     const allLineData = data[1];
-    return { query, allLineData, formattedData };
+    this.setState({
+      formattedData,
+      allLineData,
+    });
   }
 
   static getDerivedStateFromProps(props, state) {
     const {
       rows,
       graphData,
-      line,
       xAxis,
       yAxis,
+      formattedData,
+      allLineData,
     } = state;
-    const { formattedData, allLineData } = props;
+    const { line } = props;
+
     if (!rows[0] && !graphData[0]) {
       return {
         rows: prepareTableData(allLineData),
@@ -78,27 +72,11 @@ class History extends React.Component {
     return null;
   }
 
-  handleLineChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { xAxis, yAxis } = this.state;
-    this.setState({
-      line: event.target.value,
-      color: linesByName[event.target.value].color,
-      rows: prepareTableData(
-        deriveLine(formattedData, event.target.value, allLineData),
-      ),
-      graphData: deriveYAxis(
-        deriveXAxis(
-          deriveLine(formattedData, event.target.value, allLineData), xAxis,
-        ),
-        yAxis,
-      ),
-    });
-  };
-
   handleXAxisChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { yAxis, line } = this.state;
+    const {
+      yAxis, formattedData, allLineData,
+    } = this.state;
+    const { line } = this.props;
     this.setState({
       xAxis: event.target.value,
       graphData: deriveYAxis(
@@ -117,8 +95,10 @@ class History extends React.Component {
   };
 
   handleYAxisChange = (event) => {
-    const { formattedData, allLineData } = this.props;
-    const { xAxis, line } = this.state;
+    const {
+      xAxis, formattedData, allLineData,
+    } = this.state;
+    const { line } = this.props;
     this.setState({
       yAxis: event.target.value,
       graphData: deriveYAxis(
@@ -150,72 +130,71 @@ class History extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, line } = this.props;
     const {
-      line,
       rows,
       dataFormat,
       xTickFormat,
       yTickFormat,
-      color,
       graphData,
       xAxis,
       yAxis,
     } = this.state;
+    const { color } = linesByName[line];
     return (
-      <Layout
-        pageTitle="History"
-        toolbarTitle="History"
-      >
-        <HistoryMenu
-          line={line}
-          handleLineChange={this.handleLineChange}
-          dataFormat={dataFormat}
-          xAxis={xAxis}
-          handleXAxisChange={this.handleXAxisChange}
-          yAxis={yAxis}
-          handleYAxisChange={this.handleYAxisChange}
-        />
-        <Card className={classes.card}>
-          <Grid container justify="center" alignItems="center">
-            <Grid item xs={8} />
-            <Grid item xs={4}>
-              <AppBar position="static" color="default">
-                <Tabs
-                  value={dataFormat}
-                  onChange={this.handleTabChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  variant="fullWidth"
-                >
-                  <Tab label="Chart" value="chart" />
-                  <Tab label="Table" value="table" />
-                </Tabs>
-              </AppBar>
-            </Grid>
+      <Card>
+        <Grid container justify="center">
+          <Grid item md={8} xs={12}>
+            <HistoryMenu
+              dataFormat={dataFormat}
+              xAxis={xAxis}
+              handleXAxisChange={this.handleXAxisChange}
+              yAxis={yAxis}
+              handleYAxisChange={this.handleYAxisChange}
+            />
           </Grid>
-          { dataFormat === 'chart' ? (
-            <div className={classes.chartContainer}>
-              <HistoryChart
-                chartFormat="column"
-                graphData={graphData}
-                color={color}
-                xTickFormat={xTickFormat}
-                yTickFormat={yTickFormat}
-                yAxis={yAxis}
-              />
-            </div>
-          )
-            : <HistoryTable rows={rows} />
-          }
-        </Card>
-      </Layout>
+          <Grid item md={4} xs={12}>
+            <AppBar position="static" color="default">
+              <Tabs
+                value={dataFormat}
+                onChange={this.handleTabChange}
+                indicatorColor="primary"
+                textColor="primary"
+                variant="fullWidth"
+              >
+                <Tab label="Chart" value="chart" />
+                <Tab label="Table" value="table" />
+              </Tabs>
+            </AppBar>
+          </Grid>
+        </Grid>
+        { dataFormat === 'chart' ? (
+          <div className={classes.chartContainer}>
+            <HistoryChart
+              chartFormat="column"
+              graphData={graphData}
+              color={color}
+              xTickFormat={xTickFormat}
+              yTickFormat={yTickFormat}
+              yAxis={yAxis}
+            />
+          </div>
+        )
+          : <HistoryTable rows={rows} />
+        }
+      </Card>
     );
   }
 }
 
 History.propTypes = {
-  classes: PropTypes.object.isRequired,
+  classes: PropTypes.object,
+  line: PropTypes.string,
+};
+
+History.defaultProps = {
+  line: 'All lines',
+  classes: {},
 };
 
 export default withStyles(styles)(History);
