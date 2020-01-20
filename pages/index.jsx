@@ -146,7 +146,7 @@ class Index extends Component {
                 handleMenuChange={this.handleDirectionChange}
               />
             </Toolbar>
-            <DataParser line={line} direction={0} date={date} />
+            <DataParser line={line} direction={direction} date={date} />
           </Grid>
         )}
         <Grid item xs={12}>
