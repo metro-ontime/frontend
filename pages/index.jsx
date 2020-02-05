@@ -21,7 +21,7 @@ const styles = () => ({
   root: {
     flexGrow: 1,
     margin: '0 auto',
-    maxWidth: '1000px',
+    maxWidth: '1200px',
   },
 });
 
@@ -100,23 +100,21 @@ class Index extends Component {
           />
         </Grid>
         <Grid item xs={12}>
+          <FilterPanel
+            line={currentLine}
+            handleLineChange={this.handleLineChange}
+            arrivalWindow={arrivalWindow}
+            handleArrivalWindow={this.handleArrivalWindow}
+            date={date}
+            dates={dates}
+            handleDate={this.handleDate}
+          />
           <Grid
             container
             spacing={16}
             justify="center"
           >
-            <Grid item xs={12} md={2}>
-              <FilterPanel
-                line={currentLine}
-                handleLineChange={this.handleLineChange}
-                arrivalWindow={arrivalWindow}
-                handleArrivalWindow={this.handleArrivalWindow}
-                date={date}
-                dates={dates}
-                handleDate={this.handleDate}
-              />
-            </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <PerformanceScoreCard
                 data={data}
                 width={width}
@@ -124,7 +122,7 @@ class Index extends Component {
                 arrivalWindow={arrivalWindow}
               />
             </Grid>
-            <Grid item xs={12} md={5}>
+            <Grid item xs={12} md={6}>
               <WaitTimeScoreCard
                 width={width}
                 data={data}

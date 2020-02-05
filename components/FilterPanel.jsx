@@ -4,16 +4,25 @@ import {
   InputLabel,
   Select,
   Card,
-  CardHeader,
-  CardContent,
   MenuItem,
   ListItemAvatar,
   Avatar,
+  Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import { lines } from '~/helpers/LineInfo';
 
 const styles = theme => ({
+  card: {
+    display: 'flex',
+    alignItems: 'center',
+    margin: '15px 0',
+    padding: theme.spacing.unit,
+    flexDirection: 'row',
+    '@media(max-width: 500px)': {
+      flexDirection: 'column',
+    },
+  },
   avatar: {
     height: 25,
     width: 25,
@@ -22,7 +31,7 @@ const styles = theme => ({
   selectEmpty: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: '-.25em',
-    width: '100%'
+    width: '100%',
   },
   lineDot: {
     width: '100%',
@@ -33,11 +42,11 @@ const styles = theme => ({
   },
   formControl: {
     padding: theme.spacing.unit,
-    width: '100%',
+    width: '150px',
   },
   label: {
-    padding: theme.spacing.unit
-  }
+    padding: theme.spacing.unit,
+  },
 });
 
 const arrivalWindows = [
@@ -92,54 +101,53 @@ const FilterPanel = (props) => {
       { item }
     </MenuItem>
   ));
+
   return (
-    <Card>
-      <CardHeader style={{ paddingBottom: 0 }} title="Filter By" titleTypographyProps={{ variant: 'body1' }} />
-      <CardContent style={{ paddingTop: 0, paddingLeft: '.5em' }}>
-        <FormControl className={classes.formControl}>
-          <InputLabel className={ classes.label }>Line</InputLabel>
-          <Select
-            className={classes.selectEmpty}
-            value={line}
-            onChange={handleLineChange}
-            name="Line"
-          >
-            <MenuItem value="All">
-              <div style={{ display: 'flex', alignItems: 'center' }}>
-                <ListItemAvatar>
-                  <Avatar className={classes.avatar}>
-                    <div style={{ backgroundColor: '#dddddd' }} className={classes.lineDot} />
-                  </Avatar>
-                </ListItemAvatar>
-                All Lines
-              </div>
-            </MenuItem>
-            { lineSelectors }
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel className={ classes.label }>Cutoff</InputLabel>
-          <Select
-            className={classes.selectEmpty}
-            value={arrivalWindow}
-            onChange={handleArrivalWindow}
-            name="arrivalWindow"
-          >
-            { windows }
-          </Select>
-        </FormControl>
-        <FormControl className={classes.formControl}>
-          <InputLabel className={ classes.label }>Date</InputLabel>
-          <Select
-            className={classes.selectEmpty}
-            value={date}
-            onChange={handleDate}
-            name="Date"
-          >
-            { dateSelectors }
-          </Select>
-        </FormControl>
-      </CardContent>
+    <Card className={classes.card}>
+      <Typography className={classes.label} variant="body1">Filter By: </Typography>
+      <FormControl className={classes.formControl}>
+        <InputLabel className={classes.label}>Line</InputLabel>
+        <Select
+          className={classes.selectEmpty}
+          value={line}
+          onChange={handleLineChange}
+          name="Line"
+        >
+          <MenuItem value="All">
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <ListItemAvatar>
+                <Avatar className={classes.avatar}>
+                  <div style={{ backgroundColor: '#dddddd' }} className={classes.lineDot} />
+                </Avatar>
+              </ListItemAvatar>
+              All Lines
+            </div>
+          </MenuItem>
+          { lineSelectors }
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel className={classes.label}>Cutoff</InputLabel>
+        <Select
+          className={classes.selectEmpty}
+          value={arrivalWindow}
+          onChange={handleArrivalWindow}
+          name="arrivalWindow"
+        >
+          { windows }
+        </Select>
+      </FormControl>
+      <FormControl className={classes.formControl}>
+        <InputLabel className={classes.label}>Date</InputLabel>
+        <Select
+          className={classes.selectEmpty}
+          value={date}
+          onChange={handleDate}
+          name="Date"
+        >
+          { dateSelectors }
+        </Select>
+      </FormControl>
     </Card>
   );
 };
