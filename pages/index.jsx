@@ -20,9 +20,8 @@ import History from '~/components/history';
 const styles = () => ({
   root: {
     flexGrow: 1,
-    margin: 0,
-    padding: '0 15px',
-    width: '100%',
+    margin: '0 auto',
+    maxWidth: '1000px',
   },
 });
 

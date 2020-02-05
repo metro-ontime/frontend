@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import CONFIG from '~/config';
 import Highchart from './charts/Highchart';
 import LinearIndeterminate from './LinearIndeterminate';
 import { prepareObservations, prepareSchedule } from '~/helpers/PrepareData';
@@ -30,10 +31,10 @@ class DataParser extends Component {
   }
 
   fetchData(line, date) {
-    const vehiclePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/vehicle_tracking/processed/${line}_lametro-rail/${date}.csv`;
+    const vehiclePath = `${CONFIG.RAILSTATS_API}/tracking/${line}?date=${date}`;
     prepareObservations(vehiclePath, this.updateTrips);
 
-    const schedulePath = `https://s3-us-west-1.amazonaws.com/h4la-metro-performance/data/schedule/${line}_lametro-rail/${date}.csv`;
+    const schedulePath = `${CONFIG.RAILSTATS_API}/schedule/${line}?date=${date}`;
     prepareSchedule(schedulePath, line, this.updateSchedule);
   }
 
