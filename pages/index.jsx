@@ -74,7 +74,7 @@ class Index extends Component {
 
   handleLineChange = (e) => {
     const selectedLine = e.target.value;
-    this.setState({ currentLine: selectedLine }, this.updateData)
+    this.setState({ currentLine: selectedLine, error: true }, this.updateData)
   }
 
   handleArrivalWindow = (e) => {
@@ -84,7 +84,7 @@ class Index extends Component {
 
   handleDate = (e) => {
     const newValue = e.target.value;
-    this.setState({ date: newValue }, this.updateData);
+    this.setState({ date: newValue, error: true }, this.updateData);
   }
 
   render() {
@@ -157,9 +157,11 @@ class Index extends Component {
           }
           </Grid>
         </Grid>
+        {/*
         <Grid item xs={12}>
           <History line={currentLine === 'All' ? 'All Lines' : currentLine} />
         </Grid>
+        */}
         <Grid item xs={12}>
           line: {currentLine} direction: {direction} date={date}
         </Grid>
