@@ -16,6 +16,7 @@ import DataParser from '~/components/DataParser';
 import SimpleMenu from '~/components/SimpleMenu';
 import About from '~/components/About';
 import History from '~/components/history';
+import MareyLoader from '~/components/MareyLoader';
 
 const styles = () => ({
   root: {
@@ -174,7 +175,7 @@ class Index extends Component {
                 handleMenuChange={this.handleDirectionChange}
               />
             </Toolbar>
-            <DataParser line={line} direction={direction} date={date} />
+            <MareyLoader line={line} direction={direction} date={date} />
           </Grid>
         )}
         <Grid item xs={12}>
