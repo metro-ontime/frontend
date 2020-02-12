@@ -29,6 +29,7 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      error: false,
       data: props.data,
       currentLine: 'All',
       arrivalWindow: '1_min',
@@ -39,7 +40,7 @@ class Index extends Component {
 
   static async getInitialProps({ query }) {
     const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
-    const dates = await axios.get(`${CONFIG.RAILSTATS_API}/dates`).then(response => response.data);
+    const dates = await axios.get(`${CONFIG.RAILSTATS_API}/network/dates`).then(response => response.data);
     return { query, dates, data };
   }
 
@@ -47,27 +48,43 @@ class Index extends Component {
     this.setState({ direction: index });
   }
 
+  updateData = () => {
+    if (this.state.currentLine === 'All') {
+      Promise.all([
+        axios.get(`${CONFIG.RAILSTATS_API}/network?date=${this.state.date}`),
+        axios.get(`${CONFIG.RAILSTATS_API}/network/dates`)
+      ])
+        .then(arr => {
+          this.setState({ data: arr[0].data, dates: arr[1].data, error: false })
+        })
+    } else {
+      Promise.all([
+        axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}?date=${this.state.date}`),
+        axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}/dates`)
+      ])
+        .then(arr => {
+          if (!arr[0].data.total_arrivals_analyzed) {
+            throw new Error('data error')
+          }
+          this.setState({ data: arr[0].data, dates: arr[1].data, error: false })
+        })
+        .catch(err => this.setState({ error: true }))
+    }
+  }
+
   handleLineChange = (e) => {
     const selectedLine = e.target.value;
-    if (selectedLine === 'All') {
-      axios.get(`${CONFIG.RAILSTATS_API}/network`)
-        .then(({ data }) => this.setState({ data, currentLine: selectedLine }));
-    } else {
-      axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[selectedLine].id}`)
-        .then(({ data }) => this.setState({ data, currentLine: selectedLine }));
-    }
+    this.setState({ currentLine: selectedLine }, this.updateData)
   }
 
   handleArrivalWindow = (e) => {
     const newValue = e.target.value;
-    this.setState({ arrivalWindow: newValue });
+    this.setState({ arrivalWindow: newValue }, this.updateData);
   }
 
   handleDate = (e) => {
     const newValue = e.target.value;
-    this.setState({ date: newValue });
-    axios.get(`${CONFIG.RAILSTATS_API}/network?date=${newValue}`)
-      .then(({ data }) => this.setState({ data }));
+    this.setState({ date: newValue }, this.updateData);
   }
 
   render() {
@@ -114,6 +131,7 @@ class Index extends Component {
             spacing={16}
             justify="center"
           >
+          { !this.state.error &&
             <Grid item xs={12} md={6}>
               <PerformanceScoreCard
                 data={data}
@@ -122,6 +140,8 @@ class Index extends Component {
                 arrivalWindow={arrivalWindow}
               />
             </Grid>
+          }
+          { !this.state.error &&
             <Grid item xs={12} md={6}>
               <WaitTimeScoreCard
                 width={width}
@@ -129,12 +149,21 @@ class Index extends Component {
                 currentLine={currentLine}
               />
             </Grid>
+          }
+          { this.state.error &&
+            <Grid item xs={12}>
+              There was an error fetching the data.
+            </Grid>
+          }
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <History line={currentLine === 'All' ? 'All Lines' : currentLine} />
         </Grid>
-        {currentLine !== 'All' && (
+        <Grid item xs={12}>
+          line: {currentLine} direction: {direction} date={date}
+        </Grid>
+        {!this.state.error && currentLine !== 'All' && (
           <Grid item xs={12}>
             <Toolbar color="primary">
               <SimpleMenu
