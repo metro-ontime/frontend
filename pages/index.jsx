@@ -162,9 +162,6 @@ class Index extends Component {
           <History line={currentLine === 'All' ? 'All Lines' : currentLine} />
         </Grid>
         */}
-        <Grid item xs={12}>
-          line: {currentLine} direction: {direction} date={date}
-        </Grid>
         {!this.state.error && currentLine !== 'All' && (
           <Grid item xs={12}>
             <Toolbar color="primary">
