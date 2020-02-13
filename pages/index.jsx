@@ -12,7 +12,6 @@ import FilterPanel from '~/components/FilterPanel';
 import CONFIG from '~/config';
 import { linesByName } from '~/helpers/LineInfo';
 import directionNames from '~/helpers/Directions';
-import DataParser from '~/components/DataParser';
 import SimpleMenu from '~/components/SimpleMenu';
 import About from '~/components/About';
 import History from '~/components/history';

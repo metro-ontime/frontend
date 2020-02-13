@@ -1,7 +1,7 @@
 const d3 = require('d3')
 
 export default class Marey {
-  constructor(schedule, observations, stations, timeDomain) {
+  constructor(schedule, observations, stations, timeDomain, initDirection = 0) {
     this.schedule = schedule
     this.observations = observations
     this.stations = stations
@@ -13,36 +13,30 @@ export default class Marey {
     this.yScaleLabels = d3.scaleLinear().domain([0, 1]).range([0, 250])
     this.yScaleChart = d3.scaleTime().domain(timeDomain).range([250, this.height * 4])
     this.state = {
-      direction: 0
+      direction: initDirection
     }
   }
   
-  drawLine(path, direction) {
-    return d3.line()
-      .x(d => this.xScaleChart(direction === "0" ? d.position : 1 - d.position))
-      .y(d => this.yScaleChart(new Date(d.datetime)))(path)
-  }
-  
-  drawScheduleLine(path, direction) {
+  drawLine = path => {
     return d3.line()
       .x(d => this.xScaleChart(d.position))
       .y(d => this.yScaleChart(new Date(d.datetime)))(path)
   }
   
-  stationLine(position, timeDomain) {
+  stationLine = (position, timeDomain) => {
     const path = timeDomain.map(time => ({ x: this.xScaleChart(position), y: this.yScaleChart(time) }))
     return d3.line()
       .x(d => d.x)
       .y(d => d.y)(path)
   }
   
-  changeDirection(direction) {
+  changeDirection = (direction) => {
     this.state.direction = direction
     this.yScaleChart.range([250, this.height * 4])
     this.draw(this.container)
   }
   
-  draw(container) {
+  draw = (container) => {
     this.container = container
     container.selectAll("svg").remove()
     const svg = container.append("svg")
@@ -94,18 +88,18 @@ export default class Marey {
     this.scheduleLines = svg.append('g')
     
     const tripPaths = this.tripLines.selectAll('path')
-      .data(this.observations.filter(obj => parseInt(obj.direction) === this.state.direction))
+      .data(this.observations.filter(obj => obj.direction === this.state.direction))
       .join('path')
-        .attr('d', d => this.drawLine(d.path, d.direction))
+        .attr('d', d => this.drawLine(d.path))
         .attr("clip-path","url(#chart-bounds)")
         .attr('stroke', '#f00')
         .attr('stroke-width', 2)
         .attr('fill', 'none');
     
     const schedulePaths = this.scheduleLines.selectAll('path')
-      .data(this.schedule.filter(obj => parseInt(obj.direction) === this.state.direction))
+      .data(this.schedule.filter(obj => obj.direction === this.state.direction))
       .join('path')
-        .attr('d', d => this.drawScheduleLine(d.path, d.direction))
+        .attr('d', d => this.drawLine(d.path))
         .attr("clip-path","url(#chart-bounds)")
         .attr('stroke', '#bbb')
         .attr('stroke-width', 2)
@@ -113,8 +107,8 @@ export default class Marey {
     
     const zoomed = () => {
       this.yScaleChart.range([250, this.height * 4].map(d => d3.event.transform.applyY(d)));
-      tripPaths.attr('d', d => this.drawLine(d.path, d.direction));
-      schedulePaths.attr('d', d => this.drawScheduleLine(d.path, d.direction));
+      tripPaths.attr('d', d => this.drawLine(d.path));
+      schedulePaths.attr('d', d => this.drawLine(d.path));
       times.call(leftAxis);
     }
     

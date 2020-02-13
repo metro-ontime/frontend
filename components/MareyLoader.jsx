@@ -1,7 +1,8 @@
 import React from 'react';
 import CONFIG from '~/config';
-import Marey from './Marey';
+import Marey from './charts/Marey';
 const d3 = require('d3');
+const d3Array = require('d3-array')
 
 export default class MareyLoader extends React.Component {
   constructor(props) {
@@ -13,13 +14,9 @@ export default class MareyLoader extends React.Component {
     this.fetchData(line, date, direction);
   }
    
-  componentWillUpdate(prevProps) {
+  componentDidUpdate(prevProps) {
     const { date, line, direction } = this.props;
-    if (date !== prevProps.date || line !== prevProps.line) {
-      this.fetchData(line, date, direction);
-    } else if (direction !== prevProps.direction) {
-      this.diagram.changeDirection(direction)
-    }
+    this.fetchData(line, date, direction);
   }
 
   fetchData(line, date, direction) {
@@ -30,47 +27,57 @@ export default class MareyLoader extends React.Component {
       .then(arr => {
         const tracking = arr[0]
         const schedule = arr[1]
-        const stations = arr[2]
+        const stations = this.prepareStations(arr[2], direction)
         const vehicleTrips = this.prepareTrips(tracking)
-        const scheduleTrips = this.prepareScheduleTrips(schedule, stations)
+        const scheduleTrips = this.prepareScheduleTrips(schedule, stations, direction)
         const minDatetime = d3.min(schedule, d => d.datetime)
         const maxDatetime = d3.max(schedule, d => d.datetime)
         const timeDomain = [new Date(minDatetime), new Date(maxDatetime)]
-        this.diagram = new Marey(scheduleTrips, vehicleTrips, stations, timeDomain)
-        const svg = d3.select(this.node)
-        this.diagram.draw(svg)
+        this.diagram = new Marey(scheduleTrips, vehicleTrips, stations, timeDomain, direction)
+        d3.select(this.node).call(this.diagram.draw)
+      })
+      .catch(err => {
+        console.log(err)
+        d3.select(this.node).selectAll('svg').remove()
       })
   }
 
-  prepareTrips(observations) {
-    const trips = [];
-    observations.reduce((acc, cur, idx) => {
-      if (acc.trip_id !== cur.trip_id) {
-        trips.push(acc);
-        return { trip_id: cur.trip_id, path: [{ datetime: cur.datetime, position: cur.relative_position }], direction: cur.direction_id }
-      } else {
-        acc.path.push({ datetime: cur.datetime, position: cur.relative_position });
-        return acc
-      }
-    }, { trip_id: observations[0].trip_id, path: [], direction: observations[0].direction_id });
-    return trips
+  prepareStations(stations, direction) {
+    return stations.map(station => ({
+      ...station,
+      relative_position: direction === 0 ? station.relative_position : 1 - station.relative_position
+    }))
   }
 
-  prepareScheduleTrips(schedule, stations) {
-    const trips = [];
-    schedule.reduce((acc, cur, idx) => {
-      if (acc.trip_id !== cur.trip_id) {
-        trips.push(acc);
-        return { trip_id: cur.trip_id, path: [{ datetime: cur.datetime, position: stations.find(s => parseInt(s.stop_id) === parseInt(cur.stop_id)).relative_position }], direction: cur.direction_id }
-      } else {
-        acc.path.push({ datetime: cur.datetime, position: stations.find(s => parseInt(s.stop_id) === parseInt(cur.stop_id)).relative_position });
-        return acc
-      }
-    }, { trip_id: schedule[0].trip_id, path: [], direction: schedule[0].direction_id });
-    return trips
+  prepareTrips(observations) {
+    return Array.from(d3Array.group(observations, d => d.trip_id), ([trip_id, trip]) => {
+      return ({
+        path: trip.map(obs => ({
+          datetime: obs.datetime,
+          position: parseInt(obs.direction_id) === 0 ? obs.relative_position : 1 - obs.relative_position
+        })),
+        direction: parseInt(trip[0].direction_id)
+      })
+    })
+  }
+
+  prepareScheduleTrips(schedule, stations, direction) {
+    const trips = Array.from(d3Array.group(schedule, d => d.direction_id, d => d.trip_id), ([direction_id, trips]) => ({ direction_id, trips }))
+      .find(el => parseInt(el.direction_id) === direction)
+      .trips
+    return Array.from(trips, ([trip_id, trip]) => trip)
+      .map(trip => {
+        return ({
+          path: trip.map(stop => ({
+            datetime: stop.datetime,
+            position: stations.find(station => parseInt(station.stop_id) === parseInt(stop.stop_id)).relative_position,
+          })),
+          direction: direction
+        })
+      })
   }
 
   render() {
-    return <svg ref={node => { this.node = node }} style={{ width: '100%', height: 1000 }}></svg>
+    return <div ref={node => { this.node = node }} style={{ width: '100%', height: 1000 }}></div>
   }
 }
