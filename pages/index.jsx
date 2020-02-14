@@ -14,7 +14,6 @@ import { linesByName } from '~/helpers/LineInfo';
 import directionNames from '~/helpers/Directions';
 import SimpleMenu from '~/components/SimpleMenu';
 import About from '~/components/About';
-import History from '~/components/history';
 import MareyLoader from '~/components/MareyLoader';
 
 const styles = () => ({
@@ -157,11 +156,6 @@ class Index extends Component {
           }
           </Grid>
         </Grid>
-        {/*
-        <Grid item xs={12}>
-          <History line={currentLine === 'All' ? 'All Lines' : currentLine} />
-        </Grid>
-        */}
         {!this.state.error && currentLine !== 'All' && (
           <Grid item xs={12}>
             <Toolbar color="primary">
@@ -171,7 +165,7 @@ class Index extends Component {
                 handleMenuChange={this.handleDirectionChange}
               />
             </Toolbar>
-            <MareyLoader line={line} direction={direction} date={date} />
+            <MareyLoader line={line} direction={direction} date={date} width={width} />
           </Grid>
         )}
         <Grid item xs={12}>

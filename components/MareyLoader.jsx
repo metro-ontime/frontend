@@ -1,10 +1,11 @@
 import React from 'react';
 import CONFIG from '~/config';
 import Marey from './charts/Marey';
-const d3 = require('d3');
-const d3Array = require('d3-array')
+import { select, selectAll } from 'd3-selection'
+import { min, max, group } from 'd3-array'
+import { csv } from 'd3-fetch'
 
-export default class MareyLoader extends React.Component {
+class MareyLoader extends React.Component {
   constructor(props) {
     super(props)
   }
@@ -23,22 +24,23 @@ export default class MareyLoader extends React.Component {
     const vehiclePath = `${CONFIG.RAILSTATS_API}/tracking/${line}?date=${date}`;
     const schedulePath = `${CONFIG.RAILSTATS_API}/schedule/${line}?date=${date}`;
     const stationPath = `https://raw.githubusercontent.com/metro-ontime/performance_tracker/master/data/line_info/${line}/${line}_${direction}_stations.csv`;
-    Promise.all([d3.csv(vehiclePath), d3.csv(schedulePath), d3.csv(stationPath)])
+    Promise.all([csv(vehiclePath), csv(schedulePath), csv(stationPath)])
       .then(arr => {
         const tracking = arr[0]
         const schedule = arr[1]
         const stations = this.prepareStations(arr[2], direction)
         const vehicleTrips = this.prepareTrips(tracking)
         const scheduleTrips = this.prepareScheduleTrips(schedule, stations, direction)
-        const minDatetime = d3.min(schedule, d => d.datetime)
-        const maxDatetime = d3.max(schedule, d => d.datetime)
+        const minDatetime = min(schedule, d => d.datetime)
+        const maxDatetime = max(schedule, d => d.datetime)
         const timeDomain = [new Date(minDatetime), new Date(maxDatetime)]
-        this.diagram = new Marey(scheduleTrips, vehicleTrips, stations, timeDomain, direction)
-        d3.select(this.node).call(this.diagram.draw)
+        const width = ({ xl: 1850, lg: 1100, md: 900, sm: 550 })[this.props.width]
+        this.diagram = new Marey(scheduleTrips, vehicleTrips, stations, timeDomain, direction, width, 1000)
+        select(this.node).call(this.diagram.draw)
       })
       .catch(err => {
         console.log(err)
-        d3.select(this.node).selectAll('svg').remove()
+        select(this.node).selectAll('svg').remove()
       })
   }
 
@@ -50,7 +52,7 @@ export default class MareyLoader extends React.Component {
   }
 
   prepareTrips(observations) {
-    return Array.from(d3Array.group(observations, d => d.trip_id), ([trip_id, trip]) => {
+    return Array.from(group(observations, d => d.trip_id), ([trip_id, trip]) => {
       return ({
         path: trip.map(obs => ({
           datetime: obs.datetime,
@@ -62,7 +64,7 @@ export default class MareyLoader extends React.Component {
   }
 
   prepareScheduleTrips(schedule, stations, direction) {
-    const trips = Array.from(d3Array.group(schedule, d => d.direction_id, d => d.trip_id), ([direction_id, trips]) => ({ direction_id, trips }))
+    const trips = Array.from(group(schedule, d => d.direction_id, d => d.trip_id), ([direction_id, trips]) => ({ direction_id, trips }))
       .find(el => parseInt(el.direction_id) === direction)
       .trips
     return Array.from(trips, ([trip_id, trip]) => trip)
@@ -78,6 +80,16 @@ export default class MareyLoader extends React.Component {
   }
 
   render() {
-    return <div ref={node => { this.node = node }} style={{ width: '100%', height: 1000 }}></div>
+    return <div ref={node => { this.node = node }} style={{
+      width: '100%',
+      height: 1000,
+      display: 'flex',
+      justifyContent: 'center',
+      background: 'white',
+      borderRadius: '4px',
+      boxShadow: '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)'
+    }}></div>
   }
 }
+
+export default MareyLoader

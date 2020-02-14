@@ -1,31 +1,37 @@
-const d3 = require('d3')
+import { select, selectAll, event as currentEvent } from 'd3-selection'
+import { scaleLinear, scaleTime } from 'd3-scale'
+import { line } from 'd3-shape'
+import { axisLeft } from 'd3-axis'
+import { timeFormat } from 'd3-time-format'
+import { timeMinute } from 'd3-time'
+import { zoom } from 'd3-zoom'
 
 export default class Marey {
-  constructor(schedule, observations, stations, timeDomain, initDirection = 0) {
+  constructor(schedule, observations, stations, timeDomain, initDirection = 0, width, height) {
     this.schedule = schedule
     this.observations = observations
     this.stations = stations
     this.timeDomain = timeDomain
-    this.width = 1000
-    this.height = 1000
-    this.xScaleLeftAxis = d3.scaleLinear().domain([0, 1]).range([0, 60])
-    this.xScaleChart = d3.scaleLinear().domain([0, 1]).range([60, this.width])
-    this.yScaleLabels = d3.scaleLinear().domain([0, 1]).range([0, 250])
-    this.yScaleChart = d3.scaleTime().domain(timeDomain).range([250, this.height * 4])
+    this.width = width
+    this.height = height
+    this.xScaleLeftAxis = scaleLinear().domain([0, 1]).range([0, 60])
+    this.xScaleChart = scaleLinear().domain([0, 1]).range([60, this.width])
+    this.yScaleLabels = scaleLinear().domain([0, 1]).range([0, 250])
+    this.yScaleChart = scaleTime().domain(timeDomain).range([250, this.height * 4])
     this.state = {
       direction: initDirection
     }
   }
   
   drawLine = path => {
-    return d3.line()
+    return line()
       .x(d => this.xScaleChart(d.position))
       .y(d => this.yScaleChart(new Date(d.datetime)))(path)
   }
   
   stationLine = (position, timeDomain) => {
     const path = timeDomain.map(time => ({ x: this.xScaleChart(position), y: this.yScaleChart(time) }))
-    return d3.line()
+    return line()
       .x(d => d.x)
       .y(d => d.y)(path)
   }
@@ -55,9 +61,9 @@ export default class Marey {
     const timeArea = svg.append('g')
     const labelArea = svg.append('g')
     const chart = svg.append('g')
-    const leftAxis = d3.axisLeft(this.yScaleChart)
-      .ticks(d3.timeMinute.every(30))
-      .tickFormat(d3.timeFormat("%-I:%M %p"));
+    const leftAxis = axisLeft(this.yScaleChart)
+      .ticks(timeMinute.every(30))
+      .tickFormat(timeFormat("%-I:%M %p"));
     
     const stationLabels = labelArea.append('g')
       .selectAll('text')
@@ -106,14 +112,13 @@ export default class Marey {
         .attr('fill', 'none');
     
     const zoomed = () => {
-      this.yScaleChart.range([250, this.height * 4].map(d => d3.event.transform.applyY(d)));
+      this.yScaleChart.range([250, this.height * 4].map(d => currentEvent.transform.applyY(d)));
       tripPaths.attr('d', d => this.drawLine(d.path));
       schedulePaths.attr('d', d => this.drawLine(d.path));
       times.call(leftAxis);
     }
     
-    const zoom = d3.zoom().on("zoom", zoomed);
-    svg.call(zoom);
+    svg.call(zoom().on("zoom", zoomed));
     svg.style('cursor', 'pointer')
     
     return svg
