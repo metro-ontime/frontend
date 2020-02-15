@@ -1,10 +1,10 @@
-FROM node:10.7
+FROM node:12.3
 
 COPY . /src
 WORKDIR /src
 
-RUN npm install --production && npm run build
+RUN yarn install --production && yarn run build
 
 EXPOSE 3000
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["yarn", "start"]
