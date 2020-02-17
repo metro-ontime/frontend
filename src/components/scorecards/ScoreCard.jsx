@@ -10,10 +10,11 @@ const styles = theme => ({
   root: {
     padding: 0,
     textAlign: 'center',
-    color: theme.palette.text.secondary,
+    color: '#000',
     position: 'relative',
     width: '100%',
     margin: 0,
+    height: '100%'
   },
   content: {
     padding: 10,

@@ -1,11 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
-const CompressionPlugin = require('compression-webpack-plugin');
 
 module.exports = {
-  mode: 'production',
-  output: {
-    filename: '[name].[contenthash].js'
-  },
+  mode: 'development',
   module: {
     rules: [
       {
@@ -41,10 +37,10 @@ module.exports = {
       "~": __dirname
     }
   },
+  devtool: 'inline-source-map',
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/index.html'
-    }),
-    new CompressionPlugin()
+    })
   ]
 }
