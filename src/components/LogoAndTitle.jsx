@@ -10,8 +10,8 @@ import withWidth from '@material-ui/core/withWidth';
 import flowRight from 'lodash/flowRight';
 import Moment from 'react-moment';
 import 'moment-timezone';
-import TooltipCustom from '~/components/TooltipCustom';
-import { linesByName } from '~/helpers/LineInfo';
+import TooltipCustom from './TooltipCustom.jsx';
+import { linesByName } from '../helpers/LineInfo.jsx';
 
 const styles = theme => ({
   card: {

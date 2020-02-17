@@ -1,20 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import { Grid, Toolbar } from '@material-ui/core';
-import withWidth from '@material-ui/core/withWidth';
-import { withStyles } from '@material-ui/core/styles';
-import flowRight from 'lodash/flowRight';
-import LogoAndTitle from '~/components/LogoAndTitle';
-import PerformanceScoreCard from '~/components/scorecards/PerformanceScoreCard';
-import WaitTimeScoreCard from '~/components/scorecards/WaitTimeScoreCard';
-import FilterPanel from '~/components/FilterPanel';
-import CONFIG from '~/config';
-import { linesByName } from '~/helpers/LineInfo';
-import directionNames from '~/helpers/Directions';
-import SimpleMenu from '~/components/SimpleMenu';
-import About from '~/components/About';
-import MareyLoader from '~/components/MareyLoader';
+// import LogoAndTitle from './components/LogoAndTitle.jsx';
+// import PerformanceScoreCard from './components/scorecards/PerformanceScoreCard.jsx';
+// import WaitTimeScoreCard from './components/scorecards/WaitTimeScoreCard.jsx';
+// import FilterPanel from './components/FilterPanel.jsx';
+import CONFIG from '../config';
+import { linesByName } from './helpers/LineInfo.jsx';
+import directionNames from './helpers/Directions';
+// import SimpleMenu from './components/SimpleMenu.jsx';
+// import About from './components/About.jsx';
+// import MareyLoader from './components/MareyLoader.jsx';
 
 const styles = () => ({
   root: {
@@ -28,19 +23,25 @@ class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: false,
-      data: props.data,
+      error: true,
+      data: null,
+      timestamp: null,
       currentLine: 'All',
       arrivalWindow: '1_min',
-      date: props.dates[props.dates.length - 1],
+      date: null,
+      dates: [],
       direction: 0,
     };
   }
 
-  static async getInitialProps({ query }) {
-    const { data } = await axios.get(`${CONFIG.RAILSTATS_API}/network`);
-    const dates = await axios.get(`${CONFIG.RAILSTATS_API}/network/dates`).then(response => response.data);
-    return { query, dates, data };
+  componentDidMount() {
+    const urls = [`${CONFIG.RAILSTATS_API}/network`, `${CONFIG.RAILSTATS_API}/network/dates`]
+    Promise.all(urls.map(url => fetch(url).then(response => response.json())))
+      .then(arr => {
+        const data = arr[0];
+        const dates = arr[1];
+        this.setState({ dates, data, date: dates[dates.length - 1], timestamp: data.timestamp });
+      })
   }
 
   handleDirectionChange = (newDirection, index) => {
@@ -50,16 +51,16 @@ class Index extends Component {
   updateData = () => {
     if (this.state.currentLine === 'All') {
       Promise.all([
-        axios.get(`${CONFIG.RAILSTATS_API}/network?date=${this.state.date}`),
-        axios.get(`${CONFIG.RAILSTATS_API}/network/dates`)
+        fetch(`${CONFIG.RAILSTATS_API}/network?date=${this.state.date}`),
+        fetch(`${CONFIG.RAILSTATS_API}/network/dates`)
       ])
         .then(arr => {
           this.setState({ data: arr[0].data, dates: arr[1].data, error: false })
         })
     } else {
       Promise.all([
-        axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}?date=${this.state.date}`),
-        axios.get(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}/dates`)
+        fetch(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}?date=${this.state.date}`),
+        fetch(`${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}/dates`)
       ])
         .then(arr => {
           if (!arr[0].data.total_arrivals_analyzed) {
@@ -87,17 +88,16 @@ class Index extends Component {
   }
 
   render() {
-    const {
-      classes, width, dates,
-    } = this.props;
+    const { classes, width } = this.props;
     const {
       currentLine,
       arrivalWindow,
       date,
       data,
+      dates,
       direction,
+      timestamp
     } = this.state;
-    const { timestamp } = data;
     let line;
     let directions;
     if (currentLine !== 'All') {
@@ -105,17 +105,19 @@ class Index extends Component {
       directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
     }
 
+    return <div>Railstats</div>
+    /*
     return (
-      <Grid container spacing={24} justify="space-around" className={classes.root}>
-        <Grid item>
+      <div className={classes.root}>
+        <div>
           <LogoAndTitle
             timestamp={timestamp}
             line={currentLine}
             date={date}
             altImg="/static/images/logo_network.svg"
           />
-        </Grid>
-        <Grid item xs={12}>
+        </div>
+        <div>
           <FilterPanel
             line={currentLine}
             handleLineChange={this.handleLineChange}
@@ -125,39 +127,35 @@ class Index extends Component {
             dates={dates}
             handleDate={this.handleDate}
           />
-          <Grid
-            container
-            spacing={16}
-            justify="center"
-          >
+          <div>
           { !this.state.error &&
-            <Grid item xs={12} md={6}>
+            <div>
               <PerformanceScoreCard
                 data={data}
                 width={width}
                 currentLine={currentLine}
                 arrivalWindow={arrivalWindow}
               />
-            </Grid>
+            </div>
           }
           { !this.state.error &&
-            <Grid item xs={12} md={6}>
+            <div>
               <WaitTimeScoreCard
                 width={width}
                 data={data}
                 currentLine={currentLine}
               />
-            </Grid>
+            </div>
           }
           { this.state.error &&
-            <Grid item xs={12}>
+            <div>
               There was an error fetching the data.
-            </Grid>
+            </div>
           }
-          </Grid>
-        </Grid>
+          </div>
+        </div>
         {!this.state.error && currentLine !== 'All' && (
-          <Grid item xs={12}>
+          <div>
             <Toolbar color="primary">
               <SimpleMenu
                 label={`Towards: ${directions[direction]}`}
@@ -166,13 +164,14 @@ class Index extends Component {
               />
             </Toolbar>
             <MareyLoader line={line} direction={direction} date={date} width={width} />
-          </Grid>
+          </div>
         )}
-        <Grid item xs={12}>
+        <div>
           <About />
-        </Grid>
-      </Grid>
+        </div>
+      </div>
     );
+    */
   }
 }
 
@@ -187,4 +186,4 @@ Index.propTypes = {
 };
 
 
-export default flowRight([withStyles(styles), withWidth()])(Index);
+export default Index;

@@ -1,5 +1,5 @@
 import React from 'react';
-import CONFIG from '~/config';
+import CONFIG from '../../config';
 import Marey from './charts/Marey';
 import { select, selectAll } from 'd3-selection'
 import { min, max, group } from 'd3-array'

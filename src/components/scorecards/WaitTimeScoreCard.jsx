@@ -5,9 +5,9 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesById } from '~/helpers/LineInfo';
-import ScoreCard from './ScoreCard';
-import Comparison from './Comparison';
+import { linesById } from '../../helpers/LineInfo.jsx';
+import ScoreCard from './ScoreCard.jsx';
+import Comparison from './Comparison.jsx';
 
 const styles = () => ({
   separator: {

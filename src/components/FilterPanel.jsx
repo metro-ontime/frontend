@@ -10,7 +10,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { lines } from '~/helpers/LineInfo';
+import { lines } from '../helpers/LineInfo.jsx';
 
 const styles = theme => ({
   card: {
