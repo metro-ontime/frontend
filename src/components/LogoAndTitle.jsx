@@ -16,7 +16,7 @@ const logos = {
   All: logoNetwork,
   Blue: logo801,
   Red: logo802,
-  Greed: logo803,
+  Green: logo803,
   Gold: logo804,
   Purple: logo805,
   Expo: logo806
