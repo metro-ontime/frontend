@@ -8,11 +8,12 @@ import TooltipCustom from '../TooltipCustom.jsx';
 const styles = () => ({
   root: {
     backgroundColor: '#eee',
-    height: '3em',
+    height: '2rem',
   },
   title: {
     fontSize: '1em',
     textAlign: 'center',
+    color: '#000'
   },
   iconPosition: {
     position: 'absolute',

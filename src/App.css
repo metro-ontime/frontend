@@ -61,6 +61,7 @@
   .waitScoreCard {
     grid-column-start: 2;
     grid-column-end: 3;
+    align-self: stretch;
   }
   .marey {
     grid-column-start: 1;

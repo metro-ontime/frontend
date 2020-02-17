@@ -26,7 +26,7 @@ const styles = theme => ({
   avatar: {
     height: 25,
     width: 25,
-    marginRight: 10,
+    marginRight: 5,
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -86,8 +86,8 @@ const FilterPanel = (props) => {
   ));
   const lineSelectors = lines.map(metLine => (
     <MenuItem value={`${metLine.name}`} key={metLine.name}>
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <ListItemAvatar>
+      <div style={{ display: 'flex', alignItems: 'left' }}>
+        <ListItemAvatar style={{ minWidth: 35 }}>
           <Avatar className={classes.avatar}>
             <div style={{ backgroundColor: metLine.color }} className={classes.lineDot} />
           </Avatar>
@@ -115,7 +115,7 @@ const FilterPanel = (props) => {
         >
           <MenuItem value="All">
             <div style={{ display: 'flex', alignItems: 'center' }}>
-              <ListItemAvatar>
+              <ListItemAvatar style={{ minWidth: 35 }}>
                 <Avatar className={classes.avatar}>
                   <div style={{ backgroundColor: '#dddddd' }} className={classes.lineDot} />
                 </Avatar>

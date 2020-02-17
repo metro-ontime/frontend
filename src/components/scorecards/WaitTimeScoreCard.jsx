@@ -8,6 +8,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { linesById } from '../../helpers/LineInfo.jsx';
 import ScoreCard from './ScoreCard.jsx';
 import Comparison from './Comparison.jsx';
+import waiting from '~/static/images/waiting.svg';
 
 const styles = () => ({
   separator: {
@@ -26,7 +27,7 @@ const WaitTimeScoreCard = ({
 
   const tooltip = {
     title: 'Average Wait Time',
-    content: 'This is an average over all stop intervals measured for the day so far. Obviously, this interval should be split by time of day since trains run more frequently during peak times. Feature coming soon!'
+    content: 'The average time between services across all stops on a train line for the day.'
   };
 
   const title = 'Average Wait Time';
@@ -66,7 +67,7 @@ const WaitTimeScoreCard = ({
       <Grid item xs={6}>
         <img
           alt="waiting"
-          src="/public/images/waiting.svg"
+          src={waiting}
         />
       </Grid>
       <Grid item xs={6}>

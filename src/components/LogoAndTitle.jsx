@@ -3,7 +3,24 @@ import Moment from 'react-moment';
 import 'moment-timezone';
 // import TooltipCustom from './TooltipCustom.jsx';
 import { linesByName } from '../helpers/LineInfo.jsx';
-import './LogoAndTitle.scss'
+import './LogoAndTitle.scss';
+import logoNetwork from '~/static/images/logo_network.svg';
+import logo801 from '~/static/images/logo_801.svg';
+import logo802 from '~/static/images/logo_802.svg';
+import logo803 from '~/static/images/logo_803.svg';
+import logo804 from '~/static/images/logo_804.svg';
+import logo805 from '~/static/images/logo_805.svg';
+import logo806 from '~/static/images/logo_806.svg';
+
+const logos = {
+  All: logoNetwork,
+  Blue: logo801,
+  Red: logo802,
+  Greed: logo803,
+  Gold: logo804,
+  Purple: logo805,
+  Expo: logo806
+};
 
 const LogoAndTitle = (props) => {
   const {
@@ -17,7 +34,7 @@ const LogoAndTitle = (props) => {
   }
   return (
     <div className="logoAndTitle">
-      <img src={linesByName[line] ? `/public/images/logo_${linesByName[line].id}.svg` : '/public/images/logo_network.svg' } />
+      <img src={logos[line]} />
       <div className="text">
         <h1>{ defaultText }</h1>
         <p>
