@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 53 (72520) - https://sketchapp.com -->
+    <title>logo_805</title>
+    <desc>Created with Sketch.</desc>
+    <g id="logo_805" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Gold-Line" transform="translate(501.333333, 64.000000)" fill="#0D0D0D" stroke="#C2C2C2" stroke-linecap="round" stroke-width="64">
+            <path d="M21.3333333,10.6666667 L384,10.6666667" id="Line"></path>
+            <path d="M21.3333333,362.666667 L384,362.666667" id="Line-Copy"></path>
+            <path d="M10.6666667,10.6666667 L10.6666667,352" id="Line"></path>
+        </g>
+        <g id="Red-Line" transform="translate(149.333333, 74.666667)" stroke="#DFDFDF" stroke-linecap="round" stroke-width="64">
+            <path d="M0,0 L106.666667,128" id="Line-2"></path>
+            <path d="M106.666667,219.333333 L324.666667,306.333333" id="Line-3"></path>
+            <path d="M106.666667,128 L106.666667,219.333333" id="Line-3-Copy"></path>
+        </g>
+        <path d="M149.333333,426.666667 L448,426.666667" id="Purple-Line" stroke="#9561A8" stroke-width="64" stroke-linecap="round"></path>
+        <g id="Blue-Line" transform="translate(362.666667, 490.666667)" stroke="#C2C2C2" stroke-linecap="round" stroke-width="64">
+            <path d="M149.333333,0 L149.333333,448" id="Line-5"></path>
+            <path d="M10.6666667,320 L10.6666667,448" id="Line-5-Copy"></path>
+            <path d="M138.666667,320 L10.6666667,320" id="Line-5-Copy-2"></path>
+            <path d="M138.666667,448 L10.6666667,448" id="Line-5-Copy-3"></path>
+        </g>
+        <g id="Expo-Line" transform="translate(148.666667, 475.666667)" stroke="#DFDFDF" stroke-linecap="round" stroke-width="64">
+            <path d="M324.015432,0.706666667 L221.969136,112.333333" id="Line-6"></path>
+            <path d="M222.695279,112 L0.971387697,111" id="Line-6-Copy"></path>
+        </g>
+        <g id="Green-Line" transform="translate(128.000000, 682.666667)" stroke="#9C9C9C" stroke-linecap="round" stroke-width="64">
+            <path d="M21.3333333,117.333333 L21.3333333,10.6666667" id="Line-7"></path>
+            <path d="M21.3333333,10.6666667 L480,10.6666667" id="Line-7-Copy"></path>
+            <path d="M480,10.6666667 L565.333333,74.6666667" id="Line-7-Copy-2"></path>
+            <path d="M565.333333,74.6666667 L736,74.6666667" id="Line-7-Copy-3"></path>
+        </g>
+        <circle id="Union-Station" stroke="#7D7D7D" stroke-width="20" fill="#FFFFFF" cx="512" cy="421" r="55"></circle>
+        <circle id="Willowbrook/Rosa-Parks-Station" stroke="#7D7D7D" stroke-width="20" fill="#FFFFFF" cx="512" cy="698" r="55"></circle>
+    </g>
+</svg>
