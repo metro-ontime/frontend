@@ -66,7 +66,7 @@ const WaitTimeScoreCard = ({
       <Grid item xs={6}>
         <img
           alt="waiting"
-          src="/static/images/waiting.svg"
+          src="/public/images/waiting.svg"
         />
       </Grid>
       <Grid item xs={6}>

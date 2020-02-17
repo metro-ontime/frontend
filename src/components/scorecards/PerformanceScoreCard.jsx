@@ -77,9 +77,7 @@ const PerformanceScoreCard = ({
       </Grid>
       <Grid item xs={6}>
         <Typography
-          variant={width === 'xs'
-            ? 'h3'
-            : 'h2'}
+          variant="h2"
           component="p"
           align="center"
         >

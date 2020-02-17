@@ -17,7 +17,7 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     margin: '15px 0',
-    padding: theme.spacing.unit,
+    padding: theme.spacing(),
     flexDirection: 'row',
     '@media(max-width: 500px)': {
       flexDirection: 'column',
@@ -29,7 +29,7 @@ const styles = theme => ({
     marginRight: 10,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
     marginBottom: '-.25em',
     width: '100%',
   },
@@ -41,11 +41,11 @@ const styles = theme => ({
     borderRadius: '50%',
   },
   formControl: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(),
     width: '150px',
   },
   label: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(),
   },
 });
 
