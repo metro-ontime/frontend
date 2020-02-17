@@ -4,7 +4,7 @@ import {
   Grid,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import ScoreCardHeader from '~/components/scorecards/ScoreCardHeader';
+import ScoreCardHeader from './ScoreCardHeader.jsx';
 
 const styles = theme => ({
   root: {

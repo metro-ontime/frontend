@@ -5,9 +5,9 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import { linesById } from '~/helpers/LineInfo';
-import ScoreCard from './ScoreCard';
-import Comparison from './Comparison';
+import { linesById } from '../../helpers/LineInfo.jsx';
+import ScoreCard from './ScoreCard.jsx';
+import Comparison from './Comparison.jsx';
 
 const styles = () => ({
   separator: {
@@ -66,7 +66,7 @@ const WaitTimeScoreCard = ({
       <Grid item xs={6}>
         <img
           alt="waiting"
-          src="/static/images/waiting.svg"
+          src="/public/images/waiting.svg"
         />
       </Grid>
       <Grid item xs={6}>

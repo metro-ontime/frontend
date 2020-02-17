@@ -1,19 +1,4 @@
 {
-  "presets": [
-    [
-      "next/babel",
-      {
-        "preset-env": {
-          "targets": {
-            "browsers": "defaults"
-          },
-          "useBuiltIns": "usage"
-        }
-      }
-      ]
-    ],
-  "plugins": [
-    ["babel-plugin-root-import"],
-    ["@babel/plugin-syntax-dynamic-import"]
-  ]
+  "presets": ["@babel/preset-env", "@babel/preset-react"],
+  "plugins": ["@babel/plugin-proposal-class-properties"]
 }

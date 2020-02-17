@@ -5,10 +5,10 @@ import {
   Divider,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import OnTimePie from '~/components/charts/OnTimePie';
-import { linesById } from '~/helpers/LineInfo';
-import ScoreCard from './ScoreCard';
-import Comparison from './Comparison';
+import OnTimePie from '../charts/OnTimePie.jsx';
+import { linesById } from '../../helpers/LineInfo.jsx';
+import ScoreCard from './ScoreCard.jsx';
+import Comparison from './Comparison.jsx';
 
 
 const styles = () => ({
@@ -77,9 +77,7 @@ const PerformanceScoreCard = ({
       </Grid>
       <Grid item xs={6}>
         <Typography
-          variant={width === 'xs'
-            ? 'h3'
-            : 'h2'}
+          variant="h2"
           component="p"
           align="center"
         >
