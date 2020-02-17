@@ -1,0 +1,27 @@
+.logoAndTitle {
+  display: grid;
+  grid-template-columns: 150px auto;
+  grid-template-rows: 150px;
+  max-width: 900px;
+  margin: 20px auto;
+  img {
+    grid-column-start: 1;
+    grid-column-end: 2;
+    width: 100%;
+  }
+  .text {
+    grid-column-start: 2;
+    grid-column-end: 3;
+    align-self: center;
+  }
+  h1 {
+    font-weight: 500;
+    font-size: var(--font-xlarge);
+    color: var(--dark-grey);
+    margin: 0 0 10px 0;
+  }
+  p {
+    margin: 0;
+    font-size: var(--font-medium);
+  }
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import LogoAndTitle from './components/LogoAndTitle.jsx';
+import LogoAndTitle from './components/LogoAndTitle.jsx';
 // import PerformanceScoreCard from './components/scorecards/PerformanceScoreCard.jsx';
 // import WaitTimeScoreCard from './components/scorecards/WaitTimeScoreCard.jsx';
 // import FilterPanel from './components/FilterPanel.jsx';
@@ -88,7 +88,6 @@ class Index extends Component {
   }
 
   render() {
-    const { classes, width } = this.props;
     const {
       currentLine,
       arrivalWindow,
@@ -105,7 +104,18 @@ class Index extends Component {
       directions = [directionNames[`${line}_0`], directionNames[`${line}_1`]];
     }
 
-    return <div>Railstats</div>
+    return (
+      <div>
+        <div>
+          <LogoAndTitle
+            timestamp={timestamp}
+            line={currentLine}
+            date={date}
+            altImg="/static/images/logo_network.svg"
+          />
+        </div>
+      </div>
+    )
     /*
     return (
       <div className={classes.root}>
@@ -174,16 +184,5 @@ class Index extends Component {
     */
   }
 }
-
-Index.defaultProps = {
-  width: 'lg',
-  classes: {},
-};
-
-Index.propTypes = {
-  classes: PropTypes.object,
-  width: PropTypes.string,
-};
-
 
 export default Index;
