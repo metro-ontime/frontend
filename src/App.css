@@ -1,36 +1,41 @@
 .content {
   max-width: 1200px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 50%;
-  grid-template-rows: auto;
-  grid-column-gap: 20px;
-  grid-row-gap: 20px;
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+  @media (min-width: 900px) {
+    display: grid;
+    grid-template-columns: 50%;
+    grid-template-rows: auto;
+    grid-column-gap: 20px;
+    grid-row-gap: 20px;
 
-  .filterPanel {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  .errorMessage {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  .performanceScoreCard {
-    grid-column-start: 1;
-    grid-column-end: 2;
-  }
-  .waitScoreCard {
-    grid-column-start: 2;
-    grid-column-end: 3;
-    align-self: stretch;
-  }
-  .marey {
-    grid-column-start: 1;
-    grid-column-end: 3;
-  }
-  .about {
-    grid-column-start: 1;
-    grid-column-end: 3;
+    .filterPanel {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+    .errorMessage {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+    .performanceScoreCard {
+      grid-column-start: 1;
+      grid-column-end: 2;
+    }
+    .waitScoreCard {
+      grid-column-start: 2;
+      grid-column-end: 3;
+      align-self: stretch;
+    }
+    .marey {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
+    .about {
+      grid-column-start: 1;
+      grid-column-end: 3;
+    }
   }
 }
 

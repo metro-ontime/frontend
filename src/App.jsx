@@ -32,10 +32,14 @@ class Index extends Component {
       date: '',
       dates: [],
       direction: 0,
+      width: 0,
+      height: 0
     };
   }
 
   componentDidMount() {
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
     const urls = [`${CONFIG.RAILSTATS_API}/network`, `${CONFIG.RAILSTATS_API}/network/dates`]
     Promise.all(urls.map(url => fetch(url).then(response => response.json())))
       .then(arr => {
@@ -43,6 +47,14 @@ class Index extends Component {
         const dates = arr[1];
         this.setState({ dates, data, date: dates[dates.length - 1], timestamp: data.timestamp, error: false });
       })
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWindowDimensions);
+  }
+
+  updateWindowDimensions = () => {
+    this.setState({ width: window.innerWidth, height: window.innerHeight });
   }
 
   handleDirectionChange = (newDirection, index) => {
