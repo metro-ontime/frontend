@@ -8,7 +8,7 @@ import TooltipCustom from '../TooltipCustom.jsx';
 const styles = () => ({
   root: {
     backgroundColor: '#eee',
-    height: '2rem',
+    height: '3rem',
   },
   title: {
     fontSize: '1em',

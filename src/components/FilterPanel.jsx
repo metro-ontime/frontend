@@ -43,7 +43,7 @@ const styles = theme => ({
     padding: 10,
     width: '100%',
     '@media(min-width: 600px)': {
-      width: '150px',
+      width: '200px',
     },
   },
   label: {
