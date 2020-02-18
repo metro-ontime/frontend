@@ -7,6 +7,10 @@ body {
   background-color: #fafafa;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -14,7 +18,7 @@ code {
 
 :root {
   --dark-grey: #262626;
-  --font-small: 0.75rem;
+  --font-small: 0.70rem;
   --font-medium: 0.85rem;
   --font-large: 1.25rem;
   --font-xlarge: 2rem;

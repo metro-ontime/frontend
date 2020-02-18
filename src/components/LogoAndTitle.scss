@@ -1,9 +1,13 @@
 .logoAndTitle {
   display: grid;
-  grid-template-columns: 150px auto;
-  grid-template-rows: 150px;
+  grid-template-columns: 120px auto;
+  grid-template-rows: 120px;
   max-width: 900px;
   margin: 20px auto;
+  @media (min-width: 900) {
+    grid-template-columns: 150px auto;
+    grid-template-rows: 150px;
+  }
   img {
     grid-column-start: 1;
     grid-column-end: 2;
@@ -16,12 +20,21 @@
   }
   h1 {
     font-weight: 500;
-    font-size: var(--font-xlarge);
+    font-size: var(--font-medium);
     color: var(--dark-grey);
     margin: 0 0 10px 0;
+    @media (min-width: 400px) {
+      font-size: var(--font-large);
+    }
+    @media (min-width: 900px) {
+      font-size: var(--font-xlarge);
+    }
   }
   p {
     margin: 0;
-    font-size: var(--font-medium);
+    font-size: var(--font-small);
+    @media (min-width: 600px) {
+      font-size: var(--font-medium);
+    }
   }
 }

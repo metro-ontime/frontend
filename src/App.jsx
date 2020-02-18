@@ -110,7 +110,8 @@ class Index extends Component {
       data,
       dates,
       direction,
-      timestamp
+      timestamp,
+      width
     } = this.state;
     let line;
     let directions;
@@ -163,7 +164,7 @@ class Index extends Component {
               />
             </div>
           }
-          {!this.state.error && currentLine !== 'All' && (
+          { width > 900 && !this.state.error && currentLine !== 'All' && (
             <div className="marey">
               <SimpleMenu
                 label={`Towards: ${directions[direction]}`}

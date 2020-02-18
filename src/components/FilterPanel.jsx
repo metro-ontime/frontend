@@ -16,11 +16,10 @@ const styles = theme => ({
   card: {
     display: 'flex',
     alignItems: 'center',
-    margin: '15px 0',
-    padding: theme.spacing(),
-    flexDirection: 'row',
-    '@media(max-width: 500px)': {
-      flexDirection: 'column',
+    width: '100%',
+    flexDirection: 'column',
+    '@media(min-width: 600px)': {
+      flexDirection: 'row',
     },
   },
   avatar: {
@@ -41,8 +40,11 @@ const styles = theme => ({
     borderRadius: '50%',
   },
   formControl: {
-    padding: theme.spacing(),
-    width: '150px',
+    padding: 10,
+    width: '100%',
+    '@media(min-width: 600px)': {
+      width: '150px',
+    },
   },
   label: {
     padding: theme.spacing(),
@@ -104,7 +106,6 @@ const FilterPanel = (props) => {
 
   return (
     <Card className={classes.card}>
-      <Typography className={classes.label} variant="body1">Filter By: </Typography>
       <FormControl className={classes.formControl}>
         <InputLabel className={classes.label}>Line</InputLabel>
         <Select
