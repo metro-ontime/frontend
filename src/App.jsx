@@ -10,6 +10,7 @@ import directionNames from './helpers/Directions';
 import SimpleMenu from './components/SimpleMenu.jsx';
 import About from './components/About.jsx';
 import MareyLoader from './components/MareyLoader.jsx';
+import './App.css';
 
 const styles = () => ({
   root: {
