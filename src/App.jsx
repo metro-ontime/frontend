@@ -69,7 +69,7 @@ class Index extends Component {
       ]
       Promise.all(urls.map(url => fetch(url).then(response => response.json())))
         .then(arr => {
-          this.setState({ data: arr[0], dates: arr[1], error: false })
+          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, error: false })
         })
     } else {
       const urls = [
@@ -81,7 +81,7 @@ class Index extends Component {
           if (!arr[0].total_arrivals_analyzed) {
             throw new Error('data error')
           }
-          this.setState({ data: arr[0], dates: arr[1], error: false })
+          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, error: false })
         })
         .catch(err => this.setState({ error: true }))
     }
