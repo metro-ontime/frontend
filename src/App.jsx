@@ -10,6 +10,7 @@ import directionNames from './helpers/Directions';
 import SimpleMenu from './components/SimpleMenu.jsx';
 import About from './components/About.jsx';
 import MareyLoader from './components/MareyLoader.jsx';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import './App.css';
 
 const styles = () => ({
@@ -20,11 +21,13 @@ const styles = () => ({
   },
 });
 
+const loadingStates = new Set(['loading', 'success', 'error']);
+
 class Index extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: true,
+      dataState: 'loading',
       data: null,
       timestamp: null,
       currentLine: 'All',
@@ -45,8 +48,9 @@ class Index extends Component {
       .then(arr => {
         const data = arr[0];
         const dates = arr[1];
-        this.setState({ dates, data, date: dates[dates.length - 1], timestamp: data.timestamp, error: false });
+        this.setState({ dates, data, date: dates[dates.length - 1], timestamp: data.timestamp, dataState: 'success' });
       })
+      .catch(err => this.setState({ dataState: 'error' }))
   }
 
   componentWillUnmount() {
@@ -69,8 +73,9 @@ class Index extends Component {
       ]
       Promise.all(urls.map(url => fetch(url).then(response => response.json())))
         .then(arr => {
-          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, error: false })
+          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, dataState: 'success' })
         })
+        .catch(err => this.setState({ dataState: 'error' }))
     } else {
       const urls = [
         `${CONFIG.RAILSTATS_API}/line/${linesByName[this.state.currentLine].id}?date=${this.state.date}`,
@@ -81,25 +86,25 @@ class Index extends Component {
           if (!arr[0].total_arrivals_analyzed) {
             throw new Error('data error')
           }
-          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, error: false })
+          this.setState({ data: arr[0], dates: arr[1], timestamp: arr[0].timestamp, dataState: 'success' })
         })
-        .catch(err => this.setState({ error: true }))
+        .catch(err => this.setState({ dataState: 'error' }))
     }
   }
 
   handleLineChange = (e) => {
     const selectedLine = e.target.value;
-    this.setState({ currentLine: selectedLine, error: true }, this.updateData)
+    this.setState({ currentLine: selectedLine, dataState: 'loading' }, this.updateData)
   }
 
   handleArrivalWindow = (e) => {
     const newValue = e.target.value;
-    this.setState({ arrivalWindow: newValue }, this.updateData);
+    this.setState({ arrivalWindow: newValue });
   }
 
   handleDate = (e) => {
     const newValue = e.target.value;
-    this.setState({ date: newValue, error: true }, this.updateData);
+    this.setState({ date: newValue, dataState: 'loading' }, this.updateData);
   }
 
   render() {
@@ -108,6 +113,7 @@ class Index extends Component {
       arrivalWindow,
       date,
       data,
+      dataState,
       dates,
       direction,
       timestamp,
@@ -142,12 +148,17 @@ class Index extends Component {
               handleDate={this.handleDate}
             />
           </div>
-          { this.state.error &&
-            <div className="errorMessage">
+          { dataState === 'loading' &&
+            <div className="warning">
+              <CircularProgress variant="indeterminate" color="secondary" size={100} />
+            </div>
+          }
+          { dataState === 'error' &&
+            <div className="warning">
               There was an error fetching the data.
             </div>
           }
-          { !this.state.error &&
+          { dataState === 'success' &&
             <div className="performanceScoreCard">
               <PerformanceScoreCard
                 data={data}
@@ -156,7 +167,7 @@ class Index extends Component {
               />
             </div>
           }
-          { !this.state.error &&
+          { dataState === 'success' &&
             <div className="waitScoreCard">
               <WaitTimeScoreCard
                 data={data}
@@ -164,7 +175,7 @@ class Index extends Component {
               />
             </div>
           }
-          { width > 900 && !this.state.error && currentLine !== 'All' && (
+          { width > 900 && dataState === 'success' && currentLine !== 'All' && (
             <div className="marey">
               <SimpleMenu
                 label={`Towards: ${directions[direction]}`}
